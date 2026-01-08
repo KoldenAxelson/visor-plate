@@ -5,15 +5,15 @@
 @section('content')
 <!-- Shop Hero -->
 <section class="pt-32 pb-16 bg-linear-to-b from-black to-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container-site">
         <div class="text-center mb-12">
             <div class="inline-block mb-6">
-                <span class="bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30">
+                <span class="badge-red">
                     PREMIUM NO-DRILL SOLUTION
                 </span>
             </div>
-            <h1 class="text-5xl md:text-7xl font-black mb-6">
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Visor Plate</span>
+            <h1 class="text-section mb-6">
+                <span class="text-gradient-red">Visor Plate</span>
             </h1>
             <p class="text-2xl text-gray-300 max-w-3xl mx-auto">
                 Protect your bumper. Stay legal. Remove anytime.
@@ -23,8 +23,8 @@
 </section>
 
 <!-- Product Section -->
-<section class="py-16 bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-compact bg-gray-900">
+    <div class="container-site">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
             <!-- Left: Product Carousel -->
@@ -49,19 +49,13 @@
                     </div>
 
                     <!-- Navigation Arrows -->
-                    <button
-                        @click="prev()"
-                        class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600"
-                    >
+                    <button @click="prev()" class="btn-icon absolute left-4 top-1/2 transform -translate-y-1/2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </button>
 
-                    <button
-                        @click="next()"
-                        class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600"
-                    >
+                    <button @click="next()" class="btn-icon absolute right-4 top-1/2 transform -translate-y-1/2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
@@ -102,9 +96,9 @@
                 </div>
 
                 <!-- Key Benefits -->
-                <div class="bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6 space-y-4">
+                <div class="card-info space-y-4">
                     <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                        <div class="icon-check mt-1">
                             <span class="text-white font-bold text-sm">✓</span>
                         </div>
                         <div>
@@ -113,7 +107,7 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                        <div class="icon-check mt-1">
                             <span class="text-white font-bold text-sm">✓</span>
                         </div>
                         <div>
@@ -122,7 +116,7 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                        <div class="icon-check mt-1">
                             <span class="text-white font-bold text-sm">✓</span>
                         </div>
                         <div>
@@ -131,7 +125,7 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <div class="w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                        <div class="icon-check mt-1">
                             <span class="text-white font-bold text-sm">✓</span>
                         </div>
                         <div>
@@ -142,7 +136,7 @@
                 </div>
 
                 <!-- What's Included -->
-                <div class="bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6">
+                <div class="card-info">
                     <h3 class="text-2xl font-bold text-white mb-4">What's Included</h3>
                     <ul class="space-y-3 text-gray-300">
                         <li class="flex items-center gap-3">
@@ -165,14 +159,14 @@
                 </div>
 
                 <!-- Quantity Selector -->
-                <div class="bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6">
-                    <label class="block text-white font-bold mb-3">Quantity</label>
+                <div class="card-info">
+                    <label class="label-standard">Quantity</label>
                     <div class="flex items-center gap-4">
-                        <button class="w-12 h-12 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold text-xl transition">
+                        <button class="btn-quantity">
                             −
                         </button>
-                        <input type="number" value="1" min="1" class="w-20 h-12 bg-black border-2 border-gray-800 rounded-lg text-center text-white font-bold text-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none">
-                        <button class="w-12 h-12 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold text-xl transition">
+                        <input type="number" value="1" min="1" class="input-quantity">
+                        <button class="btn-quantity">
                             +
                         </button>
                     </div>
@@ -182,7 +176,7 @@
                 </div>
 
                 <!-- Buy Now Button -->
-                <button class="w-full border-2 border-red-600 text-red-500 py-6 rounded-2xl text-2xl font-black transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600">
+                <button class="btn-primary w-full py-6 text-2xl">
                     Buy Now - $35 →
                 </button>
 
@@ -220,15 +214,15 @@
 </section>
 
 <!-- Why Choose Visor Plate -->
-<section class="py-20 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-standard bg-black">
+    <div class="container-site">
         <h2 class="text-4xl md:text-5xl font-black text-center mb-16">
             <span class="text-white">Why Car Enthusiasts</span>
-            <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700"> Love Visor Plate</span>
+            <span class="text-gradient-red"> Love Visor Plate</span>
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 text-center">
+            <div class="card-feature text-center">
                 <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">🎯</span>
                 </div>
@@ -238,7 +232,7 @@
                 </p>
             </div>
 
-            <div class="bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 text-center">
+            <div class="card-feature text-center">
                 <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">⚡</span>
                 </div>
@@ -248,7 +242,7 @@
                 </p>
             </div>
 
-            <div class="bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 text-center">
+            <div class="card-feature text-center">
                 <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">💪</span>
                 </div>
@@ -262,7 +256,7 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-20 bg-linear-to-b from-black to-gray-900">
+<section class="section-standard bg-linear-to-b from-black to-gray-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
             Ready to Protect Your Ride?
@@ -270,7 +264,7 @@
         <p class="text-xl text-gray-400 mb-8">
             Join thousands of car enthusiasts who refuse to drill holes in their bumpers
         </p>
-        <a href="#" class="inline-block border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600">
+        <a href="#" class="btn-primary inline-block">
             Get Yours Today - $35 →
         </a>
     </div>

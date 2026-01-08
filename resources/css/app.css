@@ -1,13 +1,188 @@
+/* Tailwind v4 CSS-first configuration */
 @import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* Source directives for Tailwind v4 */
+@source "../views";
+@source "../js";
 
-@theme {
-    --font-sans:
-        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+/* ========================================
+   CUSTOM COMPONENT CLASSES
+   ======================================== */
+
+/* Remove spinner buttons from number inputs */
+@layer base {
+    /* Chrome, Safari, Edge, Opera */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+}
+
+/* ========================================
+   REUSABLE BUTTON COMPONENTS
+   ======================================== */
+
+@layer components {
+    /* Primary CTA Button (Red Outline → Fill) */
+    .btn-primary {
+        @apply border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600;
+    }
+
+    /* Small Primary Button */
+    .btn-primary-sm {
+        @apply border-2 border-red-600 text-red-500 px-8 py-3 rounded-lg text-base font-bold transition-all duration-300 hover:bg-red-600 hover:text-white;
+    }
+
+    /* Secondary Button (White Outline) */
+    .btn-secondary {
+        @apply border-2 border-white/30 backdrop-blur-sm text-white px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-white/10 hover:border-white/50;
+    }
+
+    /* Icon Button (Carousel Navigation) */
+    .btn-icon {
+        @apply w-14 h-14 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600;
+    }
+
+    /* Quantity Button (+/-) */
+    .btn-quantity {
+        @apply w-12 h-12 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold text-xl transition;
+    }
+}
+
+/* ========================================
+   CARD & CONTAINER COMPONENTS
+   ======================================== */
+
+@layer components {
+    /* Feature Card */
+    .card-feature {
+        @apply bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-red-600/50 transition-all duration-300;
+    }
+
+    /* Info Box */
+    .card-info {
+        @apply bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6;
+    }
+
+    /* Numbered Step Icon */
+    .step-number {
+        @apply shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl;
+    }
+
+    /* Check Icon */
+    .icon-check {
+        @apply w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0;
+    }
+}
+
+/* ========================================
+   FORM COMPONENTS
+   ======================================== */
+
+@layer components {
+    /* Standard Input/Select */
+    .input-standard {
+        @apply w-full p-5 text-lg bg-black border-2 border-gray-800 rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none text-white transition;
+    }
+
+    /* Quantity Input */
+    .input-quantity {
+        @apply w-20 h-12 bg-black border-2 border-gray-800 rounded-lg text-center text-white font-bold text-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none;
+    }
+
+    /* Form Label */
+    .label-standard {
+        @apply block text-lg font-bold mb-4 text-white;
+    }
+}
+
+/* ========================================
+   BADGE & PILL COMPONENTS
+   ======================================== */
+
+@layer components {
+    /* Red Badge */
+    .badge-red {
+        @apply bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30;
+    }
+
+    /* Badge with backdrop blur */
+    .badge-red-blur {
+        @apply bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30 backdrop-blur-sm;
+    }
+
+    /* Trust Badge Item */
+    .trust-badge {
+        @apply flex items-center gap-2 text-gray-400;
+    }
+}
+
+/* ========================================
+   TYPOGRAPHY HELPERS
+   ======================================== */
+
+@layer components {
+    /* Hero Title */
+    .text-hero {
+        @apply text-6xl md:text-8xl font-black;
+    }
+
+    /* Section Title */
+    .text-section {
+        @apply text-5xl md:text-7xl font-black;
+    }
+
+    /* Gradient Text (for titles) */
+    .text-gradient-red {
+        @apply text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+@layer utilities {
+    /* Section Padding - Hero */
+    .section-hero {
+        @apply py-32;
+    }
+
+    /* Section Padding - Standard */
+    .section-standard {
+        @apply py-20;
+    }
+
+    /* Section Padding - Compact */
+    .section-compact {
+        @apply py-16;
+    }
+
+    /* Max-width Container */
+    .container-site {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+}
+
+/* ========================================
+   CUSTOM ANIMATIONS
+   ======================================== */
+
+@layer utilities {
+    /* Smooth transitions for interactive elements */
+    .transition-smooth {
+        @apply transition-all duration-300;
+    }
+
+    /* Hover lift (subtle, no scale) */
+    .hover-lift {
+        @apply transition-all duration-300 hover:translate-y-[-2px];
+    }
 }

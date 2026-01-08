@@ -9,7 +9,7 @@
 <body class="antialiased bg-black text-white">
     <!-- Full Navigation Bar -->
     <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b border-red-600/30 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container-site">
             <div class="flex justify-between items-center h-20">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
@@ -33,11 +33,11 @@
     </nav>
 
     <!-- 404 Content -->
-    <section class="min-h-screen flex items-center justify-center py-20 pt-32">
+    <section class="min-h-screen flex items-center justify-center section-standard pt-32">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <!-- 404 Number -->
             <div class="mb-8">
-                <h1 class="text-9xl md:text-[200px] font-black text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700 leading-none">
+                <h1 class="text-9xl md:text-[200px] font-black text-gradient-red leading-none">
                     404
                 </h1>
             </div>
@@ -53,13 +53,13 @@
             </div>
 
             <!-- Helpful Links -->
-            <div class="bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-3xl p-8 mb-12 inline-block">
+            <div class="card-info inline-block mb-12">
                 <h3 class="text-xl font-bold text-white mb-6">Where would you like to go?</h3>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ url('/') }}" class="bg-linear-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:from-red-700 hover:to-red-800 hover:shadow-lg hover:shadow-red-600/50">
                         ← Back to Home
                     </a>
-                    <a href="{{ route('shop') }}" class="border-2 border-gray-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:border-red-600 hover:bg-red-600/10">
+                    <a href="{{ route('shop') }}" class="btn-secondary px-8 py-4">
                         Shop Visor Plate →
                     </a>
                 </div>
@@ -74,7 +74,7 @@
 
     <!-- Footer -->
     <footer class="border-t border-gray-800 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+        <div class="container-site text-center text-gray-500 text-sm">
             <p>&copy; {{ date('Y') }} Visor Plate. Preserve your ride's beauty.</p>
         </div>
     </footer>

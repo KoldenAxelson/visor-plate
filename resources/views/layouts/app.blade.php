@@ -11,7 +11,7 @@
 <body class="antialiased bg-white text-gray-900">
     <!-- Simple Header/Nav -->
     <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b border-red-600/30 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="container-site">
             <div class="flex justify-between items-center h-20">
                 <a href="{{ url('/') }}" class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
@@ -40,8 +40,8 @@
     </main>
 
     <!-- Simple Footer -->
-    <footer class="bg-linear-to-b from-black to-gray-900 border-t border-gray-800 py-16 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer class="bg-linear-to-b from-black to-gray-900 border-t border-gray-900 section-compact">
+        <div class="container-site">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-2">
                     <a href="{{ url('/') }}" class="flex items-center gap-3 mb-4">
@@ -74,6 +74,7 @@
                         <li><a href="/wholesale" class="hover:text-red-600 transition">Wholesale Inquiry</a></li>
                         <li><a href="/shipping" class="hover:text-red-600 transition">Shipping Info</a></li>
                         <li><a href="/returns" class="hover:text-red-600 transition">Returns</a></li>
+                        <li><a href="/design" class="hover:text-red-600 transition">Design</a></li>
                     </ul>
                 </div>
             </div>

@@ -12,16 +12,16 @@
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
+    <div class="relative z-10 container-site py-32 text-center">
         <div class="inline-block mb-6">
-            <span class="bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30 backdrop-blur-sm">
+            <span class="badge-red-blur">
                 FOR SHOW CARS & ENTHUSIASTS
             </span>
         </div>
 
-        <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight">
+        <h1 class="text-hero mb-8 leading-tight">
             <span class="text-white">Preserve Your</span><br>
-            <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Pristine Bumper</span>
+            <span class="text-gradient-red">Pristine Bumper</span>
         </h1>
 
         <p class="text-xl md:text-3xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
@@ -30,26 +30,26 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <a href="{{ route('shop') }}" class="group border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600">
+            <a href="{{ route('shop') }}" class="group btn-primary">
                 Get Visor Plate - $35
                 <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </a>
-            <a href="#how-it-works" class="border-2 border-white/30 backdrop-blur-sm text-white px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-white/10 hover:border-white/50">
+            <a href="#how-it-works" class="btn-secondary">
                 See Installation
             </a>
         </div>
 
         <!-- Social Proof Pills -->
         <div class="flex flex-wrap gap-6 justify-center text-sm">
-            <div class="flex items-center gap-2 text-gray-400">
+            <div class="trust-badge">
                 <span class="text-red-500 text-xl">✓</span>
                 <span>No Drilling Required</span>
             </div>
-            <div class="flex items-center gap-2 text-gray-400">
+            <div class="trust-badge">
                 <span class="text-red-500 text-xl">✓</span>
                 <span>60 Second Install</span>
             </div>
-            <div class="flex items-center gap-2 text-gray-400">
+            <div class="trust-badge">
                 <span class="text-red-500 text-xl">✓</span>
                 <span>Perfect for Show Cars</span>
             </div>
@@ -65,12 +65,12 @@
 </section>
 
 <!-- The Enthusiast's Dilemma -->
-<section class="py-32 bg-linear-to-b from-black to-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-hero bg-linear-to-b from-black to-gray-900">
+    <div class="container-site">
         <div class="text-center mb-20">
-            <h2 class="text-5xl md:text-7xl font-black mb-6">
+            <h2 class="text-section mb-6">
                 <span class="text-white">The Car Enthusiast's</span><br>
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Impossible Choice</span>
+                <span class="text-gradient-red">Impossible Choice</span>
             </h2>
             <p class="text-xl text-gray-400 max-w-3xl mx-auto">
                 You spent thousands building your dream car. Why compromise its looks for a license plate?
@@ -79,7 +79,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Problem 1 - Drilling -->
-            <div class="group relative bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-red-600/50 transition-all duration-300">
+            <div class="card-feature group">
                 <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-red-600/30">
                     <span class="text-4xl">❌</span>
                 </div>
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Problem 2 - Dashboard -->
-            <div class="group relative bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-red-600/50 transition-all duration-300">
+            <div class="card-feature group">
                 <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-red-600/30">
                     <span class="text-4xl">🤮</span>
                 </div>
@@ -101,7 +101,7 @@
             </div>
 
             <!-- Problem 3 - No Plate -->
-            <div class="group relative bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-red-600/50 transition-all duration-300">
+            <div class="card-feature group">
                 <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-red-600/30">
                     <span class="text-4xl">🚨</span>
                 </div>
@@ -115,16 +115,16 @@
 </section>
 
 <!-- The Solution - Premium Product Showcase -->
-<section id="features" class="py-32 bg-linear-to-b from-gray-900 to-black relative overflow-hidden">
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="features" class="section-hero bg-linear-to-b from-gray-900 to-black relative overflow-hidden">
+    <div class="relative container-site">
         <div class="text-center mb-20">
             <div class="inline-block mb-6">
-                <span class="bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30">
+                <span class="badge-red">
                     THE SOLUTION
                 </span>
             </div>
-            <h2 class="text-5xl md:text-7xl font-black mb-6">
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Visor Plate</span>
+            <h2 class="text-section mb-6">
+                <span class="text-gradient-red">Visor Plate</span>
             </h2>
             <p class="text-2xl text-gray-300 max-w-3xl mx-auto">
                 Zero compromise. Zero damage. Maximum style.
@@ -141,7 +141,7 @@
             <div class="space-y-8">
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
+                        <div class="step-number">
                             1
                         </div>
                         <div>
@@ -155,7 +155,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
+                        <div class="step-number">
                             2
                         </div>
                         <div>
@@ -169,7 +169,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
+                        <div class="step-number">
                             3
                         </div>
                         <div>
@@ -183,7 +183,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
+                        <div class="step-number">
                             4
                         </div>
                         <div>
@@ -199,7 +199,7 @@
 
         <!-- CTA -->
         <div class="text-center">
-            <a href="{{ route('shop') }}" class="inline-block border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600">
+            <a href="{{ route('shop') }}" class="btn-primary inline-block">
                 Protect Your Ride - $35 →
             </a>
         </div>
@@ -207,12 +207,12 @@
 </section>
 
 <!-- Carousel Gallery Section -->
-<section id="gallery" class="py-32 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="gallery" class="section-hero bg-black">
+    <div class="container-site">
         <div class="text-center mb-20">
-            <h2 class="text-5xl md:text-7xl font-black mb-6">
+            <h2 class="text-section mb-6">
                 <span class="text-white">See It On</span><br>
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Real Enthusiast Cars</span>
+                <span class="text-gradient-red">Real Enthusiast Cars</span>
             </h2>
             <p class="text-xl text-gray-400">
                 From show cars to daily drivers, Visor Plate keeps them all looking clean
@@ -242,20 +242,14 @@
                 </div>
 
                 <!-- Previous Button -->
-                <button
-                    @click="prev()"
-                    class="absolute left-4 top-1/2 transform -translate-y-1/2 w-14 h-14 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600 group z-10"
-                >
+                <button @click="prev()" class="btn-icon absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
                     <svg class="w-6 h-6 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </button>
 
                 <!-- Next Button -->
-                <button
-                    @click="next()"
-                    class="absolute right-4 top-1/2 transform -translate-y-1/2 w-14 h-14 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600 group z-10"
-                >
+                <button @click="next()" class="btn-icon absolute right-4 top-1/2 transform -translate-y-1/2 z-10">
                     <svg class="w-6 h-6 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
@@ -312,12 +306,12 @@
 </section>
 
 <!-- State Checker Tool -->
-<section id="state-checker" class="py-32 bg-linear-to-b from-black to-gray-900">
+<section id="state-checker" class="section-hero bg-linear-to-b from-black to-gray-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-5xl md:text-6xl font-black mb-4">
                 <span class="text-white">Does Your State</span><br>
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Require Front Plates?</span>
+                <span class="text-gradient-red">Require Front Plates?</span>
             </h2>
             <p class="text-xl text-gray-400">
                 Find out if you need a front license plate (spoiler: even if you don't, you might need one for toll roads)
@@ -325,14 +319,11 @@
         </div>
 
         <!-- Alpine.js State Checker -->
-        <div x-data="stateChecker()" class="bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-3xl p-10 shadow-2xl">
+        <div x-data="stateChecker()" class="card-info shadow-2xl">
             <!-- State Dropdown -->
             <div class="mb-8">
-                <label class="block text-lg font-bold mb-4 text-white">Select Your State:</label>
-                <select
-                    x-model="selectedState"
-                    class="w-full p-5 text-lg bg-black border-2 border-gray-800 rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none text-white transition"
-                >
+                <label class="label-standard">Select Your State:</label>
+                <select x-model="selectedState" class="input-standard">
                     <option value="">-- Choose a state --</option>
                     <template x-for="state in states" :key="state.abbr">
                         <option :value="state.abbr" x-text="state.name"></option>
@@ -378,7 +369,7 @@
 
                 <!-- CTA -->
                 <div class="mt-8 text-center">
-                    <a href="#pricing" class="inline-block border-2 border-red-600 text-red-500 px-10 py-4 rounded-xl text-lg font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600">
+                    <a href="#pricing" class="btn-primary inline-block">
                         Get Protected - $35 →
                     </a>
                 </div>
@@ -388,12 +379,12 @@
 </section>
 
 <!-- How It Works -->
-<section id="how-it-works" class="py-32 bg-linear-to-b from-gray-900 to-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="how-it-works" class="section-hero bg-linear-to-b from-gray-900 to-black">
+    <div class="container-site">
         <div class="text-center mb-20">
-            <h2 class="text-5xl md:text-7xl font-black mb-6">
+            <h2 class="text-section mb-6">
                 <span class="text-white">Install In</span><br>
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">Under 60 Seconds</span>
+                <span class="text-gradient-red">Under 60 Seconds</span>
             </h2>
             <p class="text-xl text-gray-400 max-w-2xl mx-auto">
                 Seriously. It's that easy. No tools, no stress, no permanent modifications.
@@ -404,10 +395,10 @@
             <!-- Step 1 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
+                    <div class="step-number mx-auto mb-6 shadow-xl text-5xl w-24 h-24 rounded-3xl">
                         1
                     </div>
-                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
+                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors duration-300">
                         <img src="{{ asset('images/Back.jpg') }}" alt="Step 1" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -420,10 +411,10 @@
             <!-- Step 2 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
+                    <div class="step-number mx-auto mb-6 shadow-xl text-5xl w-24 h-24 rounded-3xl">
                         2
                     </div>
-                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
+                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors duration-300">
                         <img src="{{ asset('images/Install.jpg') }}" alt="Step 2" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -436,10 +427,10 @@
             <!-- Step 3 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
+                    <div class="step-number mx-auto mb-6 shadow-xl text-5xl w-24 h-24 rounded-3xl">
                         3
                     </div>
-                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
+                    <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors duration-300">
                         <img src="{{ asset('images/Slide.jpg') }}" alt="Step 3" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -453,12 +444,12 @@
 </section>
 
 <!-- Pricing / CTA -->
-<section id="pricing" class="py-32 bg-black">
+<section id="pricing" class="section-hero bg-black">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-5xl md:text-7xl font-black mb-6">
+            <h2 class="text-section mb-6">
                 <span class="text-white">Protect Your Investment</span><br>
-                <span class="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700">For Just $35</span>
+                <span class="text-gradient-red">For Just $35</span>
             </h2>
             <p class="text-3xl text-gray-300 mb-4">
                 <span class="line-through text-gray-600">$200 ticket</span> or <strong class="text-red-500">$35 solution?</strong>
@@ -470,57 +461,57 @@
 
         <!-- Premium Pricing Card -->
         <div class="max-w-2xl mx-auto">
-            <div class="bg-linear-to-br from-gray-900 to-black border-2 border-red-600/50 rounded-3xl p-12 shadow-2xl">
+            <div class="card-info border-2 border-red-600/50 shadow-2xl">
                 <div class="text-center mb-10">
                     <div class="inline-block mb-4">
-                        <span class="bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30">
+                        <span class="badge-red">
                             COMPLETE KIT
                         </span>
                     </div>
                     <div class="text-7xl font-black text-white mb-3">$35</div>
-                    <div class="text-xl text-gray-400">One-time purchase • No subscriptions</div>
+                    <div class="text-xl text-gray-400">Premium Product</div>
                 </div>
 
                 <div class="space-y-5 mb-10">
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">Hand-Made in America</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">High Quality Materials</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">60-second installation</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">Works with any standard US license plate</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">Zero drilling • Zero permanent damage</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
+                        <div class="icon-check">
                             <span class="text-white font-bold">✓</span>
                         </div>
                         <span class="text-white text-lg">Perfect for show cars & daily drivers</span>
                     </div>
                 </div>
 
-                <a href="{{ route('shop') }}" class="w-full border-2 border-red-600 text-red-500 py-6 rounded-2xl text-2xl font-black transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600 block text-center">
+                <a href="{{ route('shop') }}" class="btn-primary w-full py-6 text-2xl block text-center">
                     Get Visor Plate Now →
                 </a>
 
