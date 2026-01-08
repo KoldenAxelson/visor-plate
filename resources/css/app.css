@@ -6,10 +6,32 @@
 @source "../js";
 
 /* ========================================
-   CUSTOM COMPONENT CLASSES
+   LUXURY COLOR PALETTE (2025-2026)
    ======================================== */
+:root {
+    /* Backgrounds */
+    --bg-luxury-black: #0d0d0d;
+    --bg-elevated: #1c1c1e;
+    --bg-glass: rgba(255, 255, 255, 0.05);
 
-/* Remove spinner buttons from number inputs */
+    /* Text */
+    --text-primary: #f2f2f2;
+    --text-muted: #a0a0a0;
+    --text-subtle: #6b6b6b;
+
+    /* Accents */
+    --accent-copper: #b87333;
+    --accent-gold: #c29049;
+    --accent-red: #dc2626;
+
+    /* Borders */
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-glow: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   REMOVE NUMBER INPUT SPINNERS
+   ======================================== */
 @layer base {
     /* Chrome, Safari, Edge, Opera */
     input[type="number"]::-webkit-outer-spin-button,
@@ -23,99 +45,415 @@
         -moz-appearance: textfield;
         appearance: textfield;
     }
+
+    /* Luxury body defaults */
+    body {
+        color: var(--text-primary);
+        font-weight: 400;
+        letter-spacing: 0.01em;
+    }
 }
 
 /* ========================================
-   REUSABLE BUTTON COMPONENTS
+   GLASSMORPHISM COMPONENTS
    ======================================== */
-
 @layer components {
-    /* Primary CTA Button (Red Outline → Fill) */
+    /* Glass Panel - Primary glassmorphism effect */
+    .glass-panel {
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl;
+    }
+
+    /* Glass Panel Hover State */
+    .glass-panel-hover {
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl transition-all duration-500;
+    }
+
+    .glass-panel-hover:hover {
+        @apply bg-white/8 border-white/15;
+    }
+
+    /* Glass Card - Elevated glassmorphism */
+    .glass-card {
+        @apply bg-white/[0.07] backdrop-blur-xl border border-white/[0.12] rounded-2xl;
+    }
+
+    /* Glass Overlay - For hero sections */
+    .glass-overlay {
+        @apply bg-black/60 backdrop-blur-md;
+    }
+}
+
+/* ========================================
+   GRADIENT BORDER EFFECTS (Shadow-free depth)
+   ======================================== */
+@layer components {
+    /* Gradient Border Card - Premium depth without shadows */
+    .gradient-border-card {
+        background:
+            linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+            linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.15),
+                    rgba(255, 255, 255, 0.05)
+                )
+                border-box;
+        border: 1px solid transparent;
+        @apply rounded-2xl p-8;
+    }
+
+    /* Copper Gradient Border */
+    .copper-border-card {
+        background:
+            linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+            linear-gradient(
+                    135deg,
+                    rgba(184, 115, 51, 0.4),
+                    rgba(184, 115, 51, 0.1)
+                )
+                border-box;
+        border: 1px solid transparent;
+        @apply rounded-2xl p-8;
+    }
+
+    /* Gold Gradient Border */
+    .gold-border-card {
+        background:
+            linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+            linear-gradient(
+                    135deg,
+                    rgba(194, 144, 73, 0.4),
+                    rgba(194, 144, 73, 0.1)
+                )
+                border-box;
+        border: 1px solid transparent;
+        @apply rounded-2xl p-8;
+    }
+
+    /* Elevated Card - Simulates overhead lighting */
+    .elevated-card {
+        @apply rounded-2xl p-8;
+        background-color: var(--bg-elevated);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* ========================================
+   GLOW EFFECTS (Replaces drop shadows)
+   ======================================== */
+@layer components {
+    /* Copper Glow */
+    .copper-glow {
+        position: relative;
+    }
+
+    .copper-glow::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, #c29049, #b87333);
+        filter: blur(20px);
+        z-index: -1;
+        opacity: 0.2;
+        border-radius: inherit;
+    }
+
+    /* Gold Glow */
+    .gold-glow {
+        position: relative;
+    }
+
+    .gold-glow::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, #c29049, #d4af37);
+        filter: blur(20px);
+        z-index: -1;
+        opacity: 0.25;
+        border-radius: inherit;
+    }
+
+    /* Red Glow (for primary CTAs) */
+    .red-glow {
+        position: relative;
+    }
+
+    .red-glow::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, #dc2626, #991b1b);
+        filter: blur(20px);
+        z-index: -1;
+        opacity: 0.15;
+        border-radius: inherit;
+    }
+}
+
+/* ========================================
+   LUXURY BUTTON COMPONENTS
+   ======================================== */
+@layer components {
+    /* Primary CTA - Copper accent with luxury timing */
+    .btn-primary-luxury {
+        position: relative;
+        @apply px-12 py-5 rounded-xl text-xl font-semibold overflow-hidden;
+        border: 2px solid var(--accent-copper);
+        color: var(--accent-copper);
+        letter-spacing: 0.05em;
+        transition: color 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .btn-primary-luxury::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent-copper);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+        z-index: -1;
+    }
+
+    .btn-primary-luxury:hover {
+        color: var(--bg-luxury-black);
+    }
+
+    .btn-primary-luxury:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* Primary CTA (Original red - now for specific CTAs only) */
     .btn-primary {
-        @apply border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600;
+        position: relative;
+        @apply border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold overflow-hidden;
+        letter-spacing: 0.05em;
+        transition: color 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .btn-primary::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent-red);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+        z-index: -1;
+    }
+
+    .btn-primary:hover {
+        color: var(--bg-luxury-black);
+    }
+
+    .btn-primary:hover::before {
+        transform: scaleX(1);
     }
 
     /* Small Primary Button */
     .btn-primary-sm {
-        @apply border-2 border-red-600 text-red-500 px-8 py-3 rounded-lg text-base font-bold transition-all duration-300 hover:bg-red-600 hover:text-white;
+        @apply px-8 py-3 rounded-lg text-base font-semibold transition-all duration-300;
+        border: 2px solid var(--accent-copper);
+        color: var(--accent-copper);
+        letter-spacing: 0.05em;
+    }
+
+    .btn-primary-sm:hover {
+        background-color: var(--accent-copper);
+        color: var(--bg-luxury-black);
+    }
+
+    /* Glass Button - Glassmorphic CTA */
+    .btn-glass {
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl px-10 py-4 text-lg font-medium text-white;
+        letter-spacing: 0.05em;
+        transition: all 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .btn-glass:hover {
+        @apply -translate-y-1 bg-white/8 border-white/15;
     }
 
     /* Secondary Button (White Outline) */
     .btn-secondary {
-        @apply border-2 border-white/30 backdrop-blur-sm text-white px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-white/10 hover:border-white/50;
+        @apply border-2 border-white/30 backdrop-blur-sm text-white px-12 py-5 rounded-xl text-xl font-semibold transition-all duration-500 hover:bg-white/10 hover:border-white/50;
+        letter-spacing: 0.05em;
     }
 
     /* Icon Button (Carousel Navigation) */
     .btn-icon {
-        @apply w-14 h-14 bg-black/80 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-all duration-300 backdrop-blur-sm border border-gray-700 hover:border-red-600;
+        @apply w-14 h-14 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full flex items-center justify-center text-white;
+        transition: all 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
-    /* Quantity Button (+/-) */
+    .btn-icon:hover {
+        @apply bg-white/8 border-white/15;
+        background-color: rgba(184, 115, 51, 0.2);
+        border-color: rgba(184, 115, 51, 0.3);
+    }
+
+    /* Quantity Button */
     .btn-quantity {
-        @apply w-12 h-12 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold text-xl transition;
+        @apply w-12 h-12 rounded-2xl p-8 flex items-center justify-center text-white font-bold text-xl;
+        background-color: var(--bg-elevated);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        transition: all 300ms ease;
+        padding: 0; /* Override the p-8 from elevated-card pattern */
+    }
+
+    .btn-quantity:hover {
+        @apply bg-white/5;
     }
 }
 
 /* ========================================
-   CARD & CONTAINER COMPONENTS
+   LUXURY CARD COMPONENTS
    ======================================== */
-
 @layer components {
-    /* Feature Card */
+    /* Feature Card with hover lift */
     .card-feature {
-        @apply bg-linear-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 hover:border-red-600/50 transition-all duration-300;
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8;
+        transition: all 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
-    /* Info Box */
+    .card-feature:hover {
+        @apply -translate-y-1.5 bg-white/8 border-white/15;
+    }
+
+    /* Premium Info Card */
     .card-info {
-        @apply bg-linear-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6;
+        @apply rounded-2xl p-8;
+        background:
+            linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+            linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.15),
+                    rgba(255, 255, 255, 0.05)
+                )
+                border-box;
+        border: 1px solid transparent;
+    }
+
+    /* Product Card with image scale */
+    .card-product {
+        @apply bg-white/[0.07] backdrop-blur-xl border border-white/[0.12] rounded-2xl overflow-hidden;
+        transition: all 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .card-product:hover {
+        @apply -translate-y-2;
+    }
+
+    .card-product img {
+        transition: transform 600ms ease;
+    }
+
+    .card-product:hover img {
+        transform: scale(1.04);
     }
 
     /* Numbered Step Icon */
     .step-number {
-        @apply shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl;
+        @apply shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-2xl;
+        background: linear-gradient(
+            135deg,
+            var(--accent-copper),
+            var(--accent-gold)
+        );
     }
 
     /* Check Icon */
     .icon-check {
-        @apply w-6 h-6 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0;
+        @apply w-6 h-6 rounded-lg flex items-center justify-center shrink-0;
+        background: linear-gradient(
+            135deg,
+            var(--accent-copper),
+            var(--accent-gold)
+        );
     }
 }
 
 /* ========================================
-   FORM COMPONENTS
+   LUXURY FORM COMPONENTS
    ======================================== */
-
 @layer components {
-    /* Standard Input/Select */
+    /* Standard Input/Select with glass effect */
     .input-standard {
-        @apply w-full p-5 text-lg bg-black border-2 border-gray-800 rounded-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none text-white transition;
+        @apply w-full p-5 text-lg bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl text-white transition-all duration-300;
+    }
+
+    .input-standard:focus {
+        border-color: rgba(184, 115, 51, 0.5);
+        @apply ring-2 outline-none;
+        ring-color: rgba(184, 115, 51, 0.2);
     }
 
     /* Quantity Input */
     .input-quantity {
-        @apply w-20 h-12 bg-black border-2 border-gray-800 rounded-lg text-center text-white font-bold text-xl focus:border-red-600 focus:ring-2 focus:ring-red-600/50 outline-none;
+        @apply w-20 h-12 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl text-center text-white font-bold text-xl transition-all duration-300;
+    }
+
+    .input-quantity:focus {
+        border-color: rgba(184, 115, 51, 0.5);
+        @apply ring-2 outline-none;
+        ring-color: rgba(184, 115, 51, 0.2);
     }
 
     /* Form Label */
     .label-standard {
-        @apply block text-lg font-bold mb-4 text-white;
+        @apply block text-lg font-semibold mb-4 text-white;
+        letter-spacing: 0.05em;
     }
 }
 
 /* ========================================
    BADGE & PILL COMPONENTS
    ======================================== */
-
 @layer components {
+    /* Copper Badge */
+    .badge-copper {
+        @apply px-6 py-2 rounded-full text-sm font-semibold;
+        background: rgba(184, 115, 51, 0.15);
+        color: var(--accent-copper);
+        border: 1px solid rgba(184, 115, 51, 0.3);
+        letter-spacing: 0.12em;
+    }
+
+    /* Gold Badge */
+    .badge-gold {
+        @apply px-6 py-2 rounded-full text-sm font-semibold;
+        background: rgba(194, 144, 73, 0.15);
+        color: var(--accent-gold);
+        border: 1px solid rgba(194, 144, 73, 0.3);
+        letter-spacing: 0.12em;
+    }
+
     /* Red Badge */
     .badge-red {
-        @apply bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30;
+        @apply px-6 py-2 rounded-full text-sm font-semibold;
+        background: rgba(220, 38, 38, 0.15);
+        color: var(--accent-red);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        letter-spacing: 0.12em;
     }
 
     /* Badge with backdrop blur */
     .badge-red-blur {
-        @apply bg-red-600/20 text-red-500 px-6 py-2 rounded-full text-sm font-semibold border border-red-600/30 backdrop-blur-sm;
+        @apply px-6 py-2 rounded-full text-sm font-semibold backdrop-blur-sm;
+        background: rgba(220, 38, 38, 0.15);
+        color: var(--accent-red);
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        letter-spacing: 0.12em;
+    }
+
+    .badge-copper-blur {
+        @apply px-6 py-2 rounded-full text-sm font-semibold backdrop-blur-sm;
+        background: rgba(184, 115, 51, 0.15);
+        color: var(--accent-copper);
+        border: 1px solid rgba(184, 115, 51, 0.3);
+        letter-spacing: 0.12em;
     }
 
     /* Trust Badge Item */
@@ -125,30 +463,105 @@
 }
 
 /* ========================================
-   TYPOGRAPHY HELPERS
+   LUXURY TYPOGRAPHY
    ======================================== */
-
 @layer components {
-    /* Hero Title */
+    /* Hero Title - Thin, elegant, wide tracking */
     .text-hero {
-        @apply text-6xl md:text-8xl font-black;
+        @apply text-6xl md:text-8xl font-light;
+        letter-spacing: 0.05em;
     }
 
     /* Section Title */
     .text-section {
-        @apply text-5xl md:text-7xl font-black;
+        @apply text-5xl md:text-7xl font-light;
+        letter-spacing: 0.05em;
     }
 
-    /* Gradient Text (for titles) */
+    /* Gradient Text (Copper/Gold) */
+    .text-gradient-copper {
+        @apply text-transparent bg-clip-text;
+        background-image: linear-gradient(
+            135deg,
+            var(--accent-copper),
+            var(--accent-gold)
+        );
+    }
+
+    /* Gradient Text (Gold) */
+    .text-gradient-gold {
+        @apply text-transparent bg-clip-text;
+        background-image: linear-gradient(135deg, var(--accent-gold), #d4af37);
+    }
+
+    /* Original red gradient (kept for compatibility) */
     .text-gradient-red {
         @apply text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-700;
+    }
+
+    /* All-caps with proper tracking */
+    .text-caps-luxury {
+        @apply uppercase text-sm font-semibold;
+        letter-spacing: 0.12em;
     }
 }
 
 /* ========================================
-   UTILITY CLASSES
+   MATERIAL TEXTURES
    ======================================== */
+@layer components {
+    /* Carbon Fiber Pattern */
+    .carbon-fiber {
+        background:
+            linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+            linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+            linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+            linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+            linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+            linear-gradient(
+                #1d1d1d 25%,
+                #1a1a1a 25%,
+                #1a1a1a 50%,
+                transparent 50%,
+                transparent 75%,
+                #242424 75%
+            );
+        background-color: #131313;
+        background-size: 20px 20px;
+    }
 
+    /* Premium Grain Overlay */
+    .premium-grain {
+        position: relative;
+    }
+
+    .premium-grain::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        opacity: 0.03;
+        pointer-events: none;
+        border-radius: inherit;
+    }
+
+    /* Brushed Metal Effect */
+    .brushed-metal {
+        background:
+            repeating-linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 0.04) 0px,
+                rgba(255, 255, 255, 0.04) 1px,
+                transparent 1px,
+                transparent 2px
+            ),
+            linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    }
+}
+
+/* ========================================
+   LAYOUT UTILITIES
+   ======================================== */
 @layer utilities {
     /* Section Padding - Hero */
     .section-hero {
@@ -172,17 +585,64 @@
 }
 
 /* ========================================
-   CUSTOM ANIMATIONS
+   LUXURY ANIMATION UTILITIES
    ======================================== */
-
 @layer utilities {
-    /* Smooth transitions for interactive elements */
-    .transition-smooth {
-        @apply transition-all duration-300;
+    /* Luxury hover lift (no shadow) */
+    .hover-lift {
+        transition: transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
-    /* Hover lift (subtle, no scale) */
-    .hover-lift {
-        @apply transition-all duration-300 hover:translate-y-[-2px];
+    .hover-lift:hover {
+        transform: translateY(-6px);
+    }
+
+    /* Image scale on hover */
+    .hover-scale-image {
+        @apply overflow-hidden;
+    }
+
+    .hover-scale-image img {
+        transition: transform 600ms ease;
+    }
+
+    .hover-scale-image:hover img {
+        transform: scale(1.04);
+    }
+
+    /* Link underline grow */
+    .link-underline {
+        position: relative;
+    }
+
+    .link-underline::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 300ms ease;
+    }
+
+    .link-underline:hover::after {
+        transform: scaleX(1);
+    }
+}
+
+/* ========================================
+   CUSTOM PROPERTY EXTENSIONS
+   ======================================== */
+@layer utilities {
+    /* Letter spacing */
+    .tracking-luxury {
+        letter-spacing: 0.05em;
+    }
+
+    .tracking-caps {
+        letter-spacing: 0.12em;
     }
 }

@@ -8,14 +8,14 @@
     <div class="container-site">
         <div class="text-center mb-12">
             <div class="inline-block mb-6">
-                <span class="badge-red">
+                <span class="badge-copper-blur">
                     PREMIUM NO-DRILL SOLUTION
                 </span>
             </div>
             <h1 class="text-section mb-6">
-                <span class="text-gradient-red">Visor Plate</span>
+                <span class="text-gradient-copper">Visor Plate</span>
             </h1>
-            <p class="text-2xl text-gray-300 max-w-3xl mx-auto">
+            <p class="text-2xl text-gray-300 max-w-3xl mx-auto font-light tracking-wide">
                 Protect your bumper. Stay legal. Remove anytime.
             </p>
         </div>
@@ -73,7 +73,8 @@
                         <button
                             @click="goTo(index)"
                             class="aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300"
-                            :class="currentIndex === index ? 'border-red-600 opacity-100' : 'border-gray-800 opacity-50 hover:opacity-75 hover:border-gray-700'"
+                            :class="currentIndex === index ? 'opacity-100' : 'border-gray-800 opacity-50 hover:opacity-75 hover:border-gray-700'"
+                            :style="currentIndex === index ? 'border-color: var(--accent-copper)' : ''"
                         >
                             <img :src="`{{ asset('images') }}/${image}`" :alt="`Thumbnail ${index + 1}`" class="w-full h-full object-cover">
                         </button>
@@ -85,25 +86,25 @@
             <div class="space-y-8">
                 <!-- Product Title & Price -->
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Visor Plate™</h2>
+                    <h2 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">Visor Plate™</h2>
                     <div class="flex items-baseline gap-4 mb-6">
-                        <span class="text-6xl font-black text-white">$35</span>
-                        <span class="text-2xl text-gray-400 line-through">$200 ticket</span>
+                        <span class="text-6xl font-light text-white tracking-luxury">$35</span>
+                        <span class="text-2xl text-gray-400 line-through font-light">$200 ticket</span>
                     </div>
-                    <p class="text-xl text-gray-300 leading-relaxed">
+                    <p class="text-xl text-gray-300 leading-relaxed font-light">
                         The premium velcro visor solution that displays your front license plate legally without drilling a single hole in your bumper.
                     </p>
                 </div>
 
                 <!-- Key Benefits -->
-                <div class="card-info space-y-4">
+                <div class="card-feature space-y-4">
                     <div class="flex items-start gap-3">
                         <div class="icon-check mt-1">
                             <span class="text-white font-bold text-sm">✓</span>
                         </div>
                         <div>
                             <span class="text-white font-semibold">No Drilling Required</span>
-                            <p class="text-gray-400 text-sm">Keep your bumper pristine. Zero permanent damage.</p>
+                            <p class="text-gray-400 text-sm font-light">Keep your bumper pristine. Zero permanent damage.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -112,7 +113,7 @@
                         </div>
                         <div>
                             <span class="text-white font-semibold">60-Second Installation</span>
-                            <p class="text-gray-400 text-sm">Attach velcro, mount on visor. Done.</p>
+                            <p class="text-gray-400 text-sm font-light">Attach velcro, mount on visor. Done.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -121,7 +122,7 @@
                         </div>
                         <div>
                             <span class="text-white font-semibold">Perfect for Show Cars</span>
-                            <p class="text-gray-400 text-sm">Remove in seconds for car meets and shows.</p>
+                            <p class="text-gray-400 text-sm font-light">Remove in seconds for car meets and shows.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -130,36 +131,36 @@
                         </div>
                         <div>
                             <span class="text-white font-semibold">Legally Compliant</span>
-                            <p class="text-gray-400 text-sm">Meets requirements in all 29 front-plate states.</p>
+                            <p class="text-gray-400 text-sm font-light">Meets requirements in all 29 front-plate states.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- What's Included -->
                 <div class="card-info">
-                    <h3 class="text-2xl font-bold text-white mb-4">What's Included</h3>
-                    <ul class="space-y-3 text-gray-300">
+                    <h3 class="text-2xl font-semibold text-white mb-4 tracking-wide">What's Included</h3>
+                    <ul class="space-y-3 text-gray-300 font-light">
                         <li class="flex items-center gap-3">
-                            <span class="text-red-500">•</span>
+                            <span style="color: var(--accent-copper);">•</span>
                             <span>1x Visor Plate mounting system</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <span class="text-red-500">•</span>
+                            <span style="color: var(--accent-copper);">•</span>
                             <span>Industrial-strength velcro strips</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <span class="text-red-500">•</span>
+                            <span style="color: var(--accent-copper);">•</span>
                             <span>Easy installation instructions</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <span class="text-red-500">•</span>
+                            <span style="color: var(--accent-copper);">•</span>
                             <span>Free shipping (US only)</span>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Quantity Selector -->
-                <div class="card-info">
+                <div class="card-feature">
                     <label class="label-standard">Quantity</label>
                     <div class="flex items-center gap-4">
                         <button class="btn-quantity">
@@ -170,13 +171,13 @@
                             +
                         </button>
                     </div>
-                    <p class="text-sm text-gray-400 mt-3">
-                        Need bulk pricing? <a href="#" class="text-red-500 hover:text-red-400 underline">Contact us for wholesale</a>
+                    <p class="text-sm text-gray-400 mt-3 font-light">
+                        Need bulk pricing? <a href="#" class="link-underline" style="color: var(--accent-copper);">Contact us for wholesale</a>
                     </p>
                 </div>
 
                 <!-- Buy Now Button -->
-                <button class="btn-primary w-full py-6 text-2xl">
+                <button class="btn-primary-luxury w-full py-6 text-2xl">
                     Buy Now - $35 →
                 </button>
 
@@ -186,27 +187,27 @@
                         <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="text-sm">Free Shipping</span>
+                        <span class="text-sm font-light">Free Shipping</span>
                     </div>
                     <div class="flex items-center gap-2 text-gray-400">
                         <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
                             <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
                         </svg>
-                        <span class="text-sm">Fast Delivery</span>
+                        <span class="text-sm font-light">Fast Delivery</span>
                     </div>
                     <div class="flex items-center gap-2 text-gray-400">
                         <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="text-sm">Secure Checkout</span>
+                        <span class="text-sm font-light">Secure Checkout</span>
                     </div>
                 </div>
 
                 <!-- Money Back Guarantee -->
-                <div class="bg-linear-to-r from-red-900/20 to-red-800/10 border border-red-600/30 rounded-2xl p-6 text-center">
-                    <h4 class="text-xl font-bold text-white mb-2">30-Day Money Back Guarantee</h4>
-                    <p class="text-red-200">Not satisfied? Return it for a full refund. No questions asked.</p>
+                <div class="bg-linear-to-r from-green-900/20 to-green-800/10 border border-green-600/30 rounded-2xl p-6 text-center">
+                    <h4 class="text-xl font-semibold text-white mb-2 tracking-wide">30-Day Money Back Guarantee</h4>
+                    <p class="text-green-200 font-light">Not satisfied? Return it for a full refund. No questions asked.</p>
                 </div>
             </div>
         </div>
@@ -216,38 +217,38 @@
 <!-- Why Choose Visor Plate -->
 <section class="section-standard bg-black">
     <div class="container-site">
-        <h2 class="text-4xl md:text-5xl font-black text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-light text-center mb-16 tracking-luxury">
             <span class="text-white">Why Car Enthusiasts</span>
-            <span class="text-gradient-red"> Love Visor Plate</span>
+            <span class="text-gradient-copper"> Love Visor Plate</span>
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="card-feature text-center">
-                <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div class="card-feature text-center copper-glow">
+                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">🎯</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Perfect Fit</h3>
-                <p class="text-gray-400">
+                <h3 class="text-2xl font-semibold text-white mb-3 tracking-wide">Perfect Fit</h3>
+                <p class="text-gray-400 font-light">
                     Works with any standard license plate and sun visor. Universal compatibility guaranteed.
                 </p>
             </div>
 
-            <div class="card-feature text-center">
-                <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div class="card-feature text-center copper-glow">
+                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">⚡</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Quick Release</h3>
-                <p class="text-gray-400">
+                <h3 class="text-2xl font-semibold text-white mb-3 tracking-wide">Quick Release</h3>
+                <p class="text-gray-400 font-light">
                     Remove in seconds for car shows, then reattach just as fast for daily driving.
                 </p>
             </div>
 
-            <div class="card-feature text-center">
-                <div class="w-16 h-16 bg-red-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div class="card-feature text-center copper-glow">
+                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span class="text-4xl">💪</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Industrial Strength</h3>
-                <p class="text-gray-400">
+                <h3 class="text-2xl font-semibold text-white mb-3 tracking-wide">Industrial Strength</h3>
+                <p class="text-gray-400 font-light">
                     Heavy-duty velcro holds your plate securely at highway speeds. Won't budge until you want it to.
                 </p>
             </div>
@@ -258,13 +259,13 @@
 <!-- CTA Section -->
 <section class="section-standard bg-linear-to-b from-black to-gray-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
+        <h2 class="text-4xl md:text-5xl font-light text-white mb-6 tracking-luxury">
             Ready to Protect Your Ride?
         </h2>
-        <p class="text-xl text-gray-400 mb-8">
+        <p class="text-xl text-gray-400 mb-8 font-light tracking-wide">
             Join thousands of car enthusiasts who refuse to drill holes in their bumpers
         </p>
-        <a href="#" class="btn-primary inline-block">
+        <a href="#" class="btn-primary-luxury inline-block">
             Get Yours Today - $35 →
         </a>
     </div>

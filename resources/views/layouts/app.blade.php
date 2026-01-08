@@ -8,25 +8,25 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="antialiased bg-white text-gray-900">
-    <!-- Simple Header/Nav -->
-    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b border-red-600/30 z-50">
+<body class="antialiased text-gray-900" style="background-color: var(--bg-luxury-black); color: var(--text-primary);">
+    <!-- Luxury Header/Nav -->
+    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-sm border-b z-50" style="border-color: rgba(184, 115, 51, 0.3);">
         <div class="container-site">
             <div class="flex justify-between items-center h-20">
-                <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
+                <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300" style="background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));">
                         <span class="text-white font-bold text-xl">V</span>
                     </div>
                     <div class="font-bold text-2xl tracking-tight">
                         <span class="text-white">Visor</span>
-                        <span class="text-red-600">Plate</span>
+                        <span style="color: var(--accent-copper);">Plate</span>
                     </div>
                 </a>
                 <div class="flex gap-8 items-center">
-                    <a href="{{ url('/#features') }}" class="text-gray-300 hover:text-red-600 transition hidden md:block">Features</a>
-                    <a href="{{ url('/#state-checker') }}" class="text-gray-300 hover:text-red-600 transition hidden md:block">State Requirements</a>
-                    <a href="{{ url('/#how-it-works') }}" class="text-gray-300 hover:text-red-600 transition hidden md:block">How It Works</a>
-                    <a href="{{ route('shop') }}" class="bg-linear-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:from-red-700 hover:to-red-800 hover:shadow-lg hover:shadow-red-600/50">
+                    <a href="{{ url('/#features') }}" class="text-gray-300 transition hidden md:block link-underline font-light" style="color: var(--text-primary);">Features</a>
+                    <a href="{{ url('/#state-checker') }}" class="text-gray-300 transition hidden md:block link-underline font-light" style="color: var(--text-primary);">State Requirements</a>
+                    <a href="{{ url('/#how-it-works') }}" class="text-gray-300 transition hidden md:block link-underline font-light" style="color: var(--text-primary);">How It Works</a>
+                    <a href="{{ route('shop') }}" class="btn-primary-sm">
                         Shop
                     </a>
                 </div>
@@ -39,50 +39,50 @@
         @yield('content')
     </main>
 
-    <!-- Simple Footer -->
-    <footer class="bg-linear-to-b from-black to-gray-900 border-t border-gray-900 section-compact">
+    <!-- Luxury Footer -->
+    <footer class="bg-linear-to-b from-black to-gray-900 border-t border-gray-800 section-compact">
         <div class="container-site">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="col-span-2">
-                    <a href="{{ url('/') }}" class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center">
+                    <a href="{{ url('/') }}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300" style="background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));">
                             <span class="text-white font-bold text-2xl">V</span>
                         </div>
                         <div class="font-bold text-2xl">
                             <span class="text-white">Visor</span>
-                            <span class="text-red-600">Plate</span>
+                            <span style="color: var(--accent-copper);">Plate</span>
                         </div>
                     </a>
-                    <p class="text-gray-400 max-w-md">
+                    <p class="text-gray-400 max-w-md font-light leading-relaxed">
                         The premium no-drill front license plate solution designed for car enthusiasts who refuse to compromise their vehicle's aesthetic.
                     </p>
                 </div>
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-red-600">Quick Links</h3>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="{{ url('/#features') }}" class="hover:text-red-600 transition">Features</a></li>
-                        <li><a href="{{ url('/#gallery') }}" class="hover:text-red-600 transition">Gallery</a></li>
-                        <li><a href="{{ url('/#state-checker') }}" class="hover:text-red-600 transition">State Requirements</a></li>
-                        <li><a href="{{ url('/#how-it-works') }}" class="hover:text-red-600 transition">Installation</a></li>
-                        <li><a href="{{ route('shop') }}" class="hover:text-red-600 transition">Shop</a></li>
+                    <h3 class="font-semibold text-lg mb-4 tracking-wide" style="color: var(--accent-copper);">Quick Links</h3>
+                    <ul class="space-y-3 text-gray-400 font-light">
+                        <li><a href="{{ url('/#features') }}" class="link-underline transition" style="color: var(--text-muted);">Features</a></li>
+                        <li><a href="{{ url('/#gallery') }}" class="link-underline transition" style="color: var(--text-muted);">Gallery</a></li>
+                        <li><a href="{{ url('/#state-checker') }}" class="link-underline transition" style="color: var(--text-muted);">State Requirements</a></li>
+                        <li><a href="{{ url('/#how-it-works') }}" class="link-underline transition" style="color: var(--text-muted);">Installation</a></li>
+                        <li><a href="{{ route('shop') }}" class="link-underline transition" style="color: var(--text-muted);">Shop</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-red-600">Support</h3>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="/contact" class="hover:text-red-600 transition">Contact Us</a></li>
-                        <li><a href="/wholesale" class="hover:text-red-600 transition">Wholesale Inquiry</a></li>
-                        <li><a href="/shipping" class="hover:text-red-600 transition">Shipping Info</a></li>
-                        <li><a href="/returns" class="hover:text-red-600 transition">Returns</a></li>
-                        <li><a href="/design" class="hover:text-red-600 transition">Design</a></li>
+                    <h3 class="font-semibold text-lg mb-4 tracking-wide" style="color: var(--accent-copper);">Support</h3>
+                    <ul class="space-y-3 text-gray-400 font-light">
+                        <li><a href="/contact" class="link-underline transition" style="color: var(--text-muted);">Contact Us</a></li>
+                        <li><a href="/wholesale" class="link-underline transition" style="color: var(--text-muted);">Wholesale Inquiry</a></li>
+                        <li><a href="/shipping" class="link-underline transition" style="color: var(--text-muted);">Shipping Info</a></li>
+                        <li><a href="/returns" class="link-underline transition" style="color: var(--text-muted);">Returns</a></li>
+                        <li><a href="/design" class="link-underline transition" style="color: var(--text-muted);">Design</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-500 text-sm">
+                <p class="text-gray-500 text-sm font-light">
                     &copy; {{ date('Y') }} Visor Plate. Preserve your ride's beauty.
                 </p>
-                <p class="text-gray-500 text-sm mt-4 md:mt-0">
+                <p class="text-gray-500 text-sm mt-4 md:mt-0 font-light">
                     Made for car enthusiasts, by car enthusiasts.
                 </p>
             </div>
