@@ -141,7 +141,7 @@
             <div class="space-y-8">
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
                             1
                         </div>
                         <div>
@@ -155,7 +155,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
                             2
                         </div>
                         <div>
@@ -169,7 +169,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
                             3
                         </div>
                         <div>
@@ -183,7 +183,7 @@
 
                 <div class="group">
                     <div class="flex gap-6 items-start">
-                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                        <div class="shrink-0 w-16 h-16 bg-linear-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl">
                             4
                         </div>
                         <div>
@@ -404,7 +404,7 @@
             <!-- Step 1 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
                         1
                     </div>
                     <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
@@ -420,7 +420,7 @@
             <!-- Step 2 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
                         2
                     </div>
                     <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
@@ -436,7 +436,7 @@
             <!-- Step 3 -->
             <div class="text-center group">
                 <div class="relative mb-8">
-                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl transition-all duration-300 group-hover:from-red-700 group-hover:to-red-900">
+                    <div class="w-24 h-24 bg-linear-to-br from-red-600 to-red-800 rounded-3xl flex items-center justify-center text-white text-5xl font-black mx-auto mb-6 shadow-xl">
                         3
                     </div>
                     <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-red-600 transition-colors">
@@ -486,13 +486,13 @@
                         <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
                             <span class="text-white font-bold">✓</span>
                         </div>
-                        <span class="text-white text-lg">Complete Visor Plate system with velcro</span>
+                        <span class="text-white text-lg">Hand-Made in America</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
                             <span class="text-white font-bold">✓</span>
                         </div>
-                        <span class="text-white text-lg">Industrial-strength adhesive</span>
+                        <span class="text-white text-lg">High Quality Materials</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
@@ -504,7 +504,7 @@
                         <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
                             <span class="text-white font-bold">✓</span>
                         </div>
-                        <span class="text-white text-lg">Works with any standard license plate</span>
+                        <span class="text-white text-lg">Works with any standard US license plate</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="w-8 h-8 bg-linear-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center shrink-0">
