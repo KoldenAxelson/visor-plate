@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Visor Plate - Premium No-Drill Front Plate Solution for Show Cars')
+@section('title', 'VisorPlate - Premium No-Drill Front Plate Solution for Show Cars')
 
 @section('content')
 <!-- MASSIVE Hero Section with Premium Grain -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden premium-grain">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/hero.jpg') }}" alt="Visor Plate Hero" class="w-full h-full object-cover object-top">
+        <img src="{{ asset('images/hero.jpg') }}" alt="VisorPlate Hero" class="w-full h-full object-cover object-top">
         <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/60 to-black"></div>
     </div>
 
@@ -31,7 +31,7 @@
 
         <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
             <a href="{{ route('shop') }}" class="group btn-primary-luxury">
-                Commission Your Visor Plate
+                Commission Your VisorPlate
                 <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </a>
             <a href="#how-it-works" class="btn-secondary">
@@ -124,7 +124,7 @@
                 </span>
             </div>
             <h2 class="text-section mb-6">
-                <span class="text-gradient-copper">Visor Plate</span>
+                <span class="text-gradient-copper">VisorPlate</span>
             </h2>
             <p class="text-2xl text-gray-300 max-w-3xl mx-auto font-light tracking-wide">
                 Zero compromise. Zero damage. Maximum style.
@@ -134,7 +134,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
             <!-- Product Image -->
             <div class="relative hover-scale-image">
-                <img src="{{ asset('images/Display.jpg') }}" alt="Visor Plate Product" class="relative rounded-3xl shadow-2xl border border-gray-800">
+                <img src="{{ asset('images/Display.jpg') }}" alt="VisorPlate Product" class="relative rounded-3xl shadow-2xl border border-gray-800">
             </div>
 
             <!-- Features -->
@@ -215,7 +215,7 @@
                 <span class="text-gradient-copper">Real Enthusiast Cars</span>
             </h2>
             <p class="text-xl text-gray-400 font-light tracking-wide">
-                From show cars to daily drivers, Visor Plate keeps them all looking clean
+                From show cars to daily drivers, VisorPlate keeps them all looking clean
             </p>
         </div>
 
@@ -236,7 +236,7 @@
                             x-transition:leave-end="opacity-0"
                             class="absolute inset-0"
                         >
-                            <img :src="`{{ asset('images') }}/${image}`" :alt="`Visor Plate on Car ${index + 1}`" class="w-full h-full object-cover">
+                            <img :src="`{{ asset('images') }}/${image}`" :alt="`VisorPlate on Car ${index + 1}`" class="w-full h-full object-cover">
                         </div>
                     </template>
                 </div>

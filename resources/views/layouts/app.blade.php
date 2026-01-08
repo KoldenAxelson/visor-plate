@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Visor Plate - Front License Plate Solution')</title>
+    <title>@yield('title', 'VisorPlate - Front License Plate Solution')</title>
     <meta name="description" content="The no-drill front license plate solution for car enthusiasts. Easy velcro installation on your sun visor.">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -80,7 +80,7 @@
             </div>
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-500 text-sm font-light">
-                    &copy; {{ date('Y') }} Visor Plate. Preserve your ride's beauty.
+                    &copy; {{ date('Y') }} VisorPlate. Preserve your ride's beauty.
                 </p>
                 <p class="text-gray-500 text-sm mt-4 md:mt-0 font-light">
                     Made for car enthusiasts, by car enthusiasts.

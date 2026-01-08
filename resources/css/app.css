@@ -198,11 +198,13 @@
     /* Primary CTA - Copper accent with luxury timing */
     .btn-primary-luxury {
         position: relative;
+        background: transparent;
         @apply px-12 py-5 rounded-xl text-xl font-semibold overflow-hidden;
         border: 2px solid var(--accent-copper);
         color: var(--accent-copper);
         letter-spacing: 0.05em;
         transition: color 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+        z-index: 1;
     }
 
     .btn-primary-luxury::before {
@@ -222,6 +224,11 @@
 
     .btn-primary-luxury:hover::before {
         transform: scaleX(1);
+    }
+
+    .btn-primary-luxury > * {
+        position: relative;
+        z-index: 1;
     }
 
     /* Primary CTA (Original red - now for specific CTAs only) */
@@ -314,12 +321,12 @@
 @layer components {
     /* Feature Card with hover lift */
     .card-feature {
-        @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8;
+        @apply bg-white/4 backdrop-blur-lg border border-white/10 rounded-2xl p-8;
         transition: all 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     .card-feature:hover {
-        @apply -translate-y-1.5 bg-white/8 border-white/15;
+        @apply -translate-y-1.5 bg-white/6 border-white/10;
     }
 
     /* Premium Info Card */
@@ -565,7 +572,7 @@
 @layer utilities {
     /* Section Padding - Hero */
     .section-hero {
-        @apply py-32;
+        @apply py-12;
     }
 
     /* Section Padding - Standard */
