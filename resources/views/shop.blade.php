@@ -4,7 +4,8 @@
 
 @section('content')
 <!-- Shop Hero -->
-<section class="pt-32 pb-16 bg-linear-to-b from-black to-gray-900">
+<!--
+<section class="pt-16 pb-1 bg-linear-to-b from-black to-gray-900">
     <div class="container-site">
         <div class="text-center mb-12">
             <div class="inline-block mb-6">
@@ -12,6 +13,7 @@
                     PREMIUM NO-DRILL SOLUTION
                 </span>
             </div>
+
             <h1 class="text-section mb-6">
                 <span class="text-gradient-copper">Visor Plate</span>
             </h1>
@@ -21,6 +23,7 @@
         </div>
     </div>
 </section>
+-->
 
 <!-- Product Section -->
 <section class="section-compact bg-gray-900">
@@ -28,7 +31,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
             <!-- Left: Product Carousel -->
-            <div x-data="productCarousel()" class="sticky top-24">
+            <div x-data="productCarousel()" class="lg:sticky lg:top-24">
                 <!-- Main Image Display -->
                 <div class="relative rounded-3xl overflow-hidden border-2 border-gray-800 shadow-2xl mb-6 bg-black">
                     <div class="relative aspect-square">
@@ -86,7 +89,7 @@
             <div class="space-y-8">
                 <!-- Product Title & Price -->
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">Visor Plate™</h2>
+                    <h2 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">Visor Plate</h2>
                     <div class="flex items-baseline gap-4 mb-6">
                         <span class="text-6xl font-light text-white tracking-luxury">$35</span>
                         <span class="text-2xl text-gray-400 line-through font-light">$200 ticket</span>
@@ -136,21 +139,21 @@
                     </div>
                 </div>
 
-                <!-- What's Included -->
+                <!-- Buyer's Notice -->
                 <div class="card-info">
-                    <h3 class="text-2xl font-semibold text-white mb-4 tracking-wide">What's Included</h3>
+                    <h3 class="text-2xl font-semibold text-white mb-4 tracking-wide">Buyer's Notice</h3>
                     <ul class="space-y-3 text-gray-300 font-light">
                         <li class="flex items-center gap-3">
                             <span style="color: var(--accent-copper);">•</span>
-                            <span>1x Visor Plate mounting system</span>
+                            <span>VisorPlates made with 12"x6"plate dimensions in mind</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <span style="color: var(--accent-copper);">•</span>
-                            <span>Industrial-strength velcro strips</span>
+                            <span>Plastic Vinyl for display expands/contracts with heat</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <span style="color: var(--accent-copper);">•</span>
-                            <span>Easy installation instructions</span>
+                            <span>Hand-made in the USA</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <span style="color: var(--accent-copper);">•</span>
@@ -178,7 +181,7 @@
 
                 <!-- Buy Now Button -->
                 <button class="btn-primary-luxury w-full py-6 text-2xl">
-                    Buy Now - $35 →
+                    Proceed to Checkout
                 </button>
 
                 <!-- Trust Badges -->

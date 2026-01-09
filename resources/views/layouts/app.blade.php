@@ -7,6 +7,7 @@
     <meta name="description" content="The no-drill front license plate solution for car enthusiasts. Easy velcro installation on your sun visor.">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="antialiased text-gray-900" style="background-color: var(--bg-luxury-black); color: var(--text-primary);">
     <!-- Luxury Header/Nav -->

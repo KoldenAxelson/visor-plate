@@ -577,12 +577,12 @@
 
     /* Section Padding - Standard */
     .section-standard {
-        @apply py-20;
+        @apply py-12;
     }
 
     /* Section Padding - Compact */
     .section-compact {
-        @apply py-16;
+        @apply py-12;
     }
 
     /* Max-width Container */

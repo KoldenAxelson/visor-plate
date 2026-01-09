@@ -4,54 +4,61 @@
 
 @section('content')
 <!-- MASSIVE Hero Section with Premium Grain -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden premium-grain">
-    <!-- Background Image with Overlay -->
+<section class="relative min-h-screen flex items-center overflow-hidden premium-grain">
+    <!-- Background Image -->
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/hero.jpg') }}" alt="VisorPlate Hero" class="w-full h-full object-cover object-top">
-        <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/60 to-black"></div>
+        <img src="{{ asset('images/hero.jpg') }}" alt="VisorPlate Hero"
+             class="w-full h-full object-cover object-top">
+        <!-- Narrow LEFT gradient - opaque left, transparent by 50% mark -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"
+             style="--tw-gradient-to: transparent; --tw-gradient-stops: black 0%, rgb(0 0 0 / 0.8) 35%, transparent 60%;"></div>
+
+        <!-- Bottom fade for trust badges and scroll indicator -->
+        <div class="absolute inset-x-0 bottom-0 h-128 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
     </div>
 
-    <!-- Content -->
-    <div class="relative z-10 container-site py-32 text-center">
-        <div class="inline-block mb-6">
-            <span class="badge-copper-blur">
-                FOR SHOW CARS & ENTHUSIASTS
-            </span>
-        </div>
+    <!-- Content - NO CONTAINER, direct left padding -->
+    <div class="relative z-10 w-full py-32 px-8 md:px-16 lg:px-20">
+        <div class="max-w-xl"> <!-- Constrains text width, but stays left -->
 
-        <h1 class="text-hero mb-8 leading-tight">
-            <span class="text-white">Preserve Your</span><br>
-            <span class="text-gradient-copper">Pristine Bumper</span>
-        </h1>
-
-        <p class="text-xl md:text-3xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-            The <strong class="font-semibold text-white">premium velcro visor solution</strong> that keeps your front plate legal
-            without drilling a single hole. <span style="color: var(--accent-copper);">No damage. Ever.</span>
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <a href="{{ route('shop') }}" class="group btn-primary-luxury">
-                Commission Your VisorPlate
-                <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">→</span>
-            </a>
-            <a href="#how-it-works" class="btn-secondary">
-                View Installation
-            </a>
-        </div>
-
-        <!-- Social Proof Pills -->
-        <div class="flex flex-wrap gap-6 justify-center text-sm">
-            <div class="trust-badge">
-                <span style="color: var(--accent-copper);" class="text-xl">✓</span>
-                <span>No Drilling Required</span>
+            <div class="mb-6">
+                <span class="badge-copper-blur">
+                    FOR SHOW CARS & ENTHUSIASTS
+                </span>
             </div>
-            <div class="trust-badge">
-                <span style="color: var(--accent-copper);" class="text-xl">✓</span>
-                <span>60 Second Install</span>
+
+            <h1 class="text-5xl md:text-7xl font-light mb-8 leading-tight tracking-luxury">
+                <span class="text-white">Preserve Your</span><br>
+                <span class="text-gradient-copper">Pristine Bumper</span>
+            </h1>
+
+            <p class="text-lg md:text-2xl text-gray-300 mb-12 leading-relaxed font-light">
+                The <strong class="font-semibold text-white">premium velcro visor solution</strong> that keeps your front plate legal without drilling a single hole. <br><span style="color: var(--accent-copper);">No Compromise. Fully Aesthetic.</span>
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 mb-12">
+                <a href="{{ route('shop') }}" class="group btn-primary-luxury">
+                    Get My VisorPlate
+                </a>
+                <a href="#how-it-works" class="btn-secondary">
+                    Easy Install
+                </a>
             </div>
-            <div class="trust-badge">
-                <span style="color: var(--accent-copper);" class="text-xl">✓</span>
-                <span>Perfect for Show Cars</span>
+
+            <!-- Trust Signals -->
+            <div class="flex flex-wrap gap-6 text-sm">
+                <div class="trust-badge">
+                    <span style="color: var(--accent-copper);" class="text-xl">✓</span>
+                    <span>No Drilling Required</span>
+                </div>
+                <div class="trust-badge">
+                    <span style="color: var(--accent-copper);" class="text-xl">✓</span>
+                    <span>60 Second Install</span>
+                </div>
+                <div class="trust-badge">
+                    <span style="color: var(--accent-copper);" class="text-xl">✓</span>
+                    <span>Handmade in America</span>
+                </div>
             </div>
         </div>
     </div>
@@ -61,6 +68,21 @@
         <div class="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center">
             <div class="w-1 h-3 rounded-full mt-2" style="background-color: var(--accent-copper);"></div>
         </div>
+    </div>
+
+    <!-- Sticky Mobile CTA -->
+    <div x-data="stickyMobileCTA()"
+         x-show="showCTA"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="translate-y-full"
+         x-transition:enter-end="translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0"
+         x-transition:leave-end="translate-y-full"
+         class="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-black/95 backdrop-blur-sm border-t border-white/10">
+        <a href="{{ route('shop') }}" class="btn-primary-luxury w-full text-center py-4 text-lg block">
+            Get My VisorPlate - $35
+        </a>
     </div>
 </section>
 
@@ -200,7 +222,7 @@
         <!-- CTA -->
         <div class="text-center">
             <a href="{{ route('shop') }}" class="btn-primary-luxury inline-block">
-                Protect Your Ride - $35 →
+                Get My VisorPlate
             </a>
         </div>
     </div>
@@ -371,7 +393,7 @@
                 <!-- CTA -->
                 <div class="mt-8 text-center">
                     <a href="#pricing" class="btn-primary-luxury inline-block">
-                        Get Protected - $35 →
+                        Get My VisorPlate
                     </a>
                 </div>
             </div>
@@ -400,12 +422,12 @@
                         1
                     </div>
                     <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-copper-500 transition-colors duration-300">
-                        <img src="{{ asset('images/Back.jpg') }}" alt="Step 1" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/Slide.jpg') }}" alt="Step 1" class="w-full h-full object-cover">
                     </div>
                 </div>
-                <h3 class="text-3xl font-semibold mb-4 text-white tracking-wide">Attach Velcro</h3>
+                <h3 class="text-3xl font-semibold mb-4 text-white tracking-wide">Insert Plate</h3>
                 <p class="text-gray-400 text-lg font-light">
-                    Peel and stick the velcro backing to your license plate. Strong adhesive that won't damage the plate.
+                    Take your front facing license plate and insert it into the product.
                 </p>
             </div>
 
@@ -421,7 +443,7 @@
                 </div>
                 <h3 class="text-3xl font-semibold mb-4 text-white tracking-wide">Mount on Visor</h3>
                 <p class="text-gray-400 text-lg font-light">
-                    Press the plate firmly onto your passenger sun visor. Velcro holds it securely while driving.
+                    Wrap the velcro straps around the passenger side visor securely.
                 </p>
             </div>
 
@@ -432,12 +454,12 @@
                         3
                     </div>
                     <div class="aspect-video bg-gray-900 rounded-2xl overflow-hidden border-2 border-gray-800 group-hover:border-copper-500 transition-colors duration-300">
-                        <img src="{{ asset('images/Slide.jpg') }}" alt="Step 3" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/EDIT_1.jpg') }}" alt="Step 3" class="w-full h-full object-cover">
                     </div>
                 </div>
                 <h3 class="text-3xl font-semibold mb-4 text-white tracking-wide">Drive Legally</h3>
                 <p class="text-gray-400 text-lg font-light">
-                    You're done! Front plate displayed and legal. Remove anytime for shows or when not needed.
+                    You're done! Remove anytime for shows or when not needed.
                 </p>
             </div>
         </div>
@@ -513,7 +535,7 @@
                 </div>
 
                 <a href="{{ route('shop') }}" class="btn-primary-luxury w-full py-6 text-2xl block text-center">
-                    Commission Yours Now →
+                    Get My VisorPlate
                 </a>
 
                 <p class="text-center text-gray-500 mt-6 text-sm font-light">
@@ -577,6 +599,22 @@ function carousel() {
         resetAutoPlay() {
             this.stopAutoPlay();
             this.startAutoPlay();
+        }
+    }
+}
+
+// Sticky Mobile CTA
+function stickyMobileCTA() {
+    return {
+        showCTA: false,
+        init() {
+            // Only run on mobile
+            if (window.innerWidth >= 768) return;
+
+            window.addEventListener('scroll', () => {
+                // Show CTA after scrolling 100vh (past hero section)
+                this.showCTA = window.scrollY > window.innerHeight;
+            });
         }
     }
 }
