@@ -8,6 +8,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @livewireStyles
 </head>
 <body class="antialiased text-gray-900" style="background-color: var(--bg-luxury-black); color: var(--text-primary);">
     <!-- Luxury Header/Nav -->
@@ -38,6 +39,7 @@
     <!-- Main Content -->
     <main class="pt-16">
         @yield('content')
+        {{ $slot ?? '' }}
     </main>
 
     <!-- Luxury Footer -->
@@ -89,5 +91,6 @@
             </div>
         </div>
     </footer>
+    @livewireScripts
 </body>
 </html>
