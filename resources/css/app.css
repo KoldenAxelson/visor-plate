@@ -226,6 +226,17 @@
         transform: scaleX(1);
     }
 
+    .btn-primary-luxury:disabled {
+        background: #6b5742;
+        color: #3d3228;
+        border-color: #6b5742;
+        cursor: not-allowed;
+    }
+
+    .btn-primary-luxury:disabled::before {
+        display: none;
+    }
+
     .btn-primary-luxury > * {
         position: relative;
         z-index: 1;
