@@ -327,6 +327,97 @@
 }
 
 /* ========================================
+   BUTTON LOADING STATES (DRY Component)
+   Works with both Alpine.js (x-show) and Livewire (wire:loading)
+   ======================================== */
+@layer components {
+    /*
+     * Button with loading state support
+     * Prevents layout shift by using absolute positioning
+     *
+     * Usage with Alpine.js:
+     * <button class="btn-primary-luxury btn-with-loading">
+     *     <span class="btn-default-text" x-show="!loading">Click Me</span>
+     *     <span class="btn-loading-text" x-show="loading">
+     *         <svg class="btn-spinner">...</svg>
+     *         Processing...
+     *     </span>
+     * </button>
+     *
+     * Usage with Livewire:
+     * <button class="btn-primary-luxury btn-with-loading">
+     *     <span class="btn-default-text" wire:loading.remove>Click Me</span>
+     *     <span class="btn-loading-text" wire:loading.flex>
+     *         <svg class="btn-spinner">...</svg>
+     *         Processing...
+     *     </span>
+     * </button>
+     */
+
+    /* Make button a positioning context */
+    .btn-with-loading {
+        position: relative;
+    }
+
+    /* Default text - positioned absolutely to prevent layout shift */
+    .btn-default-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 150ms ease-in-out;
+    }
+
+    /* Loading text - positioned absolutely, overlays default text */
+    .btn-loading-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        transition: opacity 150ms ease-in-out;
+    }
+
+    /* Invisible spacer to maintain button height */
+    .btn-with-loading::after {
+        content: attr(data-text);
+        visibility: hidden;
+        pointer-events: none;
+        user-select: none;
+        height: 0;
+        overflow: hidden;
+    }
+
+    /* Loading spinner - pre-styled for consistency */
+    .btn-spinner {
+        @apply w-5 h-5 animate-spin;
+        fill: none;
+    }
+
+    /* Larger spinner for bigger buttons */
+    .btn-spinner-lg {
+        @apply w-6 h-6 animate-spin;
+        fill: none;
+    }
+
+    /*
+     * Loading state override for disabled buttons
+     * When loading, show the desaturated disabled state
+     */
+    .btn-with-loading:disabled .btn-default-text,
+    .btn-with-loading[disabled] .btn-default-text {
+        opacity: 0;
+    }
+
+    .btn-with-loading:disabled .btn-loading-text,
+    .btn-with-loading[disabled] .btn-loading-text {
+        opacity: 1;
+    }
+}
+
+/* ========================================
    LUXURY CARD COMPONENTS
    ======================================== */
 @layer components {
@@ -662,5 +753,24 @@
 
     .tracking-caps {
         letter-spacing: 0.12em;
+    }
+}
+
+/* ========================================
+   LOADING STATE UTILITIES
+   ======================================== */
+@layer utilities {
+    /*
+     * Quick utility for adding loading cursor
+     * Use with wire:loading.class or x-bind:class
+     */
+    .cursor-loading {
+        cursor: wait;
+    }
+
+    /* Disable pointer events during loading */
+    .loading-disabled {
+        pointer-events: none;
+        cursor: not-allowed;
     }
 }

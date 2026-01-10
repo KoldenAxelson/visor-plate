@@ -3,28 +3,6 @@
 @section('title', 'Shop - Get Your Visor Plate')
 
 @section('content')
-<!-- Shop Hero -->
-<!--
-<section class="pt-16 pb-1 bg-linear-to-b from-black to-gray-900">
-    <div class="container-site">
-        <div class="text-center mb-12">
-            <div class="inline-block mb-6">
-                <span class="badge-copper-blur">
-                    PREMIUM NO-DRILL SOLUTION
-                </span>
-            </div>
-
-            <h1 class="text-section mb-6">
-                <span class="text-gradient-copper">Visor Plate</span>
-            </h1>
-            <p class="text-2xl text-gray-300 max-w-3xl mx-auto font-light tracking-wide">
-                Protect your bumper. Stay legal. Remove anytime.
-            </p>
-        </div>
-    </div>
-</section>
--->
-
 <!-- Product Section -->
 <section class="section-compact bg-gray-900">
     <div class="container-site">
@@ -86,7 +64,7 @@
             </div>
 
             <!-- Right: Product Info & Checkout -->
-            <div class="space-y-8">
+            <div x-data="checkoutHandler()" class="space-y-8">
                 <!-- Product Title & Price -->
                 <div>
                     <h2 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">Visor Plate</h2>
@@ -166,22 +144,61 @@
                 <div class="card-feature">
                     <label class="label-standard">Quantity</label>
                     <div class="flex items-center gap-4">
-                        <button class="btn-quantity">
+                        <button
+                            @click="decrementQuantity()"
+                            :disabled="quantity <= 1"
+                            class="btn-quantity"
+                        >
                             −
                         </button>
-                        <input type="number" value="1" min="1" class="input-quantity">
-                        <button class="btn-quantity">
+                        <input
+                            type="number"
+                            x-model="quantity"
+                            min="1"
+                            max="100"
+                            class="input-quantity"
+                        >
+                        <button
+                            @click="incrementQuantity()"
+                            :disabled="quantity >= 100"
+                            class="btn-quantity"
+                        >
                             +
                         </button>
                     </div>
-                    <p class="text-sm text-gray-400 mt-3 font-light">
-                        Need bulk pricing? <a href="#" class="link-underline" style="color: var(--accent-copper);">Contact us for wholesale</a>
-                    </p>
+                    <div class="flex justify-between items-center mt-3">
+                        <p class="text-sm text-gray-400 font-light">
+                            Need bulk pricing? <a href="{{ route('contact') }}" class="link-underline" style="color: var(--accent-copper);">Contact us for wholesale</a>
+                        </p>
+                        <p class="text-lg text-white font-semibold">
+                            Total: <span x-text="'$' + (quantity * 35).toFixed(2)"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div x-show="error" x-cloak class="bg-red-900/20 border border-red-600/30 rounded-2xl p-4 text-center">
+                    <p class="text-red-200" x-text="error"></p>
                 </div>
 
                 <!-- Buy Now Button -->
-                <button class="btn-primary-luxury w-full py-6 text-2xl">
-                    Proceed to Checkout
+                <button
+                    @click="createCheckoutSession()"
+                    :disabled="loading"
+                    class="btn-primary-luxury btn-with-loading w-full py-6 text-2xl"
+                    :class="{ 'opacity-75 cursor-not-allowed': loading }"
+                    data-text="Proceed to Checkout"
+                >
+                    <span class="btn-default-text" x-show="!loading">
+                        Proceed to Checkout
+                    </span>
+                    <span class="btn-loading-text" x-show="loading">
+                        <svg class="btn-spinner-lg" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                    </span>
                 </button>
 
                 <!-- Trust Badges -->
@@ -268,14 +285,15 @@
         <p class="text-xl text-gray-400 mb-8 font-light tracking-wide">
             Join thousands of car enthusiasts who refuse to drill holes in their bumpers
         </p>
-        <a href="#" class="btn-primary-luxury inline-block">
+        <a href="#" @click.prevent="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-primary-luxury inline-block">
             Get Yours Today - $35 →
         </a>
     </div>
 </section>
 
-<!-- Alpine.js Product Carousel Component -->
+<!-- Alpine.js Components -->
 <script>
+// Product Carousel Component
 function productCarousel() {
     return {
         currentIndex: 0,
@@ -297,5 +315,65 @@ function productCarousel() {
         }
     }
 }
+
+// Checkout Handler Component
+function checkoutHandler() {
+    return {
+        quantity: 1,
+        loading: false,
+        error: null,
+
+        incrementQuantity() {
+            if (this.quantity < 100) {
+                this.quantity++;
+            }
+        },
+
+        decrementQuantity() {
+            if (this.quantity > 1) {
+                this.quantity--;
+            }
+        },
+
+        async createCheckoutSession() {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const response = await fetch('{{ route('checkout.create') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        quantity: this.quantity
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.url) {
+                    // Redirect to Stripe Checkout
+                    window.location.href = data.url;
+                } else {
+                    this.error = data.error || 'Something went wrong. Please try again.';
+                    this.loading = false;
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                this.error = 'Unable to connect to payment processor. Please try again.';
+                this.loading = false;
+            }
+        }
+    }
+}
 </script>
+
+<style>
+/* Hide elements with x-cloak until Alpine.js loads */
+[x-cloak] {
+    display: none !important;
+}
+</style>
 @endsection
