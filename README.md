@@ -1,513 +1,472 @@
-# Visor Plate - Landing Page & Shop
+# VisorPlate - Premium No-Drill License Plate Solution
 
-A premium single-product e-commerce site for Visor Plate, a no-drill front license plate solution for car enthusiasts.
+A luxury single-product e-commerce site for VisorPlate, the velcro-based front license plate holder designed for car enthusiasts who refuse to drill holes in their pristine bumpers.
 
----
-
-## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Tech Stack](#tech-stack)
-- [File Structure](#file-structure)
-- [Features Implemented](#features-implemented)
-- [Setup Instructions](#setup-instructions)
-- [Design Decisions](#design-decisions)
-- [To-Do List](#to-do-list)
-- [Key Links & Resources](#key-links--resources)
+**Product**: Velcro visor-mounted front license plate holder  
+**Price**: $35  
+**Target Market**: Car enthusiasts, show car owners, dealerships (wholesale)
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Project Status
 
-**Product:** Visor Plate - A velcro-based front license plate holder that attaches to sun visors  
-**Price:** $35  
-**Target Audience:** Car enthusiasts and show car owners who want legal compliance without drilling holes in their bumpers  
+### ✅ Implemented
+- Landing page with hero, features, gallery, state checker, installation guide
+- Shop page with product carousel and details
+- Contact form with wholesale inquiry support (Livewire)
+- Email notifications (Mailtrap for dev)
+- Custom 404 page
+- Design system showcase page (`/design`)
+- Luxury dark theme with glassmorphism
+- Mobile responsive
 
-**Value Proposition:**
-- Primary: Preserve vehicle aesthetics (no drilling)
-- Secondary: Legal compliance (all 29 front-plate states)
-- Tertiary: Quick install/removal for car shows
-- Bonus: Avoid $200 tickets
+### 🚧 To-Do
+- Stripe Checkout integration
+- Order database (emails, addresses, order history)
+- Rollo Label Printer integration for shipping
+- Production email service setup
+- Domain purchase & deployment
+- Wholesale pricing automation
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Backend:**
-- Laravel 11.x (PHP 8.4.1)
-- Composer 2.9.2
-- Laravel Herd (local development server)
-- **Livewire** (Coming with Stripe integration)
+### Backend
+- **Laravel 11.x** (PHP 8.4.1)
+- **Livewire 3.x** - Contact form, future checkout
+- **Composer 2.9.2**
+- **Laravel Valet** (local development)
 
-**Frontend:**
-- Tailwind CSS v4 (CSS-first configuration)
-- Alpine.js (lightweight JavaScript framework)
-- Vite (asset bundling)
-- Blade templates (Laravel templating engine)
+### Frontend
+- **Tailwind CSS v4** ⚠️ CSS-first config (no `tailwind.config.js`)
+- **Alpine.js** - UI interactions (carousels, state checker)
+- **Vite** - Asset bundling
+- **Blade Templates** - Templating engine
 
-**Design Philosophy:**
+### Email (Development)
+- **Mailtrap** - Testing inbox
+- **Production TBD** - Likely Mailgun or SendGrid (low volume expected)
+
+---
+
+## 🎨 Design Philosophy
+
+**Luxury Automotive Aesthetic**
 - Dark theme (black/gray backgrounds)
-- Red accent color (#ef4444 to #dc2626)
-- Bold typography (text-5xl to text-8xl)
-- Generous spacing (py-32 sections)
-- Premium automotive aesthetic
-- Clean outline buttons (no drop shadows)
+- Copper (#b87333) to gold (#c29049) gradients
+- Glassmorphism effects (backdrop blur, subtle borders)
+- NO drop shadows (uses gradient borders and glow effects instead)
+- Premium typography (font-light, generous letter-spacing)
+- Smooth animations (350ms bezier curves)
+
+**Key Principle**: Shadow-free depth through gradient borders, glass panels, and subtle glows.
 
 ---
 
-## 🔄 Why Livewire? (Coming Soon)
-
-**Current Stack:**
-- **Alpine.js** handles UI interactions (carousels, dropdowns, animations)
-- Great for client-side only features
-- No database interaction needed
-
-**Adding Livewire for:**
-- **Stripe Payment Processing** - Handle checkout flow with server-side validation
-- **Contact Forms** - Real-time validation, email sending, spam protection
-- **Wholesale Inquiries** - Form validation, database storage, notification emails
-- **Future Features** - Order tracking, customer accounts, admin dashboard
-
-**Why Livewire over plain Laravel forms?**
-- ✅ Real-time validation (no page refresh)
-- ✅ Better UX (SPA-like feel)
-- ✅ Write PHP instead of JavaScript
-- ✅ Built-in CSRF protection
-- ✅ Easy file uploads
-- ✅ Works seamlessly with Alpine.js
-
-**When will it be added?**
-When we implement Stripe payments - it provides the cleanest way to handle checkout flow, validation, and payment processing without building complex JavaScript.
-
-**Installation:**
-```bash
-composer require livewire/livewire
-```
-
-That's it! Livewire is a Laravel package that adds reactive components without the complexity of Vue/React.
-
----
-
-## 📁 File Structure
+## 📁 Project Structure
 
 ```
 visor-plate/
 ├── app/
-│   └── Livewire/                # Livewire components (coming with Stripe)
-│       ├── Checkout.php         # Payment processing
-│       ├── ContactForm.php      # Contact form handler
-│       └── WholesaleForm.php    # Wholesale inquiry handler
+│   └── Livewire/
+│       └── ContactForm.php           # Contact/wholesale form handler
 ├── public/
-│   └── images/                  # All product images
-│       ├── hero.jpg             # Homepage hero background
-│       ├── Display.jpg          # Main product shot
-│       ├── Front-in.jpg         # Installation view
-│       ├── Slide.jpg            # Sliding mechanism
-│       ├── Back.jpg             # Velcro backing
-│       ├── Install.jpg          # Visor mount view
-│       ├── EDIT_1.jpg through EDIT_8.jpg  # Lifestyle shots
-│       └── Plate.jpg
+│   └── images/                       # Product photos (not in git)
+│       ├── hero.jpg
+│       ├── Display.jpg, Front-in.jpg, etc.
+│       └── EDIT_1.jpg through EDIT_8.jpg
 ├── resources/
 │   ├── css/
-│   │   └── app.css             # Tailwind v4 config
+│   │   └── app.css                   # ⚠️ Tailwind v4 CSS-first config
 │   ├── js/
-│   │   └── app.js              # Alpine.js initialization
+│   │   └── app.js                    # Alpine.js init
 │   └── views/
-│       ├── layouts/
-│       │   └── app.blade.php   # Master layout template
+│       ├── emails/                   # ⚠️ Must be plural "emails" not "email"
+│       │   ├── contact.blade.php
+│       │   └── contact-confirmation.blade.php
 │       ├── errors/
-│       │   └── 404.blade.php   # Custom 404 page
-│       ├── livewire/            # Livewire component views (coming soon)
-│       ├── home.blade.php      # Landing page
-│       └── shop.blade.php      # Product/checkout page
+│       │   └── 404.blade.php
+│       ├── layouts/
+│       │   └── app.blade.php         # ⚠️ Master layout (see gotchas)
+│       ├── livewire/
+│       │   └── contact-form.blade.php
+│       ├── home.blade.php            # Landing page
+│       ├── shop.blade.php            # Product page
+│       └── design.blade.php          # Design system showcase
 ├── routes/
-│   └── web.php                 # Route definitions
-├── vite.config.js              # Vite configuration
-├── package.json                # Frontend dependencies
-└── composer.json               # Backend dependencies
+│   └── web.php
+├── .env                              # Email config, not in git
+└── README.md                         # You are here
 ```
 
 ---
 
-## ✅ Features Implemented
-
-### Homepage (`/`)
-- ✅ Full-screen hero section with background image
-- ✅ "The Enthusiast's Dilemma" - 3 problem cards
-- ✅ Premium product showcase with 4 key features
-- ✅ Lifestyle image carousel (8 images, auto-advance every 5s)
-- ✅ Interactive state checker (Alpine.js) - 50 states
-- ✅ "How It Works" 3-step installation guide
-- ✅ Pricing section with feature checklist
-- ✅ Mobile responsive design
-
-### Shop Page (`/shop`)
-- ✅ Product detail carousel (5 images)
-- ✅ Sticky sidebar on desktop
-- ✅ Product information and pricing
-- ✅ Key benefits section
-- ✅ "What's Included" list
-- ✅ Quantity selector (ready for wholesale)
-- ✅ Trust badges (Free Shipping, Fast Delivery, Secure Checkout)
-- ✅ 30-day money back guarantee
-- ✅ "Why Choose" benefits section
-
-### Global Features
-- ✅ Fixed navigation with Shop button
-- ✅ Cross-page navigation (works from any page)
-- ✅ Comprehensive footer with links
-- ✅ Custom 404 error page
-- ✅ Smooth, professional button hover effects (no layout shift)
-- ✅ Consistent red gradient accents throughout
-
-### Interactive Components (Alpine.js)
-1. **Lifestyle Carousel** (Homepage)
-   - 8 images (EDIT_1 through EDIT_8)
-   - Auto-advance every 5 seconds
-   - Manual navigation (prev/next buttons)
-   - Dot indicators
-   - Desktop thumbnail strip
-   - Slide counter
-
-2. **Product Carousel** (Shop Page)
-   - 5 detail images
-   - Thumbnail navigation
-   - Prev/next buttons
-   - Image counter
-   - Sticky on scroll (desktop)
-
-3. **State Checker Tool**
-   - Dropdown with all 50 US states
-   - Dynamic result display (red for required, gray for rear-only)
-   - Warning about toll roads/state lines
-
----
-
-## 🚀 Setup Instructions
+## ⚙️ Local Setup
 
 ### Prerequisites
 - PHP 8.4.1+
 - Composer 2.9.2+
 - Node.js & npm
-- Laravel Herd (or Valet)
+- Laravel Valet
 
 ### Installation
 
-1. **Clone/setup Laravel project** (if starting fresh)
 ```bash
-composer create-project laravel/laravel visor-plate
+# Clone repo
+git clone [your-repo-url]
 cd visor-plate
-```
 
-2. **Install frontend dependencies**
-```bash
+# Install dependencies
+composer install
 npm install
+
+# Copy environment file
+cp .env.example .env
+php artisan key:generate
+
+# Configure Mailtrap in .env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
+MAIL_FROM_ADDRESS="hello@visorplate.com"
+
+# Build assets
+npm run dev
+
+# Link domain (Valet)
+valet link
+
+# Visit site
+open http://visor-plate.test
 ```
 
-3. **Copy files to correct locations**
-```bash
-# Layout
-cp layouts-app-fixed.blade.php resources/views/layouts/app.blade.php
+### Important: Add Product Images
 
-# Pages
-cp home.blade.php resources/views/home.blade.php
-cp shop.blade.php resources/views/shop.blade.php
-
-# Error pages
-mkdir -p resources/views/errors
-cp 404.blade.php resources/views/errors/404.blade.php
-
-# Routes (merge with existing)
-# Copy route definitions from web-shop.php to routes/web.php
-```
-
-4. **Add images**
-```bash
-# Copy all images to public/images/
-cp *.jpg public/images/
-```
-
-5. **Start development server**
-```bash
-npm run dev           # Terminal 1 - Vite
-herd link            # OR setup Herd via GUI
-```
-
-6. **Access site**
-- Homepage: `http://visor-plate.test`
-- Shop: `http://visor-plate.test/shop`
-
-### Important: Tailwind CSS v4 Configuration
-
-This project uses **Tailwind CSS v4** which has a different setup than v3:
-
-**Do NOT create `tailwind.config.js`** - v4 uses CSS-first configuration
-
-Key files:
-- `resources/css/app.css` - Contains `@import 'tailwindcss'` and `@source` directives
-- `vite.config.js` - Has `@tailwindcss/vite` plugin
-
-**Never replace these files** unless you know what you're doing!
+Images are NOT in git. You need to add them to `public/images/`:
+- `hero.jpg` - Homepage background
+- `Display.jpg`, `Front-in.jpg`, `Slide.jpg`, `Back.jpg`, `Install.jpg` - Product details
+- `EDIT_1.jpg` through `EDIT_8.jpg` - Lifestyle gallery
 
 ---
 
-## 🎨 Design Decisions
+## 🔧 Critical Gotchas & Quirks
 
-### Button Hover Effects
-**Philosophy:** Smooth, subtle interactions without layout shift. Clean, modern outline style (no drop shadows).
+### 1. Tailwind CSS v4 (CSS-First Config)
 
-**Approach:**
-- ❌ NO `transform scale()` effects (causes jank)
-- ❌ NO drop shadows (looks dated/2010s)
-- ✅ Outline to filled transitions
-- ✅ Smooth color inversions
-- ✅ Border color transitions
+**DO NOT** create a `tailwind.config.js` file. Tailwind v4 uses CSS-first configuration.
 
-**Red Button Pattern (Primary CTA):**
+**Configuration is in**: `resources/css/app.css`
+```css
+@import "tailwindcss";
+@source "../views";
+@source "../js";
+```
+
+**Vite config**: Already has `@tailwindcss/vite` plugin  
+**Gradients**: Use `bg-linear-to-r` not `bg-gradient-to-r`
+
+If you break this, nothing will work. Don't ask me how I know.
+
+### 2. Layout File Supports Both Blade & Livewire
+
+`resources/views/layouts/app.blade.php` must have BOTH:
 ```blade
-class="border-2 border-red-600 text-red-500 px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-red-600 hover:text-white hover:border-red-600"
+<main class="pt-16">
+    @yield('content')      {{-- For traditional Blade pages --}}
+    {{ $slot ?? '' }}      {{-- For Livewire components --}}
+</main>
 ```
-- Normal: Red outline, red text, transparent background
-- Hover: Fills with red, text turns white
 
-**Outline Button Pattern (Secondary):**
-```blade
-class="border-2 border-white/30 text-white px-12 py-5 rounded-xl text-xl font-bold transition-all duration-300 hover:bg-white/10 hover:border-white/50"
+**Why**: Home/shop use `@extends`, contact form uses Livewire's `->layout()`. Without both, Livewire pages show only header/footer.
+
+### 3. Email Folder Must Be Plural
+
+Folder: `resources/views/emails/` (NOT `email`)
+
+Laravel Mail looks for `emails/contact.blade.php`. If it's `email/contact.blade.php`, emails fail silently.
+
+### 4. Luxury Button Disabled State
+
+The `.btn-primary-luxury` class has custom disabled styling:
+```css
+.btn-primary-luxury:disabled {
+    background: #6b5742;  /* Desaturated copper */
+    color: #3d3228;
+    border-color: #6b5742;
+    cursor: not-allowed;
+}
 ```
-- Normal: Semi-transparent white outline
-- Hover: Slightly filled background, brighter border
 
-### Color Palette
-- **Base:** Black (#000) and dark grays (gray-900)
-- **Accent:** Red gradients (red-600 to red-700)
-- **Text:** White primary, gray-300/400 secondary
-- **Borders:** Gray-800 default, red-600 on hover
+Shows filled but darker/desaturated when disabled (vs the normal outline → fill on hover).
 
-### Typography Scale
-- **Mega Headlines:** text-7xl to text-8xl
-- **Section Titles:** text-5xl to text-6xl
-- **Body Copy:** text-lg to text-xl
-- **Small Text:** text-sm
+### 5. Mailtrap Rate Limiting
 
-### Spacing System
-- **Section Padding:** py-32 (very generous)
-- **Component Gaps:** gap-6 to gap-16
-- **Max Widths:** 
-  - Content: max-w-7xl
-  - Focused sections: max-w-4xl
-  - Forms/Cards: max-w-2xl
+Free tier limits emails/second. The contact form sends 2 emails (one to you, one to customer). 
 
-### Responsive Breakpoints
-- Mobile-first approach
-- `sm:` 640px
-- `md:` 768px
-- `lg:` 1024px
-- `xl:` 1280px
+**Current solution**: Only sends to business owner in dev. Customer confirmation email is production-only:
+```php
+if (app()->environment('production')) {
+    Mail::send('emails.contact-confirmation', ...);
+}
+```
+
+### 6. Alpine.js + Livewire Play Nice
+
+Alpine handles UI (carousels, animations, state checker). Livewire handles server-side (forms, email). They work together - don't fight it.
+
+### 7. Images Not in Git
+
+Product photos are user-uploaded and large. Back them up separately. `.gitignore` excludes them.
 
 ---
 
-## 📝 To-Do List
+## 🎨 Design System
 
-### Immediate (Before Launch)
-- [ ] **Install Livewire** (`composer require livewire/livewire`)
-- [ ] **Connect Stripe for payments** (using Livewire checkout component)
-- [ ] Set up order confirmation emails
-- [ ] Create contact form (Livewire component)
-- [ ] Create wholesale inquiry form (Livewire component)
-- [ ] Add real testimonials/reviews (if available)
-- [ ] Optimize images (compression, WebP format)
-- [ ] Add SEO meta tags
-- [ ] Set up Google Analytics
-- [ ] Test across browsers (Chrome, Safari, Firefox, Edge)
-- [ ] Mobile device testing (iOS, Android)
+All custom CSS is in `resources/css/app.css` with reusable utility classes:
 
-### Nice to Have
-- [ ] Add FAQ section
-- [ ] Product video demonstration
-- [ ] Live chat integration
-- [ ] Email newsletter signup
-- [ ] Social media links
-- [ ] Blog for content marketing
-- [ ] Customer testimonials page
-- [ ] Instagram feed integration
+### Key Components
+- `.glass-card` - Glassmorphism panels
+- `.btn-primary-luxury` - Copper gradient fill button
+- `.input-standard` - Glass form inputs
+- `.badge-copper-blur` - Copper accent badges
+- `.text-gradient-copper` - Copper to gold text gradient
+- `.carbon-fiber` - Carbon fiber texture
+- `.premium-grain` - Subtle noise overlay
 
-### Technical
-- [ ] Set up production deployment (Forge, Vapor, etc.)
-- [ ] Configure email service (Mailgun, SendGrid, etc.)
-- [ ] Set up error monitoring (Sentry, Bugsnag)
-- [ ] SSL certificate
-- [ ] Database for order tracking (optional)
-- [ ] Admin panel for order management (optional)
+### Color System (CSS Variables)
+```css
+--accent-copper: #b87333
+--accent-gold: #c29049
+--bg-luxury-black: #0d0d0d
+--bg-elevated: #1c1c1e
+```
+
+**Showcase**: Visit `/design` to see all components in action. (Easter egg - linked in footer)
 
 ---
 
-## 🔗 Key Links & Resources
+## 📧 Contact Form (Livewire)
 
-### Development
-- **Local URL:** `http://visor-plate.test`
-- **Shop Page:** `http://visor-plate.test/shop`
+**Route**: `/contact`  
+**Component**: `app/Livewire/ContactForm.php`  
+**View**: `resources/views/livewire/contact-form.blade.php`
 
-### Documentation
-- [Laravel Docs](https://laravel.com/docs)
-- [Livewire Docs](https://livewire.laravel.com/docs) ← **Read this when adding Stripe**
-- [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
-- [Alpine.js Docs](https://alpinejs.dev)
-- [Stripe Checkout Docs](https://stripe.com/docs/checkout)
+### Features
+- Toggle between General Contact / Wholesale Inquiry
+- Real-time validation (validates as you type)
+- Wholesale minimum: 200 units
+- Spam protection (honeypot field)
+- Email notifications with HTML templates
+- Success animation + form reset
+- Auto-scroll to top on success
+- Disabled state during submission
 
-### State License Plate Requirements
-**29 States Require Front Plates:**
+### Email Flow (Development)
+1. User submits form
+2. Email sent to `MAIL_FROM_ADDRESS` (you)
+3. ~~Confirmation email to customer~~ (production only to avoid rate limits)
+4. Emails appear in Mailtrap inbox
+
+### Wholesale Behavior
+When user selects "Wholesale Inquiry":
+- Company name field appears (required)
+- Quantity field appears (minimum 200 units)
+- Email subject changes to "New Wholesale Inquiry"
+- Email template highlights wholesale details
+
+---
+
+## 🚀 Production Deployment
+
+**Status**: Not deployed yet (waiting for domain purchase post-completion)
+
+### Deployment Options Being Considered
+- **Laravel Forge** - Simple, Laravel-focused (if pricing works)
+- **Vercel** - Serverless option
+- **AWS** - If more control needed
+- **Digital Ocean** - Budget-friendly VPS
+
+**Requirements**:
+- Low cost (100 visitors/month expected)
+- Easy scaling if needed (unlikely but nice to have)
+- SSL certificate
+- Email service integration
+- Consistent uptime
+
+### Production Checklist
+- [ ] Buy domain name
+- [ ] Choose hosting provider
+- [ ] Set up production email service (Mailgun/SendGrid)
+- [ ] Configure `.env` for production
+- [ ] Upload product images to server
+- [ ] Set up SSL certificate
+- [ ] Configure error monitoring (Sentry/Bugsnag optional)
+- [ ] Test payment flow end-to-end
+- [ ] Enable customer confirmation emails
+- [ ] Set up order database
+- [ ] Integrate Rollo printer for shipping labels
+
+### Expected Traffic
+- **Optimistic**: 1,000 visitors/month
+- **Realistic**: 100 visitors/month
+- **Conversion**: ~5% (50 orders/month if optimistic)
+- **Wholesale inquiries**: ~40/month (manual outreach to dealerships)
+- **Contact form**: ~10 emails/month from customers
+
+**Email volume**: Low. Most services' free tiers will suffice initially.
+
+---
+
+## 🗺️ Routes
+
+```php
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+Route::get('/shop', function () {
+    return view('shop');
+})->name('shop');
+
+Route::get('/design', function () {
+    return view('design');
+})->name('design');
+
+Route::get('/contact', ContactForm::class)->name('contact');
+```
+
+Simple, clean, exactly what's needed.
+
+---
+
+## 📊 State Checker (Alpine.js)
+
+Interactive tool on homepage (`#state-checker`) shows which states require front plates.
+
+**29 States Require Front Plates**:  
 California, Colorado, Connecticut, Hawaii, Idaho, Illinois, Iowa, Maine, Maryland, Massachusetts, Minnesota, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New York, North Dakota, Oregon, Rhode Island, South Dakota, Texas, Vermont, Virginia, Washington, Wisconsin, Wyoming, DC
 
-**21 States Rear-Only:**
+**21 States Rear-Only**:  
 Alabama, Arizona, Arkansas, Delaware, Florida, Georgia, Indiana, Kansas, Kentucky, Louisiana, Michigan, Mississippi, New Mexico, North Carolina, Oklahoma, Pennsylvania, South Carolina, Tennessee, West Virginia, Ohio, Alaska, Utah
 
 ---
 
-## 💡 Key Implementation Notes
+## 🎯 Development Workflow
 
-### Navigation Links
-All internal links use `{{ url('/#section') }}` format to work across pages:
-```blade
-<a href="{{ url('/#features') }}">Features</a>  <!-- Works from shop page -->
-<a href="{{ route('shop') }}">Shop</a>           <!-- Named route -->
+### Making Changes
+
+```bash
+# Start Vite dev server
+npm run dev
+
+# Watch for changes (auto-recompile)
+# Visit visor-plate.test in browser
+# Make changes to Blade/CSS/JS
+# Browser auto-refreshes
 ```
 
-### Image Assets
-All images in `public/images/` are accessed via:
-```blade
-{{ asset('images/filename.jpg') }}
+### Common Commands
+
+```bash
+# Clear caches
+php artisan view:clear
+php artisan config:clear
+php artisan cache:clear
+
+# Check routes
+php artisan route:list
+
+# Test email config
+php artisan tinker
+>>> Mail::raw('Test', fn($msg) => $msg->to('test@example.com'));
+
+# Rebuild assets for production
+npm run build
 ```
 
-### Alpine.js Components
-Defined in `<script>` tags at bottom of pages:
-- `carousel()` - Lifestyle image carousel
-- `productCarousel()` - Product detail carousel
-- `stateChecker()` - State requirements tool
+### Adding New Pages
 
-### Livewire Components (Coming Soon)
-Livewire will handle server-side interactions while Alpine handles UI:
-- **Livewire:** Form validation, payment processing, database operations
-- **Alpine:** Animations, transitions, client-side UI state
-- **Together:** Best of both worlds - reactive UI with server-side power
-
-Example of both working together:
-```blade
-<!-- Livewire handles the checkout -->
-<div>
-    <button wire:click="processPayment">Pay Now</button>
-    
-    <!-- Alpine handles the success animation -->
-    <div x-data="{ show: false }" 
-         x-show="show" 
-         x-init="$wire.on('payment-success', () => show = true)">
-        Payment successful! ✓
-    </div>
-</div>
-```
-
-### Blade Layouts
-Master layout in `resources/views/layouts/app.blade.php`
-```blade
-@extends('layouts.app')
-@section('title', 'Page Title')
-@section('content')
-    <!-- Page content -->
-@endsection
-```
-
-### Error Pages
-Laravel automatically uses `resources/views/errors/404.blade.php` for 404 errors
+1. Create Blade view in `resources/views/`
+2. Add route in `routes/web.php`
+3. Use `@extends('layouts.app')` for traditional pages
+4. Or use Livewire component for interactive pages
 
 ---
 
-## 🚨 Important Notes
+## 🧪 Testing
 
-1. **Never scale elements on hover** - causes layout shift and feels janky
-2. **No drop shadows on buttons** - use clean outline style instead
-3. **Tailwind v4 uses CSS config** - don't create tailwind.config.js (use `bg-linear-to-*` not `bg-gradient-to-*`)
-4. **All CTA buttons link to shop** - not #pricing anchor
-5. **404 page must be in errors/ directory** - not root views/
-6. **Images are user-uploaded** - not in git, back them up!
-7. **Alpine for UI, Livewire for data** - Use Alpine for animations/interactions, Livewire for forms/payments
-8. **Livewire components go in app/Livewire/** - with views in resources/views/livewire/
+**Current**: Manual testing only  
+**Future**: Consider automated tests for checkout flow once Stripe is integrated
 
----
-
-## 🤝 Wholesale Inquiries
-
-The site is designed to handle both:
-- **Individual sales** ($35 each)
-- **Bulk wholesale** (dealerships buying 200+ units)
-
-Wholesale inquiries currently link to `/wholesale` (404 page) - this will be built as a **Livewire component** that handles:
-- Form validation (company name, email, quantity)
-- Minimum order quantity enforcement (200+ units)
-- Email notifications to sales team
-- Database storage of inquiries
-- Automatic response emails to customers
+### Manual Test Checklist
+- [ ] Landing page loads, all images present
+- [ ] Carousel auto-advances every 5s
+- [ ] State checker dropdown works
+- [ ] Shop page product carousel navigates
+- [ ] Contact form validates in real-time
+- [ ] Wholesale toggle shows/hides fields
+- [ ] Email sends successfully (check Mailtrap)
+- [ ] Success message displays and form resets
+- [ ] Mobile responsive on iPhone/Android
+- [ ] 404 page shows for invalid routes
 
 ---
 
-## 📊 Current Status
+## 💡 Future Features (Post-Launch)
 
-**Phase:** MVP Complete - Ready for Livewire + Stripe Integration  
-**Next Steps:**
-1. Install Livewire (`composer require livewire/livewire`)
-2. Create Livewire checkout component
-3. Integrate Stripe payment processing
-4. Build contact and wholesale forms with Livewire
+### Immediate (Pre-Launch)
+- Stripe Checkout integration
+- Order database schema
+- Rollo printer API connection
+- Production email service
+- Domain & deployment
 
-**Timeline:** 
-- Livewire installation: ~5 minutes
-- Stripe + checkout component: ~1-2 hours
-- Forms: ~30-60 minutes each
+### Nice to Have
+- Customer accounts (order tracking)
+- Admin dashboard (view orders, inquiries)
+- Email newsletter signup
+- Product reviews/testimonials
+- FAQ page (beyond contact page FAQs)
+- Blog for SEO (car care tips, legal requirements)
+- Instagram feed integration
+- Analytics (Google Analytics/Plausible)
 
-**Why This Order:**
-Livewire provides the cleanest way to handle payment forms, validation, and database interactions without writing complex JavaScript.  
-
----
-
-## 📸 Image Inventory
-
-**Homepage Carousel (Lifestyle):**
-- EDIT_1.jpg through EDIT_8.jpg
-
-**Product Detail (Shop Page):**
-- Display.jpg (main product shot)
-- Front-in.jpg (installation view)
-- Slide.jpg (sliding mechanism)
-- Back.jpg (velcro backing)
-- Install.jpg (visor mounting)
-
-**Background:**
-- hero.jpg (homepage hero section)
-
-**Unused/Additional:**
-- Plate.jpg
+### Wholesale Features
+- Auto-quote generation for bulk orders
+- Tiered pricing (200+, 500+, 1000+)
+- Dealer portal (track orders, reorder)
+- Custom branding options for dealerships
 
 ---
 
-## 🎯 Success Metrics (Once Live)
+## 🤝 Contributing
 
-Track:
-- Conversion rate (visitors → buyers)
-- Average order value
-- Cart abandonment rate
-- Wholesale inquiry rate
-- Traffic sources (social, organic, direct)
-- Mobile vs desktop conversions
+This is a solo project, but if you're reading this and have suggestions, feel free to open an issue. Just know response time may vary based on how busy I am shipping VisorPlates!
 
 ---
 
-## 💬 Support & Contact
+## 📄 License
 
-For technical questions about this codebase, refer to:
-- This README
-- Laravel documentation
-- Tailwind CSS v4 migration guide
-- Alpine.js examples
+Proprietary - All Rights Reserved
 
 ---
 
-**Last Updated:** January 2026  
-**Version:** 1.0 (MVP)  
-**Status:** Development → Ready for Stripe Integration
+## 🎨 Design Inspiration
+
+Want to use this site's design as inspiration? Check out `/design` to see the full component library. The glassmorphism + copper gradient aesthetic is 🔥 if I do say so myself.
+
+---
+
+## 📞 Contact
+
+For business inquiries: `support@visorplate.com` (once we're live)  
+For code questions: Open an issue on GitHub
+
+---
+
+**Last Updated**: January 2026  
+**Version**: 1.1 (MVP + Contact Form)  
+**Status**: Pre-launch development
