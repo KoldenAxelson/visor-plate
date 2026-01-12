@@ -23,6 +23,18 @@ class ContactForm extends Component
     public $sending = false;
 
     /**
+     * Initialize component and check for query parameters
+     */
+    public function mount()
+    {
+        // Check for 'mode' query parameter (for /wholesale redirect)
+        $mode = request()->query("mode");
+        if ($mode === "wholesale") {
+            $this->inquiry_type = "wholesale";
+        }
+    }
+
+    /**
      * Validation rules
      */
     protected function rules()
@@ -182,8 +194,13 @@ class ContactForm extends Component
 
     public function render()
     {
+        $title =
+            $this->inquiry_type === "wholesale"
+                ? "Wholesale Inquiry - VisorPlate"
+                : "Contact Us - VisorPlate";
+
         return view("livewire.contact-form")->layout("layouts.app", [
-            "title" => "Contact Us - VisorPlate",
+            "title" => $title,
         ]);
     }
 }
