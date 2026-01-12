@@ -40,8 +40,8 @@
                 <a href="{{ route('shop') }}" class="group btn-primary-luxury">
                     Get My VisorPlate
                 </a>
-                <a href="#how-it-works" class="btn-secondary">
-                    Easy Install
+                <a href="/faq" class="btn-secondary">
+                    Got Questions?
                 </a>
             </div>
 

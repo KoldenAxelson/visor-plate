@@ -46,6 +46,12 @@
         appearance: textfield;
     }
 
+    /* Smooth scroll with offset for fixed header */
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 4rem;
+    }
+
     /* Luxury body defaults */
     body {
         color: var(--text-primary);
