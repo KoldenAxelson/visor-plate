@@ -137,6 +137,10 @@
                             <span style="color: var(--accent-copper);">•</span>
                             <span>Free shipping (US only)</span>
                         </li>
+                        <li class="flex items-center gap-3">
+                            <span style="color: var(--accent-copper);">•</span>
+                            <span>Only US Deliveries</span>
+                        </li>
                     </ul>
                 </div>
 

@@ -11,7 +11,7 @@
              class="w-full h-full object-cover object-top">
         <!-- Narrow LEFT gradient - opaque left, transparent by 50% mark -->
         <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"
-             style="--tw-gradient-to: transparent; --tw-gradient-stops: black 0%, rgb(0 0 0 / 0.8) 35%, transparent 60%;"></div>
+             style="--tw-gradient-to: transparent; --tw-gradient-stops: black 0%, rgb(0 0 0 / 0.4) 35%, transparent 60%;"></div>
 
         <!-- Bottom fade for trust badges and scroll indicator -->
         <div class="absolute inset-x-0 bottom-0 h-128 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
@@ -559,6 +559,7 @@
 <!-- Alpine.js Components -->
 <script>
 // Carousel Component
+// Carousel Component - Stops auto-play on user interaction
 function carousel() {
     return {
         currentIndex: 0,
@@ -573,32 +574,47 @@ function carousel() {
             'EDIT_8.jpg'
         ],
         interval: null,
+        userInteracted: false, // Track if user has manually navigated
+
         init() {
             this.startAutoPlay();
         },
+
         startAutoPlay() {
-            this.interval = setInterval(() => {
-                this.next();
-            }, 5000);
+            // Only start auto-play if user hasn't interacted yet
+            if (!this.userInteracted) {
+                this.interval = setInterval(() => {
+                    this.next(false); // Pass false to indicate auto-advance (not user click)
+                }, 5000);
+            }
         },
+
         stopAutoPlay() {
             clearInterval(this.interval);
         },
-        next() {
+
+        next(isUserAction = true) {
+            // If this is a user action, stop auto-play permanently
+            if (isUserAction) {
+                this.userInteracted = true;
+                this.stopAutoPlay();
+            }
+
             this.currentIndex = (this.currentIndex + 1) % this.images.length;
-            this.resetAutoPlay();
         },
+
         prev() {
-            this.currentIndex = this.currentIndex === 0 ? this.images.length - 1 : this.currentIndex - 1;
-            this.resetAutoPlay();
-        },
-        goTo(index) {
-            this.currentIndex = index;
-            this.resetAutoPlay();
-        },
-        resetAutoPlay() {
+            // User clicked prev arrow - stop auto-play permanently
+            this.userInteracted = true;
             this.stopAutoPlay();
-            this.startAutoPlay();
+            this.currentIndex = this.currentIndex === 0 ? this.images.length - 1 : this.currentIndex - 1;
+        },
+
+        goTo(index) {
+            // User clicked thumbnail - stop auto-play permanently
+            this.userInteracted = true;
+            this.stopAutoPlay();
+            this.currentIndex = index;
         }
     }
 }

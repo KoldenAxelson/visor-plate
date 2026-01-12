@@ -19,7 +19,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Create Stripe Checkout Session
+     * Create Stripe Checkout Session (US-ONLY)
      */
     public function createCheckoutSession(Request $request)
     {
@@ -43,7 +43,7 @@ class CheckoutController extends Controller
                                     "VisorPlate - Premium No-Drill License Plate Holder",
                                 "description" =>
                                     "Velcro visor-mounted front license plate holder",
-                                "images" => [asset("images/Display.jpg")], // Optional: show product image
+                                "images" => [asset("images/Display.jpg")],
                             ],
                             "unit_amount" => $pricePerUnit,
                         ],
@@ -55,10 +55,17 @@ class CheckoutController extends Controller
                     route("checkout.success") .
                     "?session_id={CHECKOUT_SESSION_ID}",
                 "cancel_url" => route("checkout.cancel"),
+
+                // ⚠️ US-ONLY RESTRICTIONS
+                // Require billing address and restrict to US only
+                "billing_address_collection" => "required",
+
+                // Restrict shipping addresses to US only
                 "shipping_address_collection" => [
-                    "allowed_countries" => ["US"], // US-only shipping
+                    "allowed_countries" => ["US"],
                 ],
-                "customer_email" => $request->email ?? null, // Pre-fill if provided
+
+                "customer_email" => $request->email ?? null,
                 "metadata" => [
                     "quantity" => $quantity,
                 ],
@@ -97,6 +104,17 @@ class CheckoutController extends Controller
         try {
             // Retrieve the session from Stripe
             $session = StripeSession::retrieve($sessionId);
+
+            // Double-check US-only (extra safety net)
+            if (
+                $session->shipping_details &&
+                $session->shipping_details->address->country !== "US"
+            ) {
+                Log::warning("Non-US order attempted: " . $sessionId);
+                return redirect()
+                    ->route("shop")
+                    ->with("error", "We only ship within the United States.");
+            }
 
             // Find or create the order
             $order = Order::firstOrCreate(
@@ -207,6 +225,16 @@ class CheckoutController extends Controller
     private function handleCheckoutSessionCompleted($session)
     {
         Log::info("Checkout session completed: " . $session->id);
+
+        // Verify US-only before saving order (safety net)
+        if (
+            $session->shipping_details &&
+            $session->shipping_details->address->country !== "US"
+        ) {
+            Log::error("Non-US order blocked in webhook: " . $session->id);
+            // Don't save the order, don't send confirmation email
+            return;
+        }
 
         $order = Order::firstOrCreate(
             ["stripe_checkout_session_id" => $session->id],
