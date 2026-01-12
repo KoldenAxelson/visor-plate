@@ -774,3 +774,35 @@
         cursor: not-allowed;
     }
 }
+
+/* ========================================
+   SOCIAL ICONS
+   ======================================== */
+@layer components {
+    /* Social Icon Link - Hover state with copper gradient */
+    .social-icon-link {
+        @apply w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .social-icon-link:hover {
+        background: linear-gradient(
+            135deg,
+            var(--accent-copper),
+            var(--accent-gold)
+        );
+        border-color: transparent;
+        transform: translateY(-2px);
+    }
+
+    .social-icon-link:hover .social-icon {
+        color: var(--bg-luxury-black);
+    }
+
+    /* Social Icon SVG */
+    .social-icon {
+        @apply w-5 h-5 transition-colors duration-300;
+        color: var(--text-muted);
+    }
+}

@@ -16,8 +16,14 @@ Route::get("/design", function () {
     return view("design");
 })->name("design");
 
+Route::get("/faq", function () {
+    return view("faq");
+})->name("faq");
+
 Route::get("/contact", ContactForm::class)->name("contact");
-Route::get("/wholesale", ContactForm::class)->name("wholesale");
+Route::get("/wholesale", function () {
+    return redirect()->route("contact", ["mode" => "wholesale"]);
+})->name("wholesale");
 
 // Checkout Routes
 Route::post("/checkout/create", [
@@ -35,3 +41,9 @@ Route::get("/checkout/cancel", [CheckoutController::class, "cancel"])->name(
 Route::post("/stripe/webhook", [CheckoutController::class, "webhook"])->name(
     "stripe.webhook",
 );
+
+// Social Interest Tracking
+Route::get("/social-interest", [
+    \App\Http\Controllers\SocialInterestController::class,
+    "track",
+])->name("social.interest");

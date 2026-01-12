@@ -14,8 +14,11 @@ A luxury single-product e-commerce site for VisorPlate - velcro visor-mounted fr
 - **Stripe Checkout** - Full payment processing, webhooks, order confirmation emails
 - **Order Database** - Complete CRUD, status tracking, US-only restrictions
 - **Shop Page** - Product carousel, dynamic checkout, DRY loading states
-- **Contact Form** - Livewire form with wholesale inquiry toggle
+- **Contact Form** - Livewire form with wholesale inquiry toggle, redirect from `/wholesale`
 - **Landing Page** - Hero, features gallery, state checker tool
+- **FAQ Page** - 9 questions with Alpine.js accordion, legal disclaimers
+- **Social Interest Tracking** - Facebook/X/Instagram icons track first-click interest, goal progress
+- **Newsletter Signups** - Livewire email collection for launch notifications
 - **Design System** - Luxury dark theme, glassmorphism, copper gradients
 - **Email System** - Order confirmations, contact notifications (Mailtrap dev)
 
@@ -30,6 +33,7 @@ A luxury single-product e-commerce site for VisorPlate - velcro visor-mounted fr
 - Wholesale pricing automation
 - Analytics integration
 - Customer accounts
+- Launch actual social media (when goal thresholds hit)
 
 ---
 
@@ -123,27 +127,40 @@ Buttons with loading states use `.btn-with-loading` pattern to prevent layout sh
 ### 7. Carousel Auto-Play Stops on Interaction
 Homepage carousel auto-advances until user clicks, then stops permanently. Uses `userInteracted` flag.
 
+### 8. Social Icons Track Interest, Not External Links
+Footer/success page social icons (Facebook, X, Instagram) point to `/social-interest?platform=X` to track interest + collect newsletter signups. They do NOT link to actual social media (doesn't exist yet). Shows goal progress (X/500) and newsletter signup form.
+
 ---
 
 ## 📁 Key Files
 
 ```
 app/
-├── Http/Controllers/CheckoutController.php    # Stripe checkout, webhooks
-├── Models/Order.php                           # Order model, helpers
-└── Livewire/ContactForm.php                   # Contact/wholesale form
+├── Http/Controllers/
+│   ├── CheckoutController.php             # Stripe checkout, webhooks
+│   └── SocialInterestController.php       # Social interest tracking
+├── Models/Order.php                       # Order model, helpers
+└── Livewire/
+    ├── ContactForm.php                    # Contact/wholesale form
+    └── NewsletterSignup.php               # Newsletter email collection
 
 resources/
-├── css/app.css                                # Tailwind config + custom components
+├── css/app.css                            # Tailwind config + custom components
 ├── views/
-│   ├── checkout/                              # Success/cancel pages
-│   ├── emails/                                # Order/contact emails
-│   ├── home.blade.php                         # Landing (state checker, carousel)
-│   └── shop.blade.php                         # Product page (Alpine checkout)
+│   ├── checkout/                          # Success/cancel pages
+│   ├── emails/                            # Order/contact emails
+│   ├── livewire/newsletter-signup.blade.php  # Newsletter form
+│   ├── home.blade.php                     # Landing (state checker, carousel)
+│   ├── shop.blade.php                     # Product page (Alpine checkout)
+│   ├── faq.blade.php                      # FAQ with Alpine accordion
+│   └── social-interest.blade.php          # Social interest + newsletter signup
 
-database/migrations/*_create_orders_table.php  # Order schema
+database/migrations/
+├── *_create_orders_table.php              # Order schema
+├── *_create_social_interest_logs_table.php  # Social click tracking
+└── *_create_newsletter_signups_table.php    # Newsletter emails
 
-routes/web.php                                 # All routes
+routes/web.php                             # All routes
 ```
 
 ---
@@ -160,6 +177,7 @@ routes/web.php                                 # All routes
 - `.btn-spinner` / `.btn-spinner-lg` - Consistent spinners
 - `.text-gradient-copper` - Copper to gold text
 - `.badge-copper-blur` - Accent badges
+- `.social-icon-link` + `.social-icon` - Social media icons (hover: copper gradient fill)
 
 **Showcase**: Visit `/design` for all components.
 
@@ -198,13 +216,45 @@ routes/web.php                                 # All routes
 GET  /                      # Landing page
 GET  /shop                  # Product page with checkout
 GET  /design                # Design system showcase
+GET  /faq                   # FAQ page
 GET  /contact               # Contact form (Livewire)
+GET  /wholesale             # Redirects to /contact?mode=wholesale
 
 POST /checkout/create       # Create Stripe session (AJAX)
 GET  /checkout/success      # Order confirmation page
 GET  /checkout/cancel       # Checkout cancelled page
 
+GET  /social-interest       # Social interest tracking + newsletter signup
 POST /stripe/webhook        # Stripe webhook (CSRF exempt)
+```
+
+---
+
+## 📱 Social Interest Tracking
+
+**Purpose**: Footer/success page have Facebook, X (formerly Twitter), and Instagram icons. Instead of linking to social media (which doesn't exist yet), they track interest and collect emails for launch notifications.
+
+**Flow**: 
+1. User clicks icon → `/social-interest?platform=instagram`
+2. Logs first click per visitor (cookie + IP hash) to `social_interest_logs` table
+3. Shows goal progress: "You're one of 247 people!" with progress bar (0-500 goal)
+4. Newsletter signup form (Livewire) saves email to `newsletter_signups` table
+5. Source tracking: `social-interest-instagram`, `social-interest-facebook`, `social-interest-x`
+
+**Privacy**: IP addresses hashed (SHA-256), emails stored for notification only.
+
+**Future**: When goal hits 500 for a platform, query `newsletter_signups` where source matches and send launch announcement.
+
+**Queries**:
+```php
+// Total interest per platform
+DB::table('social_interest_logs')
+    ->select('platform', DB::raw('count(*) as total'))
+    ->groupBy('platform')->get();
+
+// Newsletter signups by platform
+DB::table('newsletter_signups')
+    ->where('source', 'social-interest-instagram')->get();
 ```
 
 ---
@@ -276,8 +326,8 @@ npm run build                                            # Production build
 ---
 
 **Last Updated**: January 12, 2026  
-**Version**: 1.3 (Stripe + UX Polish)  
-**Status**: Production-ready payment system, awaiting deployment
+**Version**: 1.4 (Social Interest Tracking + Newsletter)  
+**Status**: Production-ready payment system, FAQ, social tracking live
 
 ---
 
