@@ -33,71 +33,168 @@
                         'instagram' => 'Instagram'
                     ];
                     $platformName = $platformNames[$platform] ?? 'Social Media';
+                    $existingPlatformName = $existingPlatform ? ($platformNames[$existingPlatform] ?? 'Social Media') : null;
 
                     // Get stats for this platform
                     $totalInterest = DB::table('social_interest_logs')->count();
                     $platformInterest = DB::table('social_interest_logs')->where('platform', $platform)->count();
                     $goal = 500; // Goal for launching social media
-                    $percentage = $totalInterest > 0 ? round(($platformInterest / $goal) * 100) : 0;
+                    $percentage = $platformInterest > 0 ? round(($platformInterest / $goal) * 100) : 0;
                 @endphp
 
-                <h1 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">
-                    Thank You for<br>
-                    <span class="text-gradient-copper">Your Interest!</span>
-                </h1>
+                {{-- STATE A: First-time visitor --}}
+                @if($state === 'first-time')
+                    <h1 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">
+                        Thank You for<br>
+                        <span class="text-gradient-copper">Your Interest!</span>
+                    </h1>
 
-                <p class="text-xl text-gray-300 mb-6 font-light">
-                    You want to see VisorPlate on <strong class="text-white">{{ $platformName }}</strong>
-                </p>
+                    <p class="text-xl text-gray-300 mb-6 font-light">
+                        You want to see VisorPlate on <strong class="text-white">{{ $platformName }}</strong>
+                    </p>
+                @endif
+
+                {{-- STATE B: Same platform (already voted) --}}
+                @if($state === 'same-platform')
+                    <h1 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">
+                        Thank You for<br>
+                        <span class="text-gradient-copper">Showing Interest</span>
+                    </h1>
+
+                    <p class="text-xl text-gray-300 mb-6 font-light">
+                        We have your interest in <strong class="text-white">{{ $platformName }}</strong> noted
+                    </p>
+                @endif
+
+                {{-- STATE C: Different platform (show swap option) --}}
+                @if($state === 'different-platform')
+                    <h1 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">
+                        Thank You for<br>
+                        <span class="text-gradient-copper">Your Interest</span>
+                    </h1>
+
+                    <p class="text-xl text-gray-300 mb-6 font-light">
+                        We appreciate you wanting to see us on <strong class="text-white">{{ $platformName }}</strong>
+                    </p>
+                @endif
             </div>
 
-            <!-- Goal Progress -->
-            <div class="glass-card p-8 mb-12">
-                <div class="text-center mb-6">
-                    <p class="text-2xl text-white mb-2 font-semibold">
-                        🎯 You're one of <span class="text-gradient-copper">{{ $platformInterest }}</span> {{ Str::plural('person', $platformInterest) }}!
-                    </p>
-                    <p class="text-gray-400 font-light">
-                        We'll launch our {{ $platformName }} when we hit <strong class="text-white">{{ $goal }}</strong> interested visitors
-                    </p>
-                </div>
+            {{-- STATE C: Progress First (for social proof) --}}
+            @if($state === 'different-platform')
+                {{-- Campaign Progress (show first for social proof) --}}
+                <div class="glass-card p-8 mb-8">
+                    <div class="text-center mb-6">
+                        <p class="text-2xl text-white mb-2 font-semibold">
+                            🎯 <span class="text-gradient-copper">{{ $platformInterest }}</span> {{ Str::plural('person', $platformInterest) }} interested!
+                        </p>
+                        <p class="text-gray-400 font-light">
+                            We'll launch our {{ $platformName }} when we hit <strong class="text-white">{{ $goal }}</strong> interested visitors
+                        </p>
+                    </div>
 
-                <!-- Progress Bar -->
-                <div class="w-full bg-gray-800 rounded-full h-6 overflow-hidden border border-gray-700">
-                    <div class="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-3"
-                         style="width: {{ min($percentage, 100) }}%; background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));">
-                        @if($percentage > 15)
-                        <span class="text-black font-bold text-sm">{{ $percentage }}%</span>
-                        @endif
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-800 rounded-full h-6 overflow-hidden border border-gray-700">
+                        <div class="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-3"
+                             style="width: {{ min($percentage, 100) }}%; background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));">
+                            @if($percentage > 15)
+                            <span class="text-black font-bold text-sm">{{ $percentage }}%</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between mt-3 text-sm">
+                        <span class="text-gray-500 font-light">0</span>
+                        <span class="text-white font-semibold">{{ $platformInterest }} / {{ $goal }}</span>
+                        <span class="text-gray-500 font-light">{{ $goal }}</span>
                     </div>
                 </div>
 
-                <div class="flex justify-between mt-3 text-sm">
-                    <span class="text-gray-500 font-light">0</span>
-                    <span class="text-white font-semibold">{{ $platformInterest }} / {{ $goal }}</span>
-                    <span class="text-gray-500 font-light">{{ $goal }}</span>
+                {{-- Vote Swap Option --}}
+                <div class="glass-card p-8 mb-12 border-2 border-copper/30">
+                    <div class="text-center">
+                        <div class="mb-2">
+                            <p class="text-gray-300 mb-2 font-light">
+                                You previously showed interest in <strong class="text-white">{{ $existingPlatformName }}</strong>
+                            </p>
+                            <div class="inline-flex items-center gap-3 text-gray-300 text-lg mb-4">
+                                <span class="font-semibold">{{ $existingPlatformName }}</span>
+                                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                                <span class="font-semibold text-gradient-copper">{{ $platformName }}</span>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-400 mb-6 font-light leading-relaxed max-w-2xl mx-auto">
+                            We're a small team and have to prioritize where to build our presence. We only count <strong class="text-white">one vote per visitor</strong> to keep things fair. Want to switch your support to <strong class="text-white">{{ $platformName }}</strong>?
+                        </p>
+
+                        <form action="{{ route('social.swap') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="platform" value="{{ $platform }}">
+                            <button type="submit" class="btn-primary-luxury">
+                                Switch My Vote to {{ $platformName }}
+                            </button>
+                        </form>
+
+                        <p class="text-gray-500 text-sm mt-6 font-light italic max-w-xl mx-auto">
+                            We've decided not to pursue social media until there's clear market demand. Your feedback helps us know what matters most to our customers.
+                        </p>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Goal Progress (shown for first-time and same-platform states) --}}
+            @if($state === 'first-time' || $state === 'same-platform')
+                <div class="glass-card p-8 mb-12">
+                    <div class="text-center mb-6">
+                        <p class="text-2xl text-white mb-2 font-semibold">
+                            🎯 You're one of <span class="text-gradient-copper">{{ $platformInterest }}</span> {{ Str::plural('person', $platformInterest) }}!
+                        </p>
+                        <p class="text-gray-400 font-light">
+                            We'll launch our {{ $platformName }} when we hit <strong class="text-white">{{ $goal }}</strong> interested visitors
+                        </p>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-800 rounded-full h-6 overflow-hidden border border-gray-700">
+                        <div class="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-3"
+                             style="width: {{ min($percentage, 100) }}%; background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));">
+                            @if($percentage > 15)
+                            <span class="text-black font-bold text-sm">{{ $percentage }}%</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between mt-3 text-sm">
+                        <span class="text-gray-500 font-light">0</span>
+                        <span class="text-white font-semibold">{{ $platformInterest }} / {{ $goal }}</span>
+                        <span class="text-gray-500 font-light">{{ $goal }}</span>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <p class="text-gray-400 text-sm font-light italic">
+                            @if($state === 'first-time')
+                                ✓ Your interest has been logged — we're listening!
+                            @else
+                                ✓ We have your interest noted — thank you!
+                            @endif
+                        </p>
+                    </div>
                 </div>
 
-                <div class="text-center mt-6">
-                    <p class="text-gray-400 text-sm font-light italic">
-                        ✓ Your interest has been logged — we're listening!
+                <!-- Newsletter Sign Up Section -->
+                <div class="glass-card p-12 text-center mb-12">
+                    <h3 class="text-3xl font-light text-white mb-4 tracking-luxury">
+                        Get Notified When We Launch
+                    </h3>
+                    <p class="text-lg text-gray-300 mb-8 font-light leading-relaxed">
+                        Be the first to know when we officially launch our {{ $platformName }} presence.
                     </p>
+
+                    @livewire('newsletter-signup', ['source' => 'social-interest-' . $platform])
                 </div>
-            </div>
-
-            <!-- Platform-Specific Content -->
-            <!-- Universal Sign Up Section (same for all platforms) -->
-            <div class="glass-card p-12 text-center mb-12">
-                <h3 class="text-3xl font-light text-white mb-4 tracking-luxury">
-                    Get Notified When We Launch
-                </h3>
-                <p class="text-lg text-gray-300 mb-8 font-light leading-relaxed">
-                    Be the first to know when we officially launch our {{ $platformName }} presence.<br>
-                    No spam, just one announcement when we're live.
-                </p>
-
-                @livewire('newsletter-signup', ['source' => 'social-interest-' . $platform])
-            </div>
+            @endif
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">

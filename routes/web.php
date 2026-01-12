@@ -47,3 +47,8 @@ Route::get("/social-interest", [
     \App\Http\Controllers\SocialInterestController::class,
     "track",
 ])->name("social.interest");
+
+Route::post("/social-interest/swap", [
+    \App\Http\Controllers\SocialInterestController::class,
+    "swap",
+])->name("social.swap");
