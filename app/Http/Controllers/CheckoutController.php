@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendOrderConfirmationEmail;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Webhook;
@@ -302,28 +302,12 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Send order confirmation email
+     * Send order confirmation email (queued)
      */
     private function sendOrderConfirmationEmail(Order $order)
     {
-        try {
-            Mail::send(
-                "emails.order-confirmation",
-                ["order" => $order],
-                function ($message) use ($order) {
-                    $message
-                        ->to($order->email, $order->name)
-                        ->subject(
-                            "Order Confirmation - VisorPlate #" . $order->id,
-                        );
-                },
-            );
+        SendOrderConfirmationEmail::dispatch($order);
 
-            Log::info("Order confirmation email sent to: " . $order->email);
-        } catch (\Exception $e) {
-            Log::error(
-                "Failed to send order confirmation email: " . $e->getMessage(),
-            );
-        }
+        Log::info("Order confirmation email queued for: " . $order->email);
     }
 }

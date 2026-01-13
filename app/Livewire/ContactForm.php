@@ -2,9 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Jobs\SendContactConfirmationEmail;
+use App\Jobs\SendContactFormEmail;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\RateLimiter;
@@ -296,39 +297,29 @@ class ContactForm extends Component
             $subject =
                 $subjectMap[$this->inquiry_type] ?? "New Contact - VisorPlate";
 
-            // Send email to business owner
-            Mail::send("emails.contact", $emailData, function ($message) use (
+            // Queue email to business owner
+            SendContactFormEmail::dispatch(
+                $emailData,
                 $subject,
                 $attachments,
-            ) {
-                $message->to(config("mail.from.address"))->subject($subject);
-                $message->replyTo($this->email, $this->name);
+                $this->email,
+                $this->name,
+            );
 
-                // Attach files if any
-                foreach ($attachments as $attachment) {
-                    $message->attach($attachment["path"], [
-                        "as" => $attachment["name"],
-                        "mime" => $attachment["mime"],
-                    ]);
-                }
-            });
-
-            // Send confirmation email to customer - Production Only
+            // Queue confirmation email to customer - Production Only
             if (app()->environment("production")) {
-                Mail::send("emails.contact-confirmation", $emailData, function (
-                    $message,
-                ) {
-                    $message
-                        ->to($this->email, $this->name)
-                        ->subject("Thank you for contacting VisorPlate");
-                });
+                SendContactConfirmationEmail::dispatch(
+                    $emailData,
+                    $this->email,
+                    $this->name,
+                );
             }
 
             // Mark as submitted
             $this->submitted = true;
 
-            // Log successful submission
-            Log::info("Contact form submission", [
+            // Log successful submission (emails queued)
+            Log::info("Contact form submission (emails queued)", [
                 "type" => $this->inquiry_type,
                 "email" => $this->email,
                 "name" => $this->name,
