@@ -20,10 +20,17 @@ Route::get("/faq", function () {
     return view("faq");
 })->name("faq");
 
+// Contact Routes
 Route::get("/contact", ContactForm::class)->name("contact");
 Route::get("/wholesale", function () {
     return redirect()->route("contact", ["mode" => "wholesale"]);
 })->name("wholesale");
+Route::get("/return", function () {
+    return redirect()->route("contact", ["mode" => "return"]);
+})->name("return");
+Route::get("/review", function () {
+    return redirect()->route("contact", ["mode" => "review"]);
+})->name("review");
 
 // Checkout Routes
 Route::post("/checkout/create", [

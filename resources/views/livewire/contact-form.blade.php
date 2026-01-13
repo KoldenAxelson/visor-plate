@@ -1,37 +1,8 @@
 <div class="min-h-screen">
-    <!-- Hero Section
-    <section class="pt-32 pb-16 premium-grain" style="background-color: var(--bg-luxury-black);">
-        <div class="container-site">
-            <div class="text-center mb-12">
-                <div class="inline-block mb-6">
-                    <span class="badge-copper-blur">
-                        GET IN TOUCH
-                    </span>
-                </div>
-                <h1 class="text-hero mb-6">
-                    <span class="text-white">Let's Talk About Your</span><br>
-                    <span class="text-gradient-copper">VisorPlate Needs</span>
-                </h1>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto font-light tracking-wide">
-                    Whether you have a question, need support, or want to discuss wholesale pricing — we're here to help.
-                </p>
-            </div>
-        </div>
-    </section>
-    -->
-
     <!-- Form Section -->
     <section class="section-standard bg-linear-to-b from-black to-gray-900">
         <div class="container-site">
             <div class="max-w-4xl mx-auto">
-                <!-- Minimal Topper --> <!--
-                <div class="text-center mb-3">
-                    <div class="inline-block mb-6">
-                        <span class="badge-copper-blur">
-                            GET IN TOUCH
-                        </span>
-                    </div>
-                </div> -->
 
                 @if($submitted)
                     <!-- Success Message -->
@@ -69,11 +40,12 @@
                         <!-- Honeypot (spam protection) -->
                         <input type="text" wire:model="honeypot" style="display:none" tabindex="-1" autocomplete="off">
 
-                        <!-- Inquiry Type Toggle -->
+                        <!-- Inquiry Type Toggle - 2x2 Grid -->
                         <div class="glass-card p-8">
                             <label class="label-standard mb-6">What can we help you with?</label>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- General Inquiry -->
                                 <button type="button"
                                         wire:click="$set('inquiry_type', 'general')"
                                         class="p-6 rounded-2xl transition-all duration-300 text-left border-2"
@@ -95,6 +67,7 @@
                                     </div>
                                 </button>
 
+                                <!-- Wholesale Inquiry -->
                                 <button type="button"
                                         wire:click="$set('inquiry_type', 'wholesale')"
                                         class="p-6 rounded-2xl transition-all duration-300 text-left border-2"
@@ -112,6 +85,50 @@
                                         <div>
                                             <h3 class="text-xl font-semibold text-white mb-2 tracking-wide">Wholesale Inquiry</h3>
                                             <p class="text-sm text-gray-400 font-light">Bulk orders (100+ units)</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- Return Request -->
+                                <button type="button"
+                                        wire:click="$set('inquiry_type', 'return')"
+                                        class="p-6 rounded-2xl transition-all duration-300 text-left border-2"
+                                        :class="{
+                                            'bg-white/10 border-[var(--accent-copper)]': @js($inquiry_type === 'return'),
+                                            'bg-white/5 border-white/10 hover:bg-white/8': @js($inquiry_type !== 'return')
+                                        }">
+                                    <div class="flex items-start gap-4">
+                                        <div class="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                                             :style="@js($inquiry_type === 'return') ? 'background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));' : 'background: rgba(255,255,255,0.1);'">
+                                            <svg class="w-6 h-6" :class="@js($inquiry_type === 'return') ? 'text-black' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-semibold text-white mb-2 tracking-wide">Return Request</h3>
+                                            <p class="text-sm text-gray-400 font-light">30-day money-back guarantee</p>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- Add Review -->
+                                <button type="button"
+                                        wire:click="$set('inquiry_type', 'review')"
+                                        class="p-6 rounded-2xl transition-all duration-300 text-left border-2"
+                                        :class="{
+                                            'bg-white/10 border-[var(--accent-copper)]': @js($inquiry_type === 'review'),
+                                            'bg-white/5 border-white/10 hover:bg-white/8': @js($inquiry_type !== 'review')
+                                        }">
+                                    <div class="flex items-start gap-4">
+                                        <div class="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                                             :style="@js($inquiry_type === 'review') ? 'background: linear-gradient(135deg, var(--accent-copper), var(--accent-gold));' : 'background: rgba(255,255,255,0.1);'">
+                                            <svg class="w-6 h-6" :class="@js($inquiry_type === 'review') ? 'text-black' : 'text-gray-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-semibold text-white mb-2 tracking-wide">Add Your Review</h3>
+                                            <p class="text-sm text-gray-400 font-light">Share your experience</p>
                                         </div>
                                     </div>
                                 </button>
@@ -191,7 +208,7 @@
                                                wire:model.blur="quantity"
                                                class="input-standard @error('quantity') border-red-500 @enderror"
                                                placeholder="200"
-                                               min="200">
+                                               min="100">
                                         @error('quantity')
                                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                                         @enderror
@@ -201,9 +218,187 @@
                             </div>
                         @endif
 
+                        <!-- Return Request Fields -->
+                        @if($inquiry_type === 'return')
+                            <div class="glass-card p-8 space-y-6"
+                                 x-data
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform translate-y-4"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0">
+                                <h3 class="text-2xl font-light text-white mb-6 tracking-luxury">Return Details</h3>
+
+                                <!-- Order Number -->
+                                <div>
+                                    <label class="label-standard">Order Number *</label>
+                                    <input type="text"
+                                           wire:model.blur="order_number"
+                                           class="input-standard @error('order_number') border-red-500 @enderror"
+                                           placeholder="e.g., VP-123456">
+                                    @error('order_number')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                    <p class="mt-2 text-sm text-gray-500">Find this in your order confirmation email</p>
+                                </div>
+
+                                <!-- Return Reason -->
+                                <div>
+                                    <label class="label-standard">Reason for Return *</label>
+                                    <textarea wire:model.blur="return_reason"
+                                              rows="4"
+                                              class="input-standard resize-none @error('return_reason') border-red-500 @enderror"
+                                              placeholder="Please tell us why you're returning the product..."></textarea>
+                                    @error('return_reason')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Photo Upload -->
+                                <div>
+                                    <label class="label-standard">Product Photo *</label>
+                                    <div class="relative">
+                                        <input type="file"
+                                               wire:model="return_photo"
+                                               accept="image/*"
+                                               class="hidden"
+                                               id="return_photo">
+                                        <label for="return_photo"
+                                               class="input-standard flex items-center justify-between cursor-pointer @error('return_photo') border-red-500 @enderror">
+                                            <span class="text-gray-400">
+                                                @if($return_photo)
+                                                    {{ $return_photo->getClientOriginalName() }}
+                                                @else
+                                                    Click to upload photo
+                                                @endif
+                                            </span>
+                                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </label>
+                                    </div>
+                                    @error('return_photo')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                    <p class="mt-2 text-sm text-gray-500">Please upload a clear photo of the product (Max 10MB)</p>
+
+                                    <!-- Photo Preview -->
+                                    @if($return_photo)
+                                        <div class="mt-4" wire:loading.remove wire:target="return_photo">
+                                            <img src="{{ $return_photo->temporaryUrl() }}"
+                                                 alt="Return photo preview"
+                                                 class="max-w-xs rounded-xl border border-white/10">
+                                        </div>
+                                    @endif
+                                    <div wire:loading wire:target="return_photo" class="mt-4 text-gray-400">
+                                        Uploading...
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Review Fields -->
+                        @if($inquiry_type === 'review')
+                            <div class="glass-card p-8 space-y-6"
+                                 x-data
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform translate-y-4"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0">
+                                <h3 class="text-2xl font-light text-white mb-6 tracking-luxury">Your Review</h3>
+
+                                <!-- Review Title -->
+                                <div>
+                                    <label class="label-standard">Review Title *</label>
+                                    <input type="text"
+                                           wire:model.blur="review_title"
+                                           class="input-standard @error('review_title') border-red-500 @enderror"
+                                           placeholder="e.g., Perfect solution for my show car!">
+                                    @error('review_title')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Star Rating (SIMPLE - NO HOVER) -->
+                                <div>
+                                    <label class="label-standard">Rating *</label>
+                                    <div class="flex gap-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <button type="button"
+                                                    wire:click="$set('rating', {{ $i }})"
+                                                    class="transition-all duration-200">
+                                                <svg class="w-10 h-10 transition-colors {{ $rating >= $i ? 'text-[var(--accent-copper)]' : 'text-gray-600' }}"
+                                                     fill="currentColor"
+                                                     viewBox="0 0 24 24">
+                                                    <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                                </svg>
+                                            </button>
+                                        @endfor
+                                    </div>
+                                    @error('rating')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Review Text -->
+                                <div>
+                                    <label class="label-standard">Your Review *</label>
+                                    <textarea wire:model.blur="review_text"
+                                              rows="6"
+                                              class="input-standard resize-none @error('review_text') border-red-500 @enderror"
+                                              placeholder="Tell us about your experience with VisorPlate..."></textarea>
+                                    @error('review_text')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Ride Photo Upload (Optional) -->
+                                <div>
+                                    <label class="label-standard">Photo of Your Ride (Optional)</label>
+                                    <div class="relative">
+                                        <input type="file"
+                                               wire:model="ride_photo"
+                                               accept="image/*"
+                                               class="hidden"
+                                               id="ride_photo">
+                                        <label for="ride_photo"
+                                               class="input-standard flex items-center justify-between cursor-pointer @error('ride_photo') border-red-500 @enderror">
+                                            <span class="text-gray-400">
+                                                @if($ride_photo)
+                                                    {{ $ride_photo->getClientOriginalName() }}
+                                                @else
+                                                    Click to upload photo
+                                                @endif
+                                            </span>
+                                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </label>
+                                    </div>
+                                    @error('ride_photo')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                    <p class="mt-2 text-sm text-gray-500">Share a photo of your car with VisorPlate installed (Max 10MB)</p>
+
+                                    <!-- Photo Preview -->
+                                    @if($ride_photo)
+                                        <div class="mt-4" wire:loading.remove wire:target="ride_photo">
+                                            <img src="{{ $ride_photo->temporaryUrl() }}"
+                                                 alt="Ride photo preview"
+                                                 class="max-w-xs rounded-xl border border-white/10">
+                                        </div>
+                                    @endif
+                                    <div wire:loading wire:target="ride_photo" class="mt-4 text-gray-400">
+                                        Uploading...
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Message -->
                         <div class="glass-card p-8">
-                            <label class="label-standard">Your Message *</label>
+                            @if($inquiry_type === 'return' || $inquiry_type === 'review')
+                                <label class="label-standard">Additional Comments (Optional)</label>
+                            @else
+                                <label class="label-standard">Your Message *</label>
+                            @endif
                             <textarea wire:model.blur="message"
                                       rows="6"
                                       class="input-standard resize-none @error('message') border-red-500 @enderror"
@@ -217,13 +412,20 @@
                         <div class="flex justify-center">
                             <button
                                 type="submit"
-                                class="btn-primary-luxury btn-with-loading"
+                                class="btn-primary-luxury btn-with-loading w-80 py-8 text-2xl"
                                 wire:loading.attr="disabled"
                                 wire:loading.class="opacity-75 cursor-not-allowed"
-                                data-text="Send Message"
                             >
                                 <span class="btn-default-text" wire:loading.remove wire:target="submit">
-                                    Send Message
+                                    @if($inquiry_type === 'wholesale')
+                                        Send Message
+                                    @elseif($inquiry_type === 'return')
+                                        Submit Return
+                                    @elseif($inquiry_type === 'review')
+                                        Submit Review
+                                    @else
+                                        Send Message
+                                    @endif
                                 </span>
                                 <span class="btn-loading-text" wire:loading.flex wire:target="submit">
                                     <svg class="btn-spinner" viewBox="0 0 24 24">
