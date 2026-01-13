@@ -1,55 +1,48 @@
-# VisorPlate - Premium No-Drill License Plate Solution
+# ⚡ VisorPlate - Luxury License Plate Solution
 
-> **README Purpose**: This document serves dual purposes: (1) GitHub project overview for developers, and (2) briefing document for future AI iterations on project status, what's implemented, what needs work, and critical gotchas. Keep it concise, scannable, and updated.
+> Single-product e-commerce for velcro visor-mounted license plate holders. Production-ready code, pre-launch status.
 
-A luxury single-product e-commerce site for VisorPlate - velcro visor-mounted front license plate holders for car enthusiasts.
-
-**Product**: $35 | **Market**: Car enthusiasts, show cars, dealerships | **Status**: Payment system live, ready for production
+**Product**: $35 | **Market**: Car enthusiasts, dealerships | **Status**: Payment live, awaiting deployment
 
 ---
 
-## 🎯 Project Status
+## 🎯 Current Status
 
-### ✅ Complete & Working
-- **Stripe Checkout** - Full payment processing, webhooks, order confirmation emails
-- **Order Database** - Complete CRUD, status tracking, US-only restrictions
-- **Shop Page** - Product carousel, dynamic checkout, DRY loading states
-- **Contact Form** - Livewire form with wholesale inquiry toggle, redirect from `/wholesale`
-- **Landing Page** - Hero, features gallery, state checker tool
-- **FAQ Page** - 9 questions with Alpine.js accordion, legal disclaimers
-- **Social Interest Tracking** - Facebook/X/Instagram icons track first-click interest, goal progress
-- **Newsletter Signups** - Livewire email collection for launch notifications
-- **Design System** - Luxury dark theme, glassmorphism, copper gradients
-- **Email System** - Order confirmations, contact notifications (Mailtrap dev)
+### ✅ Working Features
+- 💳 **Stripe Checkout** - Full payment flow, webhooks, order emails
+- 📦 **Orders** - CRUD, status tracking, US-only enforcement
+- 🛒 **Shop Page** - Product carousel, quantity selection, checkout
+- 📧 **Contact System** - Multi-type forms (general, wholesale, return, review)
+- 🏠 **Landing Page** - Hero, gallery, state checker, installation guide
+- ❓ **FAQ** - Alpine.js accordion
+- 📱 **Social Interest** - Track platform interest, newsletter signups
+- 🎨 **Design System** - Glassmorphism, copper gradients, luxury aesthetic
 
-### 🚧 Next Priorities
-1. **Admin Dashboard** - View/manage orders, mark as shipped
-2. **Rollo Printer Integration** - Auto-generate shipping labels
-3. **Production Deployment** - Domain, hosting, live Stripe keys
-4. **Production Email** - Switch from Mailtrap to Mailgun/SendGrid
-
-### 💭 Future Enhancements
-- Order tracking (customer lookup by email)
-- Wholesale pricing automation
-- Analytics integration
-- Customer accounts
-- Launch actual social media (when goal thresholds hit)
+### 🚧 Pre-Launch Checklist
+- [ ] Purchase domain
+- [ ] Setup hosting (Forge/DO/AWS)
+- [ ] Switch to live Stripe keys
+- [ ] Configure production webhook
+- [ ] Setup email service (Mailgun/SendGrid)
+- [ ] Configure Rollo printer integration
+- [ ] Test end-to-end with real card
+- [ ] Admin dashboard for order management
 
 ---
 
 ## 🛠️ Tech Stack
 
 **Backend**: Laravel 11 (PHP 8.4.1) • Livewire 3 • Stripe PHP SDK  
-**Frontend**: Tailwind CSS v4 (CSS-first) • Alpine.js • Vite  
-**Payment**: Stripe Checkout (hosted) • Webhooks  
-**Email**: Mailtrap (dev) → Mailgun/SendGrid (production)
+**Frontend**: Tailwind v4 CSS-first • Alpine.js • Vite  
+**Payment**: Stripe Checkout (hosted) + Webhooks  
+**Email**: Mailtrap (dev) → Mailgun/SendGrid (prod)
 
 ---
 
 ## ⚙️ Quick Setup
 
 ```bash
-# Install dependencies
+# Dependencies
 composer install && npm install
 
 # Environment
@@ -64,21 +57,69 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 
-# Develop
+# Development
 npm run dev
 stripe listen --forward-to visor-plate.test/stripe/webhook
 valet link
 ```
 
-**Add Product Images**: Place in `public/images/` (not in git)
-- `hero.jpg`, `Display.jpg`, `Front-in.jpg`, `Slide.jpg`, `Back.jpg`, `Install.jpg`
-- `EDIT_1.jpg` through `EDIT_8.jpg`
+**Images**: All product images are in `public/images/` (tracked in git)
 
 ---
 
-## 🔧 Critical Gotchas
+## 📁 Key Files & Features
 
-### 1. Tailwind v4 CSS-First Config
+```
+app/
+├── Http/Controllers/
+│   ├── CheckoutController.php          # Stripe checkout + webhooks
+│   └── SocialInterestController.php    # Social interest tracking
+├── Livewire/
+│   ├── ContactForm.php                 # Multi-type contact form
+│   └── NewsletterSignup.php            # Email collection
+├── Models/Order.php                     # Order model + helpers
+└── Console/Commands/
+    └── CleanupOldReturns.php           # Auto-delete old return photos (90 days)
+
+resources/
+├── css/app.css                          # Tailwind v4 config + components
+├── views/
+│   ├── home.blade.php                  # Landing (carousel, state checker)
+│   ├── shop.blade.php                  # Product page (Alpine checkout)
+│   ├── faq.blade.php                   # FAQ accordion
+│   ├── social-interest.blade.php       # Social interest + newsletter
+│   ├── checkout/                       # Success/cancel pages
+│   ├── emails/                         # Order/contact emails
+│   └── livewire/                       # Livewire components
+
+routes/web.php                           # All routes
+```
+
+### 🔑 Core Features
+
+**💳 Stripe Integration**
+- US-only enforcement (3 layers: checkout config, server validation, webhook check)
+- Webhooks: `checkout.session.completed`, `payment_intent.*`
+- Test card: `4242 4242 4242 4242`
+
+**📱 Social Interest Tracking**
+- Footer social icons → `/social-interest?platform=X`
+- Tracks first click per visitor (cookie + IP hash)
+- Shows goal progress (X/500) + newsletter signup
+- User can swap vote between platforms
+- When goal hit → query `newsletter_signups` by source
+
+**📧 Contact System**
+- 4 types: general, wholesale, return, review
+- Return photos: sanitized (EXIF stripped), stored 90 days, auto-cleaned
+- Review photos: email-only attachment (not stored)
+- Wholesale: requires company + quantity (min 100)
+
+---
+
+## ⚠️ Critical Gotchas
+
+### 1️⃣ Tailwind v4 CSS-First
 **DO NOT** create `tailwind.config.js`. Config is in `resources/css/app.css`:
 ```css
 @import "tailwindcss";
@@ -87,35 +128,27 @@ valet link
 ```
 Use `bg-linear-to-r` not `bg-gradient-to-r`.
 
-### 2. CSRF Token Required in Layout
-`resources/views/layouts/app.blade.php` must have:
+### 2️⃣ CSRF Token Required
+`resources/views/layouts/app.blade.php` must have in `<head>`:
 ```blade
 <meta name="csrf-token" content="{{ csrf_token() }}">
 ```
-Without this, checkout fails with "Unable to connect to payment processor."
+Without this: "Unable to connect to payment processor"
 
-### 3. Stripe Webhook CSRF Exception
+### 3️⃣ Stripe Webhook CSRF Exception
 `app/Http/Middleware/VerifyCsrfToken.php`:
 ```php
 protected $except = ['stripe/webhook'];
 ```
-Without this, webhooks fail with 419 errors.
+Without this: 419 errors on webhooks
 
-### 4. Layout Supports Both Blade & Livewire
+### 4️⃣ Email Folder Plural
+Use `resources/views/emails/` (NOT `email`) - Laravel convention
+
+### 5️⃣ DRY Button Loading States
+Use `.btn-with-loading` pattern to prevent layout shift:
 ```blade
-<main>
-    @yield('content')      {{-- Blade pages --}}
-    {{ $slot ?? '' }}      {{-- Livewire --}}
-</main>
-```
-
-### 5. Email Folder Must Be Plural
-`resources/views/emails/` (NOT `email`) - Laravel looks for plural.
-
-### 6. DRY Button Loading States
-Buttons with loading states use `.btn-with-loading` pattern to prevent layout shift:
-```blade
-<button class="btn-primary-luxury btn-with-loading" data-text="Text">
+<button class="btn-primary-luxury btn-with-loading">
     <span class="btn-default-text" x-show="!loading">Text</span>
     <span class="btn-loading-text" x-show="loading">
         <svg class="btn-spinner">...</svg>
@@ -124,218 +157,117 @@ Buttons with loading states use `.btn-with-loading` pattern to prevent layout sh
 </button>
 ```
 
-### 7. Carousel Auto-Play Stops on Interaction
-Homepage carousel auto-advances until user clicks, then stops permanently. Uses `userInteracted` flag.
-
-### 8. Social Icons Track Interest, Not External Links
-Footer/success page social icons (Facebook, X, Instagram) point to `/social-interest?platform=X` to track interest + collect newsletter signups. They do NOT link to actual social media (doesn't exist yet). Shows goal progress (X/500) and newsletter signup form.
-
----
-
-## 📁 Key Files
-
-```
-app/
-├── Http/Controllers/
-│   ├── CheckoutController.php             # Stripe checkout, webhooks
-│   └── SocialInterestController.php       # Social interest tracking
-├── Models/Order.php                       # Order model, helpers
-└── Livewire/
-    ├── ContactForm.php                    # Contact/wholesale form
-    └── NewsletterSignup.php               # Newsletter email collection
-
-resources/
-├── css/app.css                            # Tailwind config + custom components
-├── views/
-│   ├── checkout/                          # Success/cancel pages
-│   ├── emails/                            # Order/contact emails
-│   ├── livewire/newsletter-signup.blade.php  # Newsletter form
-│   ├── home.blade.php                     # Landing (state checker, carousel)
-│   ├── shop.blade.php                     # Product page (Alpine checkout)
-│   ├── faq.blade.php                      # FAQ with Alpine accordion
-│   └── social-interest.blade.php          # Social interest + newsletter signup
-
-database/migrations/
-├── *_create_orders_table.php              # Order schema
-├── *_create_social_interest_logs_table.php  # Social click tracking
-└── *_create_newsletter_signups_table.php    # Newsletter emails
-
-routes/web.php                             # All routes
-```
+### 6️⃣ Social Icons = Interest Tracker
+Footer/success social icons → `/social-interest?platform=X` (NOT external links)  
+They track interest + collect emails. No actual social media exists yet.
 
 ---
 
 ## 🎨 Design System
 
-**Philosophy**: Shadow-free luxury through gradient borders, glassmorphism, and glow effects.  
-**Colors**: Copper (#b87333) → Gold (#c29049) gradients on black/gray backgrounds.
+**Philosophy**: Shadow-free luxury via gradient borders, glassmorphism, glow effects  
+**Colors**: Copper (#b87333) → Gold (#c29049) on black backgrounds  
+**Typography**: Light weights, wide tracking (0.05em luxury, 0.12em caps)
 
-**Key Components** (in `app.css`):
+**Key Components** (`app.css`):
 - `.glass-card` - Glassmorphism panels
-- `.btn-primary-luxury` - Copper gradient fill button
-- `.btn-with-loading` + `.btn-default-text` / `.btn-loading-text` - DRY loading states
-- `.btn-spinner` / `.btn-spinner-lg` - Consistent spinners
-- `.text-gradient-copper` - Copper to gold text
-- `.badge-copper-blur` - Accent badges
-- `.social-icon-link` + `.social-icon` - Social media icons (hover: copper gradient fill)
+- `.btn-primary-luxury` - Copper gradient fill
+- `.copper-border-card` - Gradient border depth
+- `.text-gradient-copper` - Copper/gold text
+- `.social-icon-link` + `.social-icon` - Hover: copper gradient fill
 
-**Showcase**: Visit `/design` for all components.
+**View all**: `/design` route
 
 ---
 
-## 💳 Stripe Integration
+## 🗺️ Important Routes
 
-**Flow**: User clicks checkout → Alpine.js calls `/checkout/create` → Stripe session → Stripe hosted checkout → User pays → Webhook confirms → Order saved → Email sent → Success page
-
-**US-Only Restrictions** (3 layers):
-1. `billing_address_collection: 'required'` - Forces billing address
-2. `shipping_address_collection: ['US']` - Only US shipping
-3. Server-side checks in success page + webhook - Safety net
-
-**Test Card**: `4242 4242 4242 4242` (any future date, any CVC)
-
-**Webhooks**: `checkout.session.completed`, `payment_intent.succeeded`, `payment_intent.payment_failed`
-
----
-
-## 📧 Email System
-
-**Development**: Mailtrap for testing  
-**Production**: Switch to Mailgun or SendGrid (low volume expected)
-
-**Templates**:
-- `emails/order-confirmation.blade.php` - Sent after successful payment
-- `emails/contact.blade.php` - Contact form submissions to you
-- `emails/contact-confirmation.blade.php` - Production only (rate limit avoidance)
-
----
-
-## 🗺️ Routes
-
-```php
+```
 GET  /                      # Landing page
-GET  /shop                  # Product page with checkout
-GET  /design                # Design system showcase
-GET  /faq                   # FAQ page
+GET  /shop                  # Product + checkout
+GET  /faq                   # FAQ accordion
 GET  /contact               # Contact form (Livewire)
-GET  /wholesale             # Redirects to /contact?mode=wholesale
+GET  /wholesale             # → /contact?mode=wholesale
+GET  /design                # Design system showcase
 
-POST /checkout/create       # Create Stripe session (AJAX)
-GET  /checkout/success      # Order confirmation page
-GET  /checkout/cancel       # Checkout cancelled page
+POST /checkout/create       # Stripe session (AJAX)
+GET  /checkout/success      # Order confirmation
+GET  /checkout/cancel       # Checkout cancelled
 
-GET  /social-interest       # Social interest tracking + newsletter signup
+GET  /social-interest       # Social tracking + newsletter
+POST /social-interest/swap  # Switch platform vote
 POST /stripe/webhook        # Stripe webhook (CSRF exempt)
 ```
 
 ---
 
-## 📱 Social Interest Tracking
+## 📊 Database Schema
 
-**Purpose**: Footer/success page have Facebook, X (formerly Twitter), and Instagram icons. Instead of linking to social media (which doesn't exist yet), they track interest and collect emails for launch notifications.
+**orders** - Stripe checkout sessions, shipping addresses, order status  
+**social_interest_logs** - First-click tracking per platform (IP hash + cookie)  
+**newsletter_signups** - Email collection with source tracking  
+**users** - Standard Laravel (unused currently)
 
-**Flow**: 
-1. User clicks icon → `/social-interest?platform=instagram`
-2. Logs first click per visitor (cookie + IP hash) to `social_interest_logs` table
-3. Shows goal progress: "You're one of 247 people!" with progress bar (0-500 goal)
-4. Newsletter signup form (Livewire) saves email to `newsletter_signups` table
-5. Source tracking: `social-interest-instagram`, `social-interest-facebook`, `social-interest-x`
-
-**Privacy**: IP addresses hashed (SHA-256), emails stored for notification only.
-
-**Future**: When goal hits 500 for a platform, query `newsletter_signups` where source matches and send launch announcement.
-
-**Queries**:
-```php
-// Total interest per platform
-DB::table('social_interest_logs')
-    ->select('platform', DB::raw('count(*) as total'))
-    ->groupBy('platform')->get();
-
-// Newsletter signups by platform
-DB::table('newsletter_signups')
-    ->where('source', 'social-interest-instagram')->get();
-```
+**Scheduled Tasks** (`routes/console.php`):
+- `returns:cleanup` - Daily 3AM, deletes return photos >90 days old
 
 ---
 
-## 🚀 Production Checklist
-
-**Pre-Launch**:
-- [ ] Domain purchase
-- [ ] Hosting setup (Forge/DO/AWS)
-- [ ] Switch to live Stripe keys (`STRIPE_KEY`, `STRIPE_SECRET`)
-- [ ] Production webhook endpoint in Stripe dashboard
-- [ ] Production email service (Mailgun/SendGrid)
-- [ ] Upload product images to server
-- [ ] SSL certificate setup
-- [ ] Test end-to-end payment flow with real card
-- [ ] Enable customer confirmation emails
-
-**Post-Launch**:
-- [ ] Admin dashboard for order management
-- [ ] Rollo printer integration
-- [ ] Order tracking system
-- [ ] Analytics setup
-
----
-
-## 🧪 Development Workflow
+## 🧪 Development Commands
 
 ```bash
-# Daily development
-npm run dev                                              # Vite dev server
-stripe listen --forward-to visor-plate.test/stripe/webhook  # Webhook testing
+# Daily dev
+npm run dev
+stripe listen --forward-to visor-plate.test/stripe/webhook
 
-# Common commands
-php artisan view:clear && php artisan config:clear       # Clear caches
-php artisan route:list                                   # View routes
-php artisan tinker >>> App\Models\Order::all()           # View orders
-npm run build                                            # Production build
+# Clear caches
+php artisan view:clear && php artisan config:clear
+
+# View routes/orders
+php artisan route:list
+php artisan tinker >>> App\Models\Order::all()
+
+# Test return cleanup
+php artisan returns:cleanup --dry-run
+
+# Production build
+npm run build
 ```
 
 ---
 
-## 📊 Expected Traffic
+## 🚀 When Ready to Launch
 
-**Realistic**: 100 visitors/month, ~5 orders/month  
-**Optimistic**: 1,000 visitors/month, ~50 orders/month  
-**Wholesale**: ~40 inquiries/month (manual outreach to dealerships)
-
-**Email volume**: Low. Free tiers sufficient initially.
+1. Domain + hosting setup
+2. Live Stripe keys + production webhook endpoint
+3. Production email service (Mailgun/SendGrid)
+4. SSL certificate
+5. Test full payment flow with real card
+6. Admin dashboard for orders
+7. Rollo printer integration
+8. Analytics setup
 
 ---
 
-## 🔍 Common Issues & Solutions
+## 🐛 Common Issues
 
 **"Unable to connect to payment processor"**  
-→ Missing CSRF meta tag in layout. Add `<meta name="csrf-token">` to `<head>`.
+→ Missing `<meta name="csrf-token">` in layout
 
-**Webhooks returning 419 error**  
-→ Not excluded from CSRF. Add `'stripe/webhook'` to `VerifyCsrfToken.php`.
+**Webhooks return 419**  
+→ Not excluded from CSRF in `VerifyCsrfToken.php`
 
 **Button hover stutters**  
-→ Not using `.btn-with-loading` pattern. See Gotcha #6.
+→ Not using `.btn-with-loading` pattern
 
 **Emails not sending**  
-→ Check Mailtrap credentials in `.env`. Verify folder is `emails/` (plural).
+→ Check Mailtrap credentials, verify folder is `emails/` (plural)
 
 **Orders not saving after payment**  
-→ Webhook not receiving events. Run `stripe listen` during development.
+→ Webhook not receiving. Run `stripe listen` locally
 
 ---
 
-**Last Updated**: January 12, 2026  
-**Version**: 1.4 (Social Interest Tracking + Newsletter)  
-**Status**: Production-ready payment system, FAQ, social tracking live
-
----
-
-## 💡 For Future AI Iterations
-
-When updating this README:
-- Keep it under 400 lines
-- Focus on what's done, what's next, and critical gotchas
-- Remove verbose explanations (create separate guides instead)
-- Update version number and status at bottom
-- Maintain dual purpose: GitHub overview + AI briefing doc
+**Last Updated**: January 13, 2026  
+**Version**: 1.5  
+**For**: Project handoff to future developers/AI
