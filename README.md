@@ -19,14 +19,25 @@
 - 🎨 **Design System** - Glassmorphism, copper gradients, luxury aesthetic
 
 ### 🚧 Pre-Launch Checklist
+
+**Security & Reliability (Must-Have):**
+- [ ] **Rate Limiting** - Throttle contact forms (5 submissions/hour per IP)
+- [ ] **Queue Setup** - Background jobs for emails/webhooks
+- [ ] **Error Monitoring** - Sentry/Flare for production errors
+- [ ] **Basic Tests** - Checkout flow + webhook handling
+
+**Quality of Life:**
+- [ ] **Order Viewing** - Simple `/admin/orders` route (password protected)
+- [ ] **Rollo Integration** - Label generation from orders
+- [ ] **Backup Strategy** - Automated database dumps
+
+**Infrastructure:**
 - [ ] Purchase domain
 - [ ] Setup hosting (Forge/DO/AWS)
 - [ ] Switch to live Stripe keys
 - [ ] Configure production webhook
 - [ ] Setup email service (Mailgun/SendGrid)
-- [ ] Configure Rollo printer integration
-- [ ] Test end-to-end with real card
-- [ ] Admin dashboard for order management
+- [ ] SSL certificate
 
 ---
 
@@ -236,16 +247,13 @@ npm run build
 
 ---
 
-## 🚀 When Ready to Launch
+## 🚀 Priority Order for Launch Prep
 
-1. Domain + hosting setup
-2. Live Stripe keys + production webhook endpoint
-3. Production email service (Mailgun/SendGrid)
-4. SSL certificate
-5. Test full payment flow with real card
-6. Admin dashboard for orders
-7. Rollo printer integration
-8. Analytics setup
+1. **Rate limiting** (10 min) - See `tasks/rate-limiting.md`
+2. **Queue setup** (30 min) - See `tasks/queue-setup.md`
+3. **Basic tests** (1 hour) - See `tasks/basic-tests.md`
+4. **Order view** (30 min) - See `tasks/order-view.md`
+5. **Error tracking** (20 min) - See `tasks/error-tracking.md`
 
 ---
 
