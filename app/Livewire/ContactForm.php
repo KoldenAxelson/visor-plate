@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\RateLimiter;
 use Intervention\Image\Laravel\Facades\Image;
 use Illuminate\Support\Str;
 
@@ -182,6 +183,22 @@ class ContactForm extends Component
      */
     public function submit()
     {
+        // Rate limiting: 5 submissions per hour per IP
+        $key = "contact-form:" . request()->ip();
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            $minutes = ceil($seconds / 60);
+
+            session()->flash(
+                "error",
+                "You've submitted too many messages. Please wait {$minutes} minutes before trying again or disconnect your VPN.",
+            );
+
+            $this->sending = false;
+            return;
+        }
+
         // Check honeypot first (spam protection)
         if (!empty($this->honeypot)) {
             Log::info("Spam submission blocked", ["email" => $this->email]);
@@ -190,6 +207,9 @@ class ContactForm extends Component
 
         // Validate all fields
         $this->validate();
+
+        // Increment rate limiter (1 hour = 3600 seconds)
+        RateLimiter::hit($key, 3600);
 
         // Set sending state
         $this->sending = true;

@@ -165,12 +165,33 @@
                                 </div>
 
                                 <!-- Phone -->
-                                <div>
+                                <div x-data="{
+                                    formatPhone(e) {
+                                        let input = e.target;
+                                        let value = input.value.replace(/\D/g, ''); // Remove all non-digits
+                                        let formatted = '';
+
+                                        if (value.length > 0) {
+                                            formatted = '(' + value.substring(0, 3);
+                                        }
+                                        if (value.length >= 4) {
+                                            formatted += ') ' + value.substring(3, 6);
+                                        }
+                                        if (value.length >= 7) {
+                                            formatted += '-' + value.substring(6, 10);
+                                        }
+
+                                        input.value = formatted;
+                                        @this.set('phone', formatted);
+                                    }
+                                }">
                                     <label class="label-standard">Phone Number</label>
                                     <input type="tel"
                                            wire:model.blur="phone"
+                                           @input="formatPhone($event)"
                                            class="input-standard @error('phone') border-red-500 @enderror"
-                                           placeholder="(555) 123-4567">
+                                           placeholder="(555) 555-5555"
+                                           maxlength="14">
                                     @error('phone')
                                         <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                                     @enderror
@@ -207,7 +228,7 @@
                                         <input type="number"
                                                wire:model.blur="quantity"
                                                class="input-standard @error('quantity') border-red-500 @enderror"
-                                               placeholder="200"
+                                               placeholder="100"
                                                min="100">
                                         @error('quantity')
                                             <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
@@ -475,7 +496,7 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-3 tracking-wide">Phone</h3>
-                    <p class="text-gray-400 font-light">(555) 555-5555</p>
+                    <p class="text-gray-400 font-light">(805) 423-7338</p>
                 </div>
 
                 <!-- Hours -->
