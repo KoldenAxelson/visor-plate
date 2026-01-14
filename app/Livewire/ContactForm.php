@@ -325,6 +325,21 @@ class ContactForm extends Component
                 "name" => $this->name,
             ]);
         } catch (\Exception $e) {
+            // Add context for Flare error tracking
+            context([
+                "error_type" => "contact_form_submission",
+                "inquiry_type" => $this->inquiry_type,
+                "email" => $this->email,
+                "name" => $this->name,
+                "has_attachments" => !empty($attachments),
+                "company" =>
+                    $this->inquiry_type === "wholesale" ? $this->company : null,
+                "order_number" =>
+                    $this->inquiry_type === "return"
+                        ? $this->order_number
+                        : null,
+            ]);
+
             // Log error
             Log::error("Contact form error: " . $e->getMessage());
 

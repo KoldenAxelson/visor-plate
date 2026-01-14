@@ -76,6 +76,14 @@ class CheckoutController extends Controller
                 "url" => $checkoutSession->url,
             ]);
         } catch (\Exception $e) {
+            // Add context for Flare error tracking
+            context([
+                "error_type" => "stripe_checkout_creation",
+                "quantity" => $quantity,
+                "total_amount" => $totalAmount,
+                "customer_email" => $request->email ?? null,
+            ]);
+
             Log::error(
                 "Stripe checkout session creation failed: " . $e->getMessage(),
             );
@@ -153,9 +161,16 @@ class CheckoutController extends Controller
                 "session" => $session,
             ]);
         } catch (\Exception $e) {
+            // Add context for Flare error tracking
+            context([
+                "error_type" => "checkout_success_page",
+                "stripe_session_id" => $sessionId,
+            ]);
+
             Log::error(
                 "Error retrieving checkout session: " . $e->getMessage(),
             );
+
             return redirect()
                 ->route("shop")
                 ->with("error", "Unable to retrieve order details.");
@@ -192,9 +207,18 @@ class CheckoutController extends Controller
                 $webhookSecret,
             );
         } catch (SignatureVerificationException $e) {
+            // Add context for security monitoring
+            context([
+                "error_type" => "webhook_signature_verification",
+                "ip_address" => $request->ip(),
+                "user_agent" => $request->userAgent(),
+                "payload_size" => strlen($payload),
+            ]);
+
             Log::error(
                 "Webhook signature verification failed: " . $e->getMessage(),
             );
+
             return response()->json(["error" => "Invalid signature"], 400);
         }
 
@@ -224,46 +248,72 @@ class CheckoutController extends Controller
      */
     private function handleCheckoutSessionCompleted($session)
     {
-        Log::info("Checkout session completed: " . $session->id);
+        try {
+            Log::info("Checkout session completed: " . $session->id);
 
-        // Verify US-only before saving order (safety net)
-        if (
-            $session->shipping_details &&
-            $session->shipping_details->address->country !== "US"
-        ) {
-            Log::error("Non-US order blocked in webhook: " . $session->id);
-            // Don't save the order, don't send confirmation email
-            return;
-        }
+            // Verify US-only before saving order (safety net)
+            if (
+                $session->shipping_details &&
+                $session->shipping_details->address->country !== "US"
+            ) {
+                Log::error("Non-US order blocked in webhook: " . $session->id);
+                // Don't save the order, don't send confirmation email
+                return;
+            }
 
-        $order = Order::firstOrCreate(
-            ["stripe_checkout_session_id" => $session->id],
-            [
-                "stripe_payment_intent_id" => $session->payment_intent,
-                "email" => $session->customer_details->email,
-                "name" => $session->customer_details->name,
-                "quantity" => $session->metadata->quantity ?? 1,
-                "amount_cents" => $session->amount_total,
-                "status" => "completed",
-                "shipping_address" => $session->shipping_details
-                    ? [
-                        "name" => $session->shipping_details->name,
-                        "line1" => $session->shipping_details->address->line1,
-                        "line2" => $session->shipping_details->address->line2,
-                        "city" => $session->shipping_details->address->city,
-                        "state" => $session->shipping_details->address->state,
-                        "postal_code" =>
-                            $session->shipping_details->address->postal_code,
-                        "country" =>
-                            $session->shipping_details->address->country,
-                    ]
-                    : null,
-                "completed_at" => now(),
-            ],
-        );
+            $order = Order::firstOrCreate(
+                ["stripe_checkout_session_id" => $session->id],
+                [
+                    "stripe_payment_intent_id" => $session->payment_intent,
+                    "email" => $session->customer_details->email,
+                    "name" => $session->customer_details->name,
+                    "quantity" => $session->metadata->quantity ?? 1,
+                    "amount_cents" => $session->amount_total,
+                    "status" => "completed",
+                    "shipping_address" => $session->shipping_details
+                        ? [
+                            "name" => $session->shipping_details->name,
+                            "line1" =>
+                                $session->shipping_details->address->line1,
+                            "line2" =>
+                                $session->shipping_details->address->line2,
+                            "city" => $session->shipping_details->address->city,
+                            "state" =>
+                                $session->shipping_details->address->state,
+                            "postal_code" =>
+                                $session->shipping_details->address
+                                    ->postal_code,
+                            "country" =>
+                                $session->shipping_details->address->country,
+                        ]
+                        : null,
+                    "completed_at" => now(),
+                ],
+            );
 
-        if ($order->wasRecentlyCreated) {
-            $this->sendOrderConfirmationEmail($order);
+            if ($order->wasRecentlyCreated) {
+                $this->sendOrderConfirmationEmail($order);
+            }
+        } catch (\Exception $e) {
+            // Add detailed context for order creation errors
+            context([
+                "error_type" => "webhook_order_creation",
+                "stripe_session_id" => $session->id,
+                "stripe_payment_intent" => $session->payment_intent ?? null,
+                "customer_email" => $session->customer_details->email ?? null,
+                "amount_cents" => $session->amount_total ?? null,
+                "quantity" => $session->metadata->quantity ?? null,
+                "country" =>
+                    $session->shipping_details->address->country ?? null,
+            ]);
+
+            Log::error(
+                "Failed to process checkout session completed: " .
+                    $e->getMessage(),
+            );
+
+            // Re-throw so Stripe knows it failed and will retry
+            throw $e;
         }
     }
 
@@ -272,15 +322,30 @@ class CheckoutController extends Controller
      */
     private function handlePaymentIntentSucceeded($paymentIntent)
     {
-        Log::info("Payment intent succeeded: " . $paymentIntent->id);
+        try {
+            Log::info("Payment intent succeeded: " . $paymentIntent->id);
 
-        $order = Order::where(
-            "stripe_payment_intent_id",
-            $paymentIntent->id,
-        )->first();
+            $order = Order::where(
+                "stripe_payment_intent_id",
+                $paymentIntent->id,
+            )->first();
 
-        if ($order && $order->status !== "completed") {
-            $order->markAsCompleted();
+            if ($order && $order->status !== "completed") {
+                $order->markAsCompleted();
+            }
+        } catch (\Exception $e) {
+            // Add context for payment success tracking
+            context([
+                "error_type" => "payment_intent_succeeded",
+                "stripe_payment_intent" => $paymentIntent->id,
+                "amount" => $paymentIntent->amount ?? null,
+            ]);
+
+            Log::error(
+                "Failed to mark order as completed: " . $e->getMessage(),
+            );
+
+            // Don't throw - this is not critical enough to fail the webhook
         }
     }
 
@@ -289,15 +354,29 @@ class CheckoutController extends Controller
      */
     private function handlePaymentIntentFailed($paymentIntent)
     {
-        Log::error("Payment intent failed: " . $paymentIntent->id);
+        try {
+            Log::error("Payment intent failed: " . $paymentIntent->id);
 
-        $order = Order::where(
-            "stripe_payment_intent_id",
-            $paymentIntent->id,
-        )->first();
+            $order = Order::where(
+                "stripe_payment_intent_id",
+                $paymentIntent->id,
+            )->first();
 
-        if ($order) {
-            $order->update(["status" => "failed"]);
+            if ($order) {
+                $order->update(["status" => "failed"]);
+            }
+        } catch (\Exception $e) {
+            // Add context for payment failure tracking
+            context([
+                "error_type" => "payment_intent_failed",
+                "stripe_payment_intent" => $paymentIntent->id,
+                "failure_reason" =>
+                    $paymentIntent->last_payment_error->message ?? null,
+            ]);
+
+            Log::error(
+                "Failed to update failed payment status: " . $e->getMessage(),
+            );
         }
     }
 
@@ -306,8 +385,23 @@ class CheckoutController extends Controller
      */
     private function sendOrderConfirmationEmail(Order $order)
     {
-        SendOrderConfirmationEmail::dispatch($order);
+        try {
+            SendOrderConfirmationEmail::dispatch($order);
 
-        Log::info("Order confirmation email queued for: " . $order->email);
+            Log::info("Order confirmation email queued for: " . $order->email);
+        } catch (\Exception $e) {
+            // Add context for email queue failures
+            context([
+                "error_type" => "email_queue_failed",
+                "order_id" => $order->id,
+                "customer_email" => $order->email,
+            ]);
+
+            Log::error(
+                "Failed to queue confirmation email: " . $e->getMessage(),
+            );
+
+            // Don't throw - order is already created, email failure shouldn't stop webhook
+        }
     }
 }
