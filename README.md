@@ -12,24 +12,28 @@
 - 💳 **Stripe Checkout** - Full payment flow, webhooks, order emails
 - 📦 **Orders** - CRUD, status tracking, US-only enforcement
 - 🛒 **Shop Page** - Product carousel, quantity selection, checkout
-- 📧 **Contact System** - Multi-type forms (general, wholesale, return, review)
+- 📧 **Contact System** - Multi-type forms (general, wholesale, return, review) with rate limiting
 - 🏠 **Landing Page** - Hero, gallery, state checker, installation guide
 - ❓ **FAQ** - Alpine.js accordion
 - 📱 **Social Interest** - Track platform interest, newsletter signups
 - 🎨 **Design System** - Glassmorphism, copper gradients, luxury aesthetic
+- ⚡ **Queue System** - Background email processing (database driver)
+- 🚨 **Error Tracking** - Flare.io monitoring with custom context
+- 💾 **Backups** - Daily automated S3 backups with 30-day retention
+- 🧪 **Testing** - 32 feature tests for checkout/webhooks
 
 ### 🚧 Pre-Launch Checklist
 
 **Security & Reliability (Must-Have):**
-- [ ] **Rate Limiting** - Throttle contact forms (5 submissions/hour per IP)
-- [ ] **Queue Setup** - Background jobs for emails/webhooks
-- [ ] **Error Monitoring** - Sentry/Flare for production errors
-- [ ] **Basic Tests** - Checkout flow + webhook handling
+- [x] **Rate Limiting** - Contact forms throttled to 5/hour per IP ✅
+- [x] **Queue Setup** - Emails/webhooks in background jobs (database driver) ✅
+- [x] **Error Monitoring** - Flare.io tracking with custom context ✅
+- [x] **Basic Tests** - 32 tests for checkout + webhooks ✅
 
 **Quality of Life:**
 - [ ] **Order Viewing** - Simple `/admin/orders` route (password protected)
 - [ ] **Rollo Integration** - Label generation from orders
-- [ ] **Backup Strategy** - Automated database dumps
+- [x] **Backup Strategy** - Daily S3 backups, 30-day retention ✅
 
 **Infrastructure:**
 - [ ] Purchase domain
@@ -65,13 +69,21 @@ php artisan migrate
 STRIPE_KEY=pk_test_...
 STRIPE_SECRET=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
+QUEUE_CONNECTION=database
+FLARE_KEY=flr_... (optional for error tracking)
+AWS_ACCESS_KEY_ID=... (for backups)
+AWS_SECRET_ACCESS_KEY=...
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 
 # Development
 npm run dev
+php artisan queue:work  # Required for emails
 stripe listen --forward-to visor-plate.test/stripe/webhook
 valet link
+
+# Run tests
+php artisan test  # 32 tests should pass
 ```
 
 **Images**: All product images are in `public/images/` (tracked in git)
@@ -83,14 +95,27 @@ valet link
 ```
 app/
 ├── Http/Controllers/
-│   ├── CheckoutController.php          # Stripe checkout + webhooks
+│   ├── CheckoutController.php          # Stripe checkout + webhooks (Flare context)
 │   └── SocialInterestController.php    # Social interest tracking
+├── Jobs/
+│   ├── SendOrderConfirmationEmail.php  # Queued order emails
+│   ├── SendContactFormEmail.php        # Queued contact notifications
+│   └── SendContactConfirmationEmail.php # Queued customer confirmations
 ├── Livewire/
-│   ├── ContactForm.php                 # Multi-type contact form
+│   ├── ContactForm.php                 # Multi-type contact form (rate limited, Flare context)
 │   └── NewsletterSignup.php            # Email collection
 ├── Models/Order.php                     # Order model + helpers
+├── Exceptions/Handler.php               # Flare error handling (ignores 404s, CSRF)
 └── Console/Commands/
     └── CleanupOldReturns.php           # Auto-delete old return photos (90 days)
+
+config/
+├── backup.php                           # Spatie backup config (S3, retention)
+└── filesystems.php                      # S3 disk configuration
+
+tests/Feature/
+├── CheckoutTest.php                     # 17 tests for checkout flow
+└── WebhookTest.php                      # 15 tests for webhook handling
 
 resources/
 ├── css/app.css                          # Tailwind v4 config + components
@@ -104,6 +129,7 @@ resources/
 │   └── livewire/                       # Livewire components
 
 routes/web.php                           # All routes
+routes/console.php                       # Scheduled tasks (backup, cleanup)
 ```
 
 ### 🔑 Core Features
@@ -221,6 +247,48 @@ POST /stripe/webhook        # Stripe webhook (CSRF exempt)
 
 **Scheduled Tasks** (`routes/console.php`):
 - `returns:cleanup` - Daily 3AM, deletes return photos >90 days old
+- `backup:run` - Daily 3AM, creates database + file backups
+- `backup:clean` - Daily 4AM, removes backups older than retention policy
+- `backup:monitor` - Daily 5AM, checks backup health (local + S3)
+
+---
+
+## 🚀 Production Deployment Checklist
+
+**Required Services:**
+- [ ] Queue workers running (Supervisor recommended)
+- [ ] Cron job configured for scheduled tasks
+- [ ] Flare.io account + API key
+- [ ] AWS S3 bucket for backups
+- [ ] Production email service (Mailgun/SendGrid)
+
+**Supervisor Config for Queue Workers:**
+```ini
+[program:visorplate-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path/to/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=forge
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/path/to/worker.log
+```
+
+**Cron Job:**
+```bash
+* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+**Environment Variables Required:**
+- `APP_ENV=production`
+- `QUEUE_CONNECTION=database`
+- `FLARE_KEY=flr_...`
+- `AWS_ACCESS_KEY_ID=...`
+- `AWS_SECRET_ACCESS_KEY=...`
+- `AWS_BUCKET=visorplate-backups`
+- Live Stripe keys
+- Production email credentials
 
 ---
 
@@ -229,6 +297,7 @@ POST /stripe/webhook        # Stripe webhook (CSRF exempt)
 ```bash
 # Daily dev
 npm run dev
+php artisan queue:work  # Required - emails won't send without this
 stripe listen --forward-to visor-plate.test/stripe/webhook
 
 # Clear caches
@@ -238,7 +307,21 @@ php artisan view:clear && php artisan config:clear
 php artisan route:list
 php artisan tinker >>> App\Models\Order::all()
 
-# Test return cleanup
+# Testing
+php artisan test  # Run all 32 tests
+php artisan test --filter CheckoutTest  # Specific test
+
+# Queue management
+php artisan queue:work  # Process jobs
+php artisan queue:failed  # View failed jobs
+php artisan queue:retry all  # Retry failed jobs
+
+# Backups
+php artisan backup:run  # Manual backup
+php artisan backup:list  # View backups
+php artisan backup:monitor  # Check backup health
+
+# Return photo cleanup
 php artisan returns:cleanup --dry-run
 
 # Production build
@@ -249,11 +332,24 @@ npm run build
 
 ## 🚀 Priority Order for Launch Prep
 
-1. **Rate limiting** (10 min) - See `tasks/rate-limiting.md`
-2. **Queue setup** (30 min) - See `tasks/queue-setup.md`
-3. **Basic tests** (1 hour) - See `tasks/basic-tests.md`
-4. **Order view** (30 min) - See `tasks/order-view.md`
-5. **Error tracking** (20 min) - See `tasks/error-tracking.md`
+**Completed:**
+1. ~~**Rate limiting**~~ ✅ Complete
+2. ~~**Queue setup**~~ ✅ Complete
+3. ~~**Basic tests**~~ ✅ Complete (32 tests passing)
+4. ~~**Error tracking**~~ ✅ Complete (Flare.io)
+5. ~~**Backup strategy**~~ ✅ Complete (S3, 30-day retention)
+
+**Remaining:**
+6. **Order view** (30 min) - See `task-order-view.md`
+7. **Rollo integration** (2-3 hrs, future) - See `task-rollo-integration.md`
+
+**Infrastructure (Final steps):**
+- Domain purchase + DNS
+- Hosting setup (Forge/DO/AWS)
+- Live Stripe keys + production webhook
+- Production email service (Mailgun/SendGrid)
+- SSL certificate
+- Supervisor for queue workers
 
 ---
 
@@ -269,13 +365,26 @@ npm run build
 → Not using `.btn-with-loading` pattern
 
 **Emails not sending**  
+→ Queue worker not running. Start with `php artisan queue:work`  
 → Check Mailtrap credentials, verify folder is `emails/` (plural)
 
 **Orders not saving after payment**  
 → Webhook not receiving. Run `stripe listen` locally
 
+**Contact form spam**  
+→ Rate limiting active (5/hour per IP). Clear with `RateLimiter::clear('contact-form:IP')`
+
+**Tests failing**  
+→ Run `php artisan config:clear` and retry  
+→ Ensure `.env` has Stripe test keys
+
+**Backups not running**  
+→ Check cron job is active: `crontab -l`  
+→ Verify AWS credentials in `.env`  
+→ Run `php artisan backup:monitor` for health check
+
 ---
 
-**Last Updated**: January 13, 2026  
-**Version**: 1.5  
+**Last Updated**: January 14, 2026  
+**Version**: 2.0 (Production-ready with testing, queues, monitoring, backups)  
 **For**: Project handoff to future developers/AI
