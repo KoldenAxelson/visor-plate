@@ -113,10 +113,15 @@ class CheckoutController extends Controller
             // Retrieve the session from Stripe
             $session = StripeSession::retrieve($sessionId);
 
+            // Get shipping details from either location (Stripe API changed this)
+            $shippingDetails =
+                $session->shipping_details ??
+                ($session->collected_information->shipping_details ?? null);
+
             // Double-check US-only (extra safety net)
             if (
-                $session->shipping_details &&
-                $session->shipping_details->address->country !== "US"
+                $shippingDetails &&
+                $shippingDetails->address->country !== "US"
             ) {
                 Log::warning("Non-US order attempted: " . $sessionId);
                 return redirect()
@@ -136,21 +141,16 @@ class CheckoutController extends Controller
                         $session->payment_status === "paid"
                             ? "completed"
                             : "pending",
-                    "shipping_address" => $session->shipping_details
+                    "shipping_address" => $shippingDetails
                         ? [
-                            "name" => $session->shipping_details->name,
-                            "line1" =>
-                                $session->shipping_details->address->line1,
-                            "line2" =>
-                                $session->shipping_details->address->line2,
-                            "city" => $session->shipping_details->address->city,
-                            "state" =>
-                                $session->shipping_details->address->state,
+                            "name" => $shippingDetails->name,
+                            "line1" => $shippingDetails->address->line1,
+                            "line2" => $shippingDetails->address->line2 ?? "",
+                            "city" => $shippingDetails->address->city,
+                            "state" => $shippingDetails->address->state,
                             "postal_code" =>
-                                $session->shipping_details->address
-                                    ->postal_code,
-                            "country" =>
-                                $session->shipping_details->address->country,
+                                $shippingDetails->address->postal_code,
+                            "country" => $shippingDetails->address->country,
                         ]
                         : null,
                 ],
@@ -251,42 +251,64 @@ class CheckoutController extends Controller
         try {
             Log::info("Checkout session completed: " . $session->id);
 
+            // Retrieve full session with expanded data to ensure we have all details
+            $fullSession = StripeSession::retrieve([
+                "id" => $session->id,
+                "expand" => ["customer", "line_items"],
+            ]);
+
+            // Get shipping details from either location (Stripe API changed this)
+            // New API uses collected_information->shipping_details
+            // Old API uses shipping_details directly
+            $shippingDetails =
+                $fullSession->shipping_details ??
+                ($fullSession->collected_information->shipping_details ?? null);
+
             // Verify US-only before saving order (safety net)
             if (
-                $session->shipping_details &&
-                $session->shipping_details->address->country !== "US"
+                $shippingDetails &&
+                $shippingDetails->address->country !== "US"
             ) {
-                Log::error("Non-US order blocked in webhook: " . $session->id);
+                Log::error(
+                    "Non-US order blocked in webhook: " . $fullSession->id,
+                );
                 // Don't save the order, don't send confirmation email
                 return;
             }
 
-            $order = Order::firstOrCreate(
-                ["stripe_checkout_session_id" => $session->id],
+            // Prepare shipping address data
+            $shippingAddress = null;
+            if ($shippingDetails) {
+                $shippingAddress = [
+                    "name" => $shippingDetails->name,
+                    "line1" => $shippingDetails->address->line1,
+                    "line2" => $shippingDetails->address->line2 ?? "",
+                    "city" => $shippingDetails->address->city,
+                    "state" => $shippingDetails->address->state,
+                    "postal_code" => $shippingDetails->address->postal_code,
+                    "country" => $shippingDetails->address->country,
+                ];
+            }
+
+            // Log shipping address for debugging
+            Log::info("Shipping details from webhook", [
+                "session_id" => $fullSession->id,
+                "has_shipping_details" => !is_null($shippingDetails),
+                "shipping_address" => $shippingAddress,
+            ]);
+
+            // Use updateOrCreate to handle both creation AND updates
+            // This fixes race condition where success page creates order first
+            $order = Order::updateOrCreate(
+                ["stripe_checkout_session_id" => $fullSession->id],
                 [
-                    "stripe_payment_intent_id" => $session->payment_intent,
-                    "email" => $session->customer_details->email,
-                    "name" => $session->customer_details->name,
-                    "quantity" => $session->metadata->quantity ?? 1,
-                    "amount_cents" => $session->amount_total,
+                    "stripe_payment_intent_id" => $fullSession->payment_intent,
+                    "email" => $fullSession->customer_details->email,
+                    "name" => $fullSession->customer_details->name,
+                    "quantity" => $fullSession->metadata->quantity ?? 1,
+                    "amount_cents" => $fullSession->amount_total,
                     "status" => "completed",
-                    "shipping_address" => $session->shipping_details
-                        ? [
-                            "name" => $session->shipping_details->name,
-                            "line1" =>
-                                $session->shipping_details->address->line1,
-                            "line2" =>
-                                $session->shipping_details->address->line2,
-                            "city" => $session->shipping_details->address->city,
-                            "state" =>
-                                $session->shipping_details->address->state,
-                            "postal_code" =>
-                                $session->shipping_details->address
-                                    ->postal_code,
-                            "country" =>
-                                $session->shipping_details->address->country,
-                        ]
-                        : null,
+                    "shipping_address" => $shippingAddress,
                     "completed_at" => now(),
                 ],
             );
@@ -303,8 +325,6 @@ class CheckoutController extends Controller
                 "customer_email" => $session->customer_details->email ?? null,
                 "amount_cents" => $session->amount_total ?? null,
                 "quantity" => $session->metadata->quantity ?? null,
-                "country" =>
-                    $session->shipping_details->address->country ?? null,
             ]);
 
             Log::error(

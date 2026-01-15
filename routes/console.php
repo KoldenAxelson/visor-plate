@@ -62,3 +62,26 @@ Schedule::command("backup:monitor")
         env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com"),
     )
     ->appendOutputTo(storage_path("logs/backup-monitor.log"));
+
+/**
+ * Schedule automated label printing via Rollo thermal printer
+ *
+ * Runs weekdays at 8:00 AM
+ * Only runs if Rollo printer is online
+ * Batch prints all pending orders
+ * Updates order status and queues tracking emails
+ *
+ * Philosophy: Terminal-first operations
+ * Manual override available via: php artisan orders:print-pending
+ */
+Schedule::command("orders:print-pending")
+    ->weekdays()
+    ->at("08:00")
+    ->when(function () {
+        // Check if Rollo printer is online before running
+        return app(\App\Services\RolloPrinter::class)->isOnline();
+    })
+    ->emailOutputOnFailure(
+        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com"),
+    )
+    ->appendOutputTo(storage_path("logs/rollo.log"));

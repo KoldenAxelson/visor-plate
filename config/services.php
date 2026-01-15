@@ -39,4 +39,42 @@ return [
         "secret" => env("STRIPE_SECRET"),
         "webhook_secret" => env("STRIPE_WEBHOOK_SECRET"),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | ShipStation API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | ShipStation is used to integrate with the Rollo thermal printer for
+    | automated label generation and printing. Get your API credentials from:
+    | https://ship1.shipstation.com/settings/api
+    |
+    | Documentation: https://www.shipstation.com/docs/api/
+    |
+    */
+
+    "shipstation" => [
+        "api_key" => env("SHIPSTATION_API_KEY"),
+        "api_secret" => env("SHIPSTATION_API_SECRET"),
+        "store_id" => env("SHIPSTATION_STORE_ID"),
+
+        // Return address configuration
+        "return_address" => [
+            "name" => env("RETURN_ADDRESS_NAME", "VisorPlate"),
+            "company" => env("RETURN_ADDRESS_COMPANY", ""),
+            "line1" => env("RETURN_ADDRESS_LINE1"),
+            "line2" => env("RETURN_ADDRESS_LINE2", ""),
+            "city" => env("RETURN_ADDRESS_CITY"),
+            "state" => env("RETURN_ADDRESS_STATE"),
+            "postal_code" => env("RETURN_ADDRESS_ZIP"),
+            "country" => env("RETURN_ADDRESS_COUNTRY", "US"),
+            "phone" => env("RETURN_ADDRESS_PHONE", ""),
+        ],
+
+        // Package defaults for VisorPlate product
+        "package_length" => env("PACKAGE_LENGTH", 14), // inches
+        "package_width" => env("PACKAGE_WIDTH", 8), // inches
+        "package_height" => env("PACKAGE_HEIGHT", 1), // inches
+        "package_weight" => env("PACKAGE_WEIGHT", 12), // ounces
+    ],
 ];
