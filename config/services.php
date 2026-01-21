@@ -77,4 +77,11 @@ return [
         "package_height" => env("PACKAGE_HEIGHT", 1), // inches
         "package_weight" => env("PACKAGE_WEIGHT", 12), // ounces
     ],
+
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
 ];
