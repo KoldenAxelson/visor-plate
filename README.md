@@ -35,7 +35,7 @@
 
 **Sequential tasks to go live** (each is a separate session):
 
-1. **task-01-domain-and-hosting.md** - Domain purchase, hosting setup
+1. ✅ **task-01-domain-and-hosting.md** - Domain purchase, hosting setup
 2. **task-02-code-deployment.md** - Deploy code, SSL, environment config
 3. **task-03-production-services.md** - Stripe live keys, email service, monitoring
 4. **task-04-automation-setup.md** - Queue workers, cron jobs
