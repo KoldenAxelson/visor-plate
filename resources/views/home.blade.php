@@ -10,11 +10,11 @@
         <img src="{{ asset('images/hero.jpg') }}" alt="VisorPlate Hero"
              class="w-full h-full object-cover object-top">
         <!-- Narrow LEFT gradient - opaque left, transparent by 50% mark -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"
+        <div class="absolute inset-0 bg-linear-to-r from-black via-black/80 to-transparent"
              style="--tw-gradient-to: transparent; --tw-gradient-stops: black 0%, rgb(0 0 0 / 0.4) 35%, transparent 60%;"></div>
 
         <!-- Bottom fade for trust badges and scroll indicator -->
-        <div class="absolute inset-x-0 bottom-0 h-128 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 h-128 bg-linear-to-t from-black via-black/70 to-transparent"></div>
     </div>
 
     <!-- Content - NO CONTAINER, direct left padding -->
