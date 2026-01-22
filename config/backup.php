@@ -14,8 +14,8 @@ return [
                  * The list of directories and files that will be included in the backup.
                  */
                 "include" => [
-                    // Include return photos (temporary storage, 90-day retention)
-                    storage_path("app/public/returns"),
+                    // Don't include return photos (temporary storage, 90-day retention)
+                    //storage_path("app/public/returns"),
                 ],
 
                 /*
