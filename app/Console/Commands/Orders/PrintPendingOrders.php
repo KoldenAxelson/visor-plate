@@ -5,12 +5,14 @@ namespace App\Console\Commands\Orders;
 use App\Models\Order;
 use App\Services\RolloPrinter;
 use App\Jobs\SendTrackingEmail;
+use App\Jobs\SendDailyOrderSummaryEmail;
+use App\Jobs\SendNoOrdersEmail;
 use Illuminate\Console\Command;
 
 class PrintPendingOrders extends Command
 {
-    protected $signature = 'orders:print-pending';
-    protected $description = 'Batch print labels for all pending orders';
+    protected $signature = "orders:print-pending";
+    protected $description = "Batch print labels for all pending orders";
 
     protected RolloPrinter $printer;
 
@@ -22,30 +24,54 @@ class PrintPendingOrders extends Command
 
     public function handle(): int
     {
-        // Check if printer is online first
-        if (!$this->printer->isOnline()) {
-            $this->error('❌ Rollo printer is offline. Please check connection.');
-            $this->comment('   - Verify printer is powered on');
-            $this->comment('   - Check USB/network connection');
-            $this->comment('   - Verify ShipStation API credentials');
-            return Command::FAILURE;
-        }
-
         // Get pending orders
-        $orders = Order::where('status', 'pending')
-            ->orWhere(function($query) {
-                $query->where('status', 'completed')
-                      ->whereNull('shipped_at');
+        $orders = Order::where("status", "pending")
+            ->orWhere(function ($query) {
+                $query->where("status", "completed")->whereNull("shipped_at");
             })
-            ->orderBy('created_at', 'asc')
+            ->orderBy("created_at", "asc")
             ->get();
 
+        // If no orders, exit silently (no spam)
         if ($orders->isEmpty()) {
-            $this->info('✅ No pending orders to print.');
+            // Send "no orders" email on weekdays (Mon-Fri) for peace of mind
+            if (now()->isWeekday()) {
+                $this->info(
+                    "📧 No orders today - sending peace of mind email...",
+                );
+                SendNoOrdersEmail::dispatch();
+                $this->info('✅ "You\'re free today!" email sent.');
+            } else {
+                $this->info(
+                    "✅ No pending orders to print (weekend - no email).",
+                );
+            }
             return Command::SUCCESS;
         }
 
-        $this->info("🖨️  Starting batch print for {$orders->count()} orders...\n");
+        // 🆕 SEND DAILY SUMMARY EMAIL BEFORE PRINTING
+        $this->info("📧 Sending daily order summary email...");
+        SendDailyOrderSummaryEmail::dispatch($orders);
+        $this->info("✅ Email queued successfully.\n");
+
+        // Check if printer is online
+        if (!$this->printer->isOnline()) {
+            $this->error(
+                "❌ Rollo printer is offline. Please check connection.",
+            );
+            $this->comment("   - Verify printer is powered on");
+            $this->comment("   - Check USB/network connection");
+            $this->comment("   - Verify ShipStation API credentials");
+            $this->newLine();
+            $this->comment(
+                "💡 Orders pending, but cannot print. Summary email sent.",
+            );
+            return Command::FAILURE;
+        }
+
+        $this->info(
+            "🖨️  Starting batch print for {$orders->count()} orders...\n",
+        );
 
         // Create progress bar
         $progressBar = $this->output->createProgressBar($orders->count());
@@ -58,35 +84,39 @@ class PrintPendingOrders extends Command
         $this->newLine(2);
 
         // Process results
-        foreach ($results['results'] as $result) {
-            $order = Order::find($result['order_id']);
-            
-            if ($result['success'] && $order) {
+        foreach ($results["results"] as $result) {
+            $order = Order::find($result["order_id"]);
+
+            if ($result["success"] && $order) {
                 // Update order
                 $order->update([
-                    'tracking_number' => $result['tracking'],
-                    'shipped_at' => now(),
-                    'status' => 'shipped'
+                    "tracking_number" => $result["tracking"],
+                    "shipped_at" => now(),
+                    "status" => "shipped",
                 ]);
 
                 // Queue tracking email
                 SendTrackingEmail::dispatch($order);
 
-                $this->info("✅ Order #{$result['order_id']}: {$result['tracking']}");
+                $this->info(
+                    "✅ Order #{$result["order_id"]}: {$result["tracking"]}",
+                );
             } else {
-                $this->error("❌ Order #{$result['order_id']}: {$result['error']}");
+                $this->error(
+                    "❌ Order #{$result["order_id"]}: {$result["error"]}",
+                );
             }
         }
 
         // Summary
         $this->newLine();
         $this->info("📊 Batch Print Summary:");
-        $this->info("   Successful: {$results['successful']}");
-        if ($results['failed'] > 0) {
-            $this->error("   Failed: {$results['failed']}");
+        $this->info("   Successful: {$results["successful"]}");
+        if ($results["failed"] > 0) {
+            $this->error("   Failed: {$results["failed"]}");
             $this->comment("\n💡 Check storage/logs/rollo.log for details");
         }
 
-        return $results['failed'] > 0 ? Command::FAILURE : Command::SUCCESS;
+        return $results["failed"] > 0 ? Command::FAILURE : Command::SUCCESS;
     }
 }
