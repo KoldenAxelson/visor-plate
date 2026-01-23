@@ -45,9 +45,9 @@ Route::get("/checkout/cancel", [CheckoutController::class, "cancel"])->name(
 );
 
 // Stripe Webhook
-Route::post("/stripe/webhook", [CheckoutController::class, "webhook"])
-    ->name("stripe.webhook")
-    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+Route::post("/stripe/webhook", [CheckoutController::class, "webhook"])->name(
+    "stripe.webhook",
+);
 
 // Social Interest Tracking
 Route::get("/social-interest", [

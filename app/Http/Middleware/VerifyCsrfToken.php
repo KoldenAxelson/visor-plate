@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        "/stripe/webhook", // Stripe webhooks don't include CSRF tokens
+        // "/stripe/webhook", // Laravel 11 see, bootstrap/app.js
     ];
 }
