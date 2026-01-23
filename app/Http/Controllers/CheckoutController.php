@@ -313,7 +313,9 @@ class CheckoutController extends Controller
                 ],
             );
 
-            if ($order->wasRecentlyCreated) {
+            // Send email for completed orders that haven't been shipped
+            // (Handles both new orders and webhook retries safely)
+            if ($order->status === "completed" && !$order->shipped_at) {
                 $this->sendOrderConfirmationEmail($order);
             }
         } catch (\Exception $e) {
