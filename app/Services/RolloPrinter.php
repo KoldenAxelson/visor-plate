@@ -281,7 +281,7 @@ class RolloPrinter
             "packageCode" => "package",
             "confirmation" => "none",
             "shipDate" => now()->format("Y-m-d"),
-            "testLabel" => config("app.env") !== "production", // Test labels in dev
+            "testLabel" => false, // Test labels in dev
         ];
 
         try {
