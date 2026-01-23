@@ -28,12 +28,7 @@ class SendNoOrdersEmail implements ShouldQueue
     {
         Mail::send("emails.no-orders-today", [], function ($message) {
             $message
-                ->to(
-                    env(
-                        "ORDER_NOTIFICATION_EMAIL",
-                        "contact@visorplate-us.com",
-                    ),
-                )
+                ->to(config("services.visorplate.order_notification_email"))
                 ->subject("VisorPlate: No Orders Today - You're Free! 🎉");
         });
     }

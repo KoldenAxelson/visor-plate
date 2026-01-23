@@ -78,10 +78,18 @@ return [
         "package_weight" => env("PACKAGE_WEIGHT", 12), // ounces
     ],
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
+    "mailgun" => [
+        "domain" => env("MAILGUN_DOMAIN"),
+        "secret" => env("MAILGUN_SECRET"),
+        "endpoint" => env("MAILGUN_ENDPOINT", "api.mailgun.net"),
+        "scheme" => "https",
+    ],
+
+    // While not 3rd Party, I guess it goes here?
+    "visorplate" => [
+        "order_notification_email" => env(
+            "ORDER_NOTIFICATION_EMAIL",
+            "contact@visorplate-us.com",
+        ),
     ],
 ];

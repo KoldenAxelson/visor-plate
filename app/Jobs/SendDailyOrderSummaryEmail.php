@@ -42,12 +42,7 @@ class SendDailyOrderSummaryEmail implements ShouldQueue
             ],
             function ($message) use ($orderCount) {
                 $message
-                    ->to(
-                        env(
-                            "ORDER_NOTIFICATION_EMAIL",
-                            "contact@visorplate-us.com",
-                        ),
-                    )
+                    ->to(config("services.visorplate.order_notification_email"))
                     ->subject(
                         "VisorPlate: {$orderCount} " .
                             Str::plural("Order", $orderCount) .
