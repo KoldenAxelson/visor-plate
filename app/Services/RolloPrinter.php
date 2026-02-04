@@ -5,20 +5,16 @@ namespace App\Services;
 use App\Models\Order;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 
 /**
  * Rollo Thermal Printer Service
  *
  * Integrates with ShipStation API for automated label generation and printing.
- * ShipStation was chosen over direct Rollo API or EasyPost because:
- * - Best integration with Rollo thermal printers
- * - Mature API with good documentation
- * - Batch operations support
- * - Only $9/month after trial (worth it for <50 orders/month)
- * - PHP SDK available: https://github.com/ShipStation/shipstation-php
  *
- * API Documentation: https://www.shipstation.com/docs/api/
+ * CRITICAL FIX: ShipStation API does NOT auto-print labels. The API only returns
+ * base64 PDF data. We must decode and print it ourselves using system commands.
  */
 class RolloPrinter
 {
@@ -26,12 +22,17 @@ class RolloPrinter
     protected string $apiSecret;
     protected string $storeId;
     protected string $baseUrl = "https://ssapi.shipstation.com";
+    protected string $printerName;
 
     public function __construct()
     {
         $this->apiKey = config("services.shipstation.api_key");
         $this->apiSecret = config("services.shipstation.api_secret");
         $this->storeId = config("services.shipstation.store_id");
+
+        // IMPORTANT: Set your actual Rollo printer name from system
+        // Run `lpstat -p -d` on Mac to see available printers
+        $this->printerName = config("services.shipstation.printer_name", "Rollo_X1040");
     }
 
     /**
@@ -42,21 +43,27 @@ class RolloPrinter
     public function isOnline(): bool
     {
         try {
+            // Check ShipStation API connectivity
             $response = $this->makeRequest("GET", "/carriers");
+            if (!$response->successful()) {
+                Log::channel("rollo")->warning("ShipStation API offline", [
+                    "status" => $response->status(),
+                ]);
+                return false;
+            }
 
-            if ($response->successful()) {
-                Log::channel("rollo")->info(
-                    "Printer connectivity check: ONLINE",
-                );
+            // Check if Rollo printer is available via system
+            $printerCheck = shell_exec("lpstat -p " . escapeshellarg($this->printerName) . " 2>&1");
+
+            if ($printerCheck && str_contains($printerCheck, 'enabled')) {
+                Log::channel("rollo")->info("Printer connectivity check: ONLINE");
                 return true;
             }
 
-            Log::channel("rollo")->warning(
-                "Printer connectivity check: OFFLINE",
-                [
-                    "status" => $response->status(),
-                ],
-            );
+            Log::channel("rollo")->warning("Rollo printer not found or disabled", [
+                "printer_name" => $this->printerName,
+                "lpstat_output" => $printerCheck,
+            ]);
             return false;
         } catch (\Exception $e) {
             Log::channel("rollo")->error("Printer connectivity check failed", [
@@ -87,17 +94,34 @@ class RolloPrinter
                 return $shipmentData;
             }
 
-            // Generate and print label
+            // Generate label (returns base64 PDF)
             $labelData = $this->createLabel($shipmentData["shipment_id"]);
 
-            if ($labelData["success"]) {
-                Log::channel("rollo")->info("Label printed successfully", [
-                    "order_id" => $order->id,
-                    "tracking" => $labelData["tracking"],
-                ]);
+            if (!$labelData["success"]) {
+                return $labelData;
             }
 
-            return $labelData;
+            // 🆕 CRITICAL: Actually print the PDF to Rollo
+            $printResult = $this->printPdfToRollo($labelData["label_url"], $order->id);
+
+            if (!$printResult["success"]) {
+                return [
+                    "success" => false,
+                    "tracking" => $labelData["tracking"],
+                    "error" => "Label created but print failed: " . $printResult["error"],
+                ];
+            }
+
+            Log::channel("rollo")->info("Label printed successfully", [
+                "order_id" => $order->id,
+                "tracking" => $labelData["tracking"],
+            ]);
+
+            return [
+                "success" => true,
+                "tracking" => $labelData["tracking"],
+                "error" => null,
+            ];
         } catch (\Exception $e) {
             Log::channel("rollo")->error("Label generation failed", [
                 "order_id" => $order->id,
@@ -108,6 +132,88 @@ class RolloPrinter
             return [
                 "success" => false,
                 "tracking" => null,
+                "error" => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * 🆕 NEW METHOD: Decode base64 PDF and print directly to Rollo
+     *
+     * @param string $base64Pdf Base64-encoded PDF from ShipStation API
+     * @param int $orderId For logging/filename
+     * @return array ['success' => bool, 'error' => string|null]
+     */
+    protected function printPdfToRollo(string $base64Pdf, int $orderId): array
+    {
+        try {
+            // Decode base64 PDF
+            $pdfData = base64_decode($base64Pdf);
+
+            if (!$pdfData) {
+                return [
+                    "success" => false,
+                    "error" => "Failed to decode PDF data",
+                ];
+            }
+
+            // Save to temporary file
+            $filename = "label_order_{$orderId}_" . time() . ".pdf";
+            $tempPath = storage_path("app/temp/{$filename}");
+
+            // Ensure temp directory exists
+            if (!file_exists(storage_path("app/temp"))) {
+                mkdir(storage_path("app/temp"), 0755, true);
+            }
+
+            file_put_contents($tempPath, $pdfData);
+
+            Log::channel("rollo")->info("PDF saved to temp", [
+                "path" => $tempPath,
+                "size" => filesize($tempPath),
+            ]);
+
+            // Print using lp command (macOS/Linux)
+            // -d: destination printer
+            // -o media=Custom.4x6in: 4x6 label size for Rollo
+            // -o fit-to-page: ensure label fits properly
+            $command = sprintf(
+                "lp -d %s -o media=Custom.4x6in -o fit-to-page %s 2>&1",
+                escapeshellarg($this->printerName),
+                escapeshellarg($tempPath)
+            );
+
+            $output = shell_exec($command);
+
+            Log::channel("rollo")->info("Print command executed", [
+                "command" => $command,
+                "output" => $output,
+            ]);
+
+            // Verify print job was accepted
+            if ($output && str_contains($output, 'request id')) {
+                // Clean up temp file after successful print
+                sleep(2); // Give print system time to read the file
+                unlink($tempPath);
+
+                return [
+                    "success" => true,
+                    "error" => null,
+                ];
+            } else {
+                return [
+                    "success" => false,
+                    "error" => "Print command failed: " . ($output ?? "No output"),
+                ];
+            }
+        } catch (\Exception $e) {
+            Log::channel("rollo")->error("Print to Rollo failed", [
+                "order_id" => $orderId,
+                "error" => $e->getMessage(),
+            ]);
+
+            return [
+                "success" => false,
                 "error" => $e->getMessage(),
             ];
         }
@@ -267,7 +373,7 @@ class RolloPrinter
     }
 
     /**
-     * Create and print a label for a shipment
+     * Create label for a shipment (returns base64 PDF)
      *
      * @param int $shipmentId
      * @return array
@@ -281,7 +387,7 @@ class RolloPrinter
             "packageCode" => "package",
             "confirmation" => "none",
             "shipDate" => now()->format("Y-m-d"),
-            "testLabel" => config("app.env") !== "production", // Test labels in dev
+            "testLabel" => false,
         ];
 
         try {
@@ -297,7 +403,7 @@ class RolloPrinter
                 return [
                     "success" => true,
                     "tracking" => $data["trackingNumber"],
-                    "label_url" => $data["labelData"], // Base64 PDF
+                    "label_url" => $data["labelData"], // Base64 PDF - we'll print this ourselves
                     "shipment_id" => $data["shipmentId"],
                 ];
             }

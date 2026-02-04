@@ -58,6 +58,8 @@ return [
         "api_secret" => env("SHIPSTATION_API_SECRET"),
         "store_id" => env("SHIPSTATION_STORE_ID"),
 
+	'printer_name' => env('SHIPSTATION_PRINTER_NAME', 'Rollo_X1040'),
+
         // Return address configuration
         "return_address" => [
             "name" => env("RETURN_ADDRESS_NAME", "VisorPlate"),
