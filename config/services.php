@@ -94,4 +94,8 @@ return [
             "contact@visorplate-us.com",
         ),
     ],
+
+    'print_agent' => [
+        'secret' => env('PRINT_AGENT_SECRET'),
+    ],
 ];
