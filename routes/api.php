@@ -1,11 +1,21 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
 // Print agent endpoint
 Route::post('/print-agent/pending-orders', function () {
-    // Verify it's coming from your Mac Mini (simple security)
+    // Verify secret key from Mac Mini
     $secret = request()->header('X-Print-Agent-Secret');
     if ($secret !== config('services.print_agent.secret')) {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+    // Find pending orders
     $orders = \App\Models\Order::where('status', 'pending')
         ->orWhere(function ($query) {
             $query->where('status', 'completed')->whereNull('shipped_at');
@@ -13,6 +23,7 @@ Route::post('/print-agent/pending-orders', function () {
         ->orderBy('created_at', 'asc')
         ->get();
 
+    // No orders
     if ($orders->isEmpty()) {
         return response()->json([
             'success' => true,
@@ -21,6 +32,7 @@ Route::post('/print-agent/pending-orders', function () {
         ]);
     }
 
+    // Process each order
     $results = [];
     $printer = app(\App\Services\RolloPrinter::class);
 
@@ -44,7 +56,7 @@ Route::post('/print-agent/pending-orders', function () {
                     'order_id' => $order->id,
                     'success' => true,
                     'tracking' => $result['tracking'],
-                    'label_pdf' => $result['label_url'] // Base64 PDF
+                    'label_pdf' => $result['label_url']
                 ];
             } else {
                 $results[] = [
@@ -53,6 +65,8 @@ Route::post('/print-agent/pending-orders', function () {
                     'error' => $result['error']
                 ];
             }
+
+            usleep(500000); // 0.5 second delay between orders
         } catch (\Exception $e) {
             $results[] = [
                 'order_id' => $order->id,
