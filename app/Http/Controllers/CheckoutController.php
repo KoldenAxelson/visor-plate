@@ -21,82 +21,85 @@ class CheckoutController extends Controller
     /**
      * Create Stripe Checkout Session (US-ONLY)
      */
-    public function createCheckoutSession(Request $request)
-    {
-        $request->validate([
-            "quantity" => "required|integer|min:1|max:100",
-        ]);
+     public function createCheckoutSession(Request $request)
+     {
+         $request->validate([
+             "quantity" => "required|integer|min:1|max:100",
+         ]);
 
-        $quantity = $request->quantity;
-        $pricePerUnit = 3500; // $35.00 in cents
-        $totalAmount = $pricePerUnit * $quantity;
+         $quantity = $request->quantity;
+         $pricePerUnit = 3500; // $35.00 in cents
 
-        try {
-            $checkoutSession = StripeSession::create([
-                "payment_method_types" => ["card"],
-                "line_items" => [
-                    [
-                        "price_data" => [
-                            "currency" => "usd",
-                            "product_data" => [
-                                "name" =>
-                                    "VisorPlate - Premium No-Drill License Plate Holder",
-                                "description" =>
-                                    "Velcro visor-mounted front license plate holder",
-                                "images" => [asset("images/Display.jpg")],
-                            ],
-                            "unit_amount" => $pricePerUnit,
-                        ],
-                        "quantity" => $quantity,
-                    ],
-                ],
-                "mode" => "payment",
-                "success_url" =>
-                    route("checkout.success") .
-                    "?session_id={CHECKOUT_SESSION_ID}",
-                "cancel_url" => route("checkout.cancel"),
+         // Check for promo discount in session
+         $discount = session('promo_discount', 0);
+         $discountedPrice = max($pricePerUnit - $discount, 0);
 
-                // ⚠️ US-ONLY RESTRICTIONS
-                // Require billing address and restrict to US only
-                "billing_address_collection" => "required",
+         $totalAmount = $discountedPrice * $quantity;
 
-                // Restrict shipping addresses to US only
-                "shipping_address_collection" => [
-                    "allowed_countries" => ["US"],
-                ],
+         try {
+             $checkoutSession = StripeSession::create([
+                 "payment_method_types" => ["card"],
+                 "line_items" => [
+                     [
+                         "price_data" => [
+                             "currency" => "usd",
+                             "product_data" => [
+                                 "name" =>
+                                     "VisorPlate - Premium No-Drill License Plate Holder",
+                                 "description" =>
+                                     "Velcro visor-mounted front license plate holder",
+                                 "images" => [asset("images/Display.jpg")],
+                             ],
+                             "unit_amount" => $discountedPrice,
+                         ],
+                         "quantity" => $quantity,
+                     ],
+                 ],
+                 "mode" => "payment",
+                 "success_url" =>
+                     route("checkout.success") .
+                     "?session_id={CHECKOUT_SESSION_ID}",
+                 "cancel_url" => route("checkout.cancel"),
 
-                "customer_email" => $request->email ?? null,
-                "metadata" => [
-                    "quantity" => $quantity,
-                ],
-            ]);
+                 "billing_address_collection" => "required",
+                 "shipping_address_collection" => [
+                     "allowed_countries" => ["US"],
+                 ],
 
-            return response()->json([
-                "id" => $checkoutSession->id,
-                "url" => $checkoutSession->url,
-            ]);
-        } catch (\Exception $e) {
-            // Add context for Flare error tracking
-            context([
-                "error_type" => "stripe_checkout_creation",
-                "quantity" => $quantity,
-                "total_amount" => $totalAmount,
-                "customer_email" => $request->email ?? null,
-            ]);
+                 "customer_email" => $request->email ?? null,
+                 "metadata" => [
+                     "quantity" => $quantity,
+                     "promo_code" => session('promo_code', null),
+                     "discount_cents" => $discount,
+                 ],
+             ]);
 
-            Log::error(
-                "Stripe checkout session creation failed: " . $e->getMessage(),
-            );
+             return response()->json([
+                 "id" => $checkoutSession->id,
+                 "url" => $checkoutSession->url,
+             ]);
+         } catch (\Exception $e) {
+             context([
+                 "error_type" => "stripe_checkout_creation",
+                 "quantity" => $quantity,
+                 "total_amount" => $totalAmount,
+                 "customer_email" => $request->email ?? null,
+                 "promo_discount" => $discount,
+             ]);
 
-            return response()->json(
-                [
-                    "error" =>
-                        "Unable to create checkout session. Please try again.",
-                ],
-                500,
-            );
-        }
-    }
+             Log::error(
+                 "Stripe checkout session creation failed: " . $e->getMessage(),
+             );
+
+             return response()->json(
+                 [
+                     "error" =>
+                         "Unable to create checkout session. Please try again.",
+                 ],
+                 500,
+             );
+         }
+     }
 
     /**
      * Success page after payment

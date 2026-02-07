@@ -44,6 +44,13 @@ Route::get("/checkout/cancel", [CheckoutController::class, "cancel"])->name(
     "checkout.cancel",
 );
 
+// Business Card Promo - $5 off
+Route::get('/card', function () {
+    session(['promo_discount' => 500]); // $5.00 in cents
+    session(['promo_code' => 'CARD5']);
+    return redirect()->route('shop')->with('promo_applied', true);
+})->name('promo.card');
+
 // Stripe Webhook
 Route::post("/stripe/webhook", [CheckoutController::class, "webhook"])->name(
     "stripe.webhook",

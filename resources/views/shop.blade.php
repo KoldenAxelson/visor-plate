@@ -65,12 +65,30 @@
 
             <!-- Right: Product Info & Checkout -->
             <div x-data="checkoutHandler()" class="space-y-8">
+
+                <!-- Promo Banner (if active) -->
+                @if(session('promo_applied') && session('promo_discount'))
+                <div class="bg-linear-to-r from-green-600/20 to-emerald-600/20 border-2 border-green-500 rounded-2xl p-4 animate-pulse">
+                    <div class="flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-green-300 font-semibold text-lg">$5 Business Card Discount Applied!</span>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Product Title & Price -->
                 <div>
                     <h2 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-luxury">Visor Plate</h2>
                     <div class="flex items-baseline gap-4 mb-6">
-                        <span class="text-6xl font-light text-white tracking-luxury">$35</span>
-                        <span class="text-2xl text-gray-400 line-through font-light">$200 ticket</span>
+                        @if(session('promo_discount'))
+                            <span class="text-6xl font-light text-green-400 tracking-luxury">$30</span>
+                            <span class="text-3xl text-gray-500 line-through font-light">$35</span>
+                        @else
+                            <span class="text-6xl font-light text-white tracking-luxury">$35</span>
+                            <span class="text-2xl text-gray-400 line-through font-light">$200 ticket</span>
+                        @endif
                     </div>
                     <p class="text-xl text-gray-300 leading-relaxed font-light">
                         The premium velcro visor solution that displays your front license plate legally without drilling a single hole in your bumper.
