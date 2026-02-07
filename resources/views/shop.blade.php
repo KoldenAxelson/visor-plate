@@ -211,7 +211,7 @@
                     :class="{ 'opacity-75 cursor-not-allowed': loading }"
                     data-text="Proceed to Checkout"
                 >
-                    <span class="btn-default-text" x-show="!loading">
+                    <span class="btn-default-text" x-show="!loading" x-text="`Proceed to Checkout - $${totalPrice}`">
                         Proceed to Checkout
                     </span>
                     <span class="btn-loading-text" x-show="loading">
@@ -344,6 +344,14 @@ function checkoutHandler() {
         quantity: 1,
         loading: false,
         error: null,
+        promoDiscount: {{ session('promo_discount', 0) }}, // $5 total discount
+        basePrice: 3500, // $35 in cents
+
+        get totalPrice() {
+            const subtotal = this.basePrice * this.quantity;
+            const total = Math.max(subtotal - this.promoDiscount, 0);
+            return (total / 100).toFixed(2);
+        },
 
         incrementQuantity() {
             if (this.quantity < 100) {
@@ -376,7 +384,6 @@ function checkoutHandler() {
                 const data = await response.json();
 
                 if (response.ok && data.url) {
-                    // Redirect to Stripe Checkout
                     window.location.href = data.url;
                 } else {
                     this.error = data.error || 'Something went wrong. Please try again.';

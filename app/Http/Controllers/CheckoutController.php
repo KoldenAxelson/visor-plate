@@ -30,9 +30,10 @@ class CheckoutController extends Controller
          $quantity = $request->quantity;
          $pricePerUnit = 3500; // $35.00 in cents
 
-         // Check for promo discount in session
-         $discount = session('promo_discount', 0);
-         $discountedPrice = max($pricePerUnit - $discount, 0);
+         // Check for promo discount - apply to TOTAL order, not per unit
+         $totalDiscount = session('promo_discount', 0); // $5 total
+         $discountPerUnit = $quantity > 0 ? (int)($totalDiscount / $quantity) : 0;
+         $discountedPrice = max($pricePerUnit - $discountPerUnit, 0);
 
          $totalAmount = $discountedPrice * $quantity;
 
@@ -70,7 +71,7 @@ class CheckoutController extends Controller
                  "metadata" => [
                      "quantity" => $quantity,
                      "promo_code" => session('promo_code', null),
-                     "discount_cents" => $discount,
+                     "discount_cents" => $totalDiscount,
                  ],
              ]);
 
@@ -84,7 +85,7 @@ class CheckoutController extends Controller
                  "quantity" => $quantity,
                  "total_amount" => $totalAmount,
                  "customer_email" => $request->email ?? null,
-                 "promo_discount" => $discount,
+                 "promo_discount" => $totalDiscount,
              ]);
 
              Log::error(
@@ -158,6 +159,9 @@ class CheckoutController extends Controller
                         : null,
                 ],
             );
+
+            // Clear promo session after successful order
+            session()->forget(['promo_discount', 'promo_code', 'promo_applied']);
 
             return view("checkout.success", [
                 "order" => $order,

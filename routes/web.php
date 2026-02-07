@@ -51,6 +51,12 @@ Route::get('/card', function () {
     return redirect()->route('shop')->with('promo_applied', true);
 })->name('promo.card');
 
+// Testing route - clear promo session
+Route::get('/clear-promo', function () {
+    session()->forget(['promo_discount', 'promo_code', 'promo_applied']);
+    return redirect()->route('shop')->with('message', 'Promo cleared');
+})->name('promo.clear');
+
 // Stripe Webhook
 Route::post("/stripe/webhook", [CheckoutController::class, "webhook"])->name(
     "stripe.webhook",
