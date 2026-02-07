@@ -193,7 +193,7 @@
                             Need bulk pricing? <a href="{{ route('contact') }}" class="link-underline" style="color: var(--accent-copper);">Contact us for wholesale</a>
                         </p>
                         <p class="text-lg text-white font-semibold">
-                            Total: <span x-text="'$' + (quantity * 35).toFixed(2)"></span>
+                            Total: <span x-text="'$' + totalPrice"></span>
                         </p>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                     :class="{ 'opacity-75 cursor-not-allowed': loading }"
                     data-text="Proceed to Checkout"
                 >
-                    <span class="btn-default-text" x-show="!loading" x-text="`Proceed to Checkout - $${totalPrice}`">
+                    <span class="btn-default-text" x-show="!loading">
                         Proceed to Checkout
                     </span>
                     <span class="btn-loading-text" x-show="loading">
