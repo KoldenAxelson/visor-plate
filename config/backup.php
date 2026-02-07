@@ -123,7 +123,7 @@ return [
                 "mail",
             ],
             \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => [
-                "mail",
+                // CHANGED: Removed "mail" - Laravel scheduler will send one consolidated email instead
             ],
             \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => [],
             \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => [],
