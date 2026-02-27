@@ -55,18 +55,17 @@ class PrintPendingOrders extends Command
         $this->info("✅ Email queued successfully.\n");
 
         // Check if printer is online
+        // NOTE: Forge cannot reach the Rollo printer directly — the local print agent
+        // handles actual printing by polling the API. Printer being "offline" here is
+        // expected and not a failure; the summary email has already been sent.
         if (!$this->printer->isOnline()) {
-            $this->error(
-                "❌ Rollo printer is offline. Please check connection.",
+            $this->info(
+                "ℹ️  Rollo printer not reachable from this host — print agent will handle printing.",
             );
-            $this->comment("   - Verify printer is powered on");
-            $this->comment("   - Check USB/network connection");
-            $this->comment("   - Verify ShipStation API credentials");
-            $this->newLine();
             $this->comment(
-                "💡 Orders pending, but cannot print. Summary email sent.",
+                "💡 Summary email sent. Deferring label printing to local print agent.",
             );
-            return Command::FAILURE;
+            return Command::SUCCESS;
         }
 
         $this->info(

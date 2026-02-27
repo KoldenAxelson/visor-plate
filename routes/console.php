@@ -34,10 +34,10 @@ Schedule::command("returns:cleanup")
 Schedule::command("backup:run --only-db")
     ->dailyAt("03:00")
     ->emailOutputTo(
-        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com")
+        config("backup.notifications.mail.to")
     )
     ->emailOutputOnFailure(
-        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com")
+        config("backup.notifications.mail.to")
     )
     ->appendOutputTo(storage_path("logs/backup.log"));
 
@@ -51,7 +51,7 @@ Schedule::command("backup:run --only-db")
 Schedule::command("backup:clean")
     ->dailyAt("04:00")
     ->emailOutputOnFailure(
-        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com")
+        config("backup.notifications.mail.to")
     )
     ->appendOutputTo(storage_path("logs/backup-cleanup.log"));
 
@@ -65,7 +65,7 @@ Schedule::command("backup:clean")
 Schedule::command("backup:monitor")
     ->dailyAt("05:00")
     ->emailOutputOnFailure(
-        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com")
+        config("backup.notifications.mail.to")
     )
     ->appendOutputTo(storage_path("logs/backup-monitor.log"));
 
@@ -83,11 +83,7 @@ Schedule::command("backup:monitor")
 Schedule::command("orders:print-pending")
     ->weekdays()
     ->at("08:00")
-    ->when(function () {
-        // Check if Rollo printer is online before running
-        return app(\App\Services\RolloPrinter::class)->isOnline();
-    })
     ->emailOutputOnFailure(
-        env("BACKUP_NOTIFICATION_EMAIL", "contact@visorplate.com")
+        config("backup.notifications.mail.to")
     )
     ->appendOutputTo(storage_path("logs/rollo.log"));
